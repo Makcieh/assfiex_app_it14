@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "656110812152",
+    "project_id": "asfiex-it14",
+    "storage_bucket": "asfiex-it14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656110812152:android:996b475926a375686f340d",
+        "android_client_info": {
+          "package_name": "com.example.assfiex_app_it14"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGfPKGHD4tFNDPb2LNQ1mCRo2dvz03HIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

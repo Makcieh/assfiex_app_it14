@@ -1,10 +1,12 @@
-import 'package:assfiex_app_it14/components/my_botton.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:assfiex_app_it14/components/my_button.dart';
 import 'package:assfiex_app_it14/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -34,7 +36,6 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       );
       //pop the loading screen
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       //pop the loading screen
       Navigator.pop(context);
@@ -139,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 10),
 
             //sign in button
-            MyBotton(
+            MyButton(
               onTap: signUserIn,
             ),
 

@@ -1,9 +1,11 @@
+import 'package:assfiex_app_it14/components/button_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 DateTime today = DateTime.now();
 
+// ignore: must_be_immutable
 class Home extends StatelessWidget {
   Home({super.key});
 
@@ -16,30 +18,32 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          actions: [
-            IconButton(
-              onPressed: signUserOut,
-              icon: const Icon(Icons.logout),
-            )
-          ],
-          title: const Center(
-            child: Text(
-              'WELCOME TO ASFIEX',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        actions: [
+          IconButton(
+            onPressed: signUserOut,
+            icon: const Icon(Icons.logout),
+          )
+        ],
+        title: const Center(
+          child: Text(
+            'WELCOME TO ASFIEX',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
-        body: Column(
-          children: [
-            const Text('Bruh'),
-            TableCalendar(
-                focusedDay: today,
-                firstDay: DateTime.utc(2024, 9, 24),
-                lastDay: DateTime.utc(2030, 5, 6)),
-          ],
-        ));
+      ),
+      body: Column(
+        children: [
+          const Text('Bruh'),
+          TableCalendar(
+              focusedDay: today,
+              firstDay: DateTime.utc(2024, 9, 24),
+              lastDay: DateTime.utc(2030, 5, 6)),
+          const SizedBox(height: 150),
+          const ButtonMenu(),
+        ],
+      ),
+    );
   }
 }

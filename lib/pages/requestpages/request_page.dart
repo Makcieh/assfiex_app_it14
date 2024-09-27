@@ -9,7 +9,18 @@ class RequestPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 17, 17, 18),
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topLeft,
+              colors: [
+                Color.fromARGB(255, 100, 206, 255),
+                Color.fromARGB(255, 16, 133, 229)
+              ],
+            ),
+          ),
+        ),
         title: const Text(
           'Request Leave',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

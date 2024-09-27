@@ -18,7 +18,7 @@ class AuthPage extends StatelessWidget {
           }
           //user NOT logged in
           else {
-            return LoginPage();
+            return const LoginPage();
           }
         },
       ),

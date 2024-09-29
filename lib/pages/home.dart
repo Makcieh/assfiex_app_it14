@@ -19,7 +19,18 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topLeft,
+              colors: [
+                Color.fromARGB(255, 100, 206, 255),
+                Color.fromARGB(255, 16, 133, 229)
+              ],
+            ),
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: signUserOut,
@@ -35,7 +46,13 @@ class Home extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const Text('Bruh'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+                padding: const EdgeInsets.all(8),
+                color: Colors.grey,
+                child: const Text('SCHEDULE FOR THIS MONTH')),
+          ),
           TableCalendar(
               focusedDay: today,
               firstDay: DateTime.utc(2024, 9, 24),

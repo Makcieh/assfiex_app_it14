@@ -1,6 +1,7 @@
 import 'package:assfiex_app_it14/components/bottom_nav.dart';
 import 'package:assfiex_app_it14/firebase_options.dart';
-import 'package:assfiex_app_it14/pages/Employees_page.dart';
+import 'package:assfiex_app_it14/pages/employees_pages/employee_fill.dart';
+import 'package:assfiex_app_it14/pages/employees_pages/employees_page.dart';
 import 'package:assfiex_app_it14/pages/requestpages/all_request.dart';
 import 'package:assfiex_app_it14/pages/requestpages/request_page.dart';
 import 'package:assfiex_app_it14/pages/Time_Avail_page.dart';
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
           '/requestpage': (context) => const RequestPage(),
           '/employeepage': (context) => const EmployeesPage(),
           '/try': (context) => const BottomNav(),
-          '/allrequest': (context) => const AllRequest()
+          '/allrequest': (context) => const AllRequest(),
+          '/addemployee': (context) => const EmployeeFill()
         });
   }
 }

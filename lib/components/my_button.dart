@@ -6,8 +6,7 @@ class MyButton extends StatelessWidget {
   final Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
+    return InkWell(
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(horizontal: 120),

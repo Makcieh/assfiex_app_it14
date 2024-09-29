@@ -34,12 +34,20 @@ class _BottomNavState extends State<BottomNav> {
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
-        color: Colors.blue,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topLeft,
+            colors: [
+              Color.fromARGB(255, 16, 133, 229),
+              Color.fromARGB(255, 100, 206, 255),
+            ],
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
           child: GNav(
             gap: 8,
-            backgroundColor: Colors.blue,
             color: const Color.fromARGB(255, 255, 255, 255),
             activeColor: const Color.fromARGB(255, 255, 255, 255),
             tabBackgroundColor: const Color.fromARGB(255, 31, 44, 55),

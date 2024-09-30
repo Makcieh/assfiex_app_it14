@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'package:assfiex_app_it14/components/my_button.dart';
 import 'package:assfiex_app_it14/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +30,8 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
       );
       //pop the loading screen
       Navigator.pop(context);
@@ -48,12 +46,12 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
+        return const AlertDialog(
           backgroundColor: Colors.blue,
           title: Center(
             child: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
+              'Invalid Email or Password',
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
           ),
         );
@@ -141,8 +139,17 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 10),
 
             //sign in button
-            MyButton(
-              onTap: signUserIn,
+            ElevatedButton(
+              onPressed: signUserIn,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child:
+                  const Text('Sign In', style: TextStyle(color: Colors.white)),
             ),
 
             const SizedBox(height: 15),

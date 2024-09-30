@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 final searchengine = TextEditingController();
 
 class CreateSchedPage extends StatelessWidget {
-  const CreateSchedPage({super.key});
+  CreateSchedPage({super.key});
+
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +34,23 @@ class CreateSchedPage extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                child: TextField(
-                  controller: searchengine,
-                  obscureText: false,
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search), // Search icon
+                  hintText: 'Search...',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0), // Rounded edges
+                    borderSide: BorderSide.none, // No border
+                  ),
+                  filled: true, // Makes the background filled
+                  fillColor: Colors.grey[200], // Light gray background color
                 ),
+                onChanged: (value) {
+                  // Handle search query
+                  print("Search query: $value");
+                },
               ),
             ),
             Padding(
@@ -59,19 +71,19 @@ class CreateSchedPage extends StatelessWidget {
                   "ADD SCHEDULE",
                   style: TextStyle(
                     fontSize: 14, // Font size
-                    fontWeight: FontWeight.bold, // Bold text
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(40),
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
                 color: Colors.white,
                 child: const Text(
-                  'Schedules:',
+                  'Database is under development and this portion will read data',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
               ),

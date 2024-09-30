@@ -23,7 +23,7 @@ void createschedFill(BuildContext context) {
             children: [
               const Center(
                 child: Text(
-                  "FILL THE DETAILS",
+                  "Database is under development and this textfield is temporary",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

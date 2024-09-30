@@ -25,6 +25,13 @@ class EmployeeFill extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
+      body: Center(
+        child: Text(
+          'This page is under development',
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      ),
     );
   }
 }

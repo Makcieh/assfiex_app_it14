@@ -2,7 +2,6 @@ import 'package:assfiex_app_it14/components/bottom_nav.dart';
 import 'package:assfiex_app_it14/firebase_options.dart';
 import 'package:assfiex_app_it14/pages/employees_pages/employee_fill.dart';
 import 'package:assfiex_app_it14/pages/employees_pages/employees_page.dart';
-import 'package:assfiex_app_it14/pages/home.dart';
 import 'package:assfiex_app_it14/pages/requestpages/all_request.dart';
 import 'package:assfiex_app_it14/pages/requestpages/request_page.dart';
 import 'package:assfiex_app_it14/pages/Time_Avail_page.dart';
@@ -27,11 +26,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Home(),
+        home: const AuthPage(),
         routes: {
           //routes in all pages
           '/menupage': (context) => const MenuPage(),
-          '/createschedpage': (context) => const CreateSchedPage(),
+          '/createschedpage': (context) => CreateSchedPage(),
           '/timeavailpage': (context) => const TimeAvailPage(),
           '/requestpage': (context) => const RequestPage(),
           '/employeepage': (context) => const EmployeesPage(),

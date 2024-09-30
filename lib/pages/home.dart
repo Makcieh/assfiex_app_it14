@@ -18,6 +18,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 17, 17, 18),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -48,10 +49,15 @@ class Home extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-                padding: const EdgeInsets.all(8),
-                color: Colors.grey,
-                child: const Text('SCHEDULE FOR THIS MONTH')),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    padding: const EdgeInsets.all(8),
+                    color: Colors.grey,
+                    child: const Text('SCHEDULE FOR THIS MONTH')),
+              ],
+            ),
           ),
           TableCalendar(
               focusedDay: today,

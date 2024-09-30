@@ -6,6 +6,7 @@ class EmployeeFill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 17, 17, 18),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(

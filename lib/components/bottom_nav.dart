@@ -1,6 +1,6 @@
 import 'package:assfiex_app_it14/pages/employees_pages/employees_page.dart';
 import 'package:assfiex_app_it14/pages/Time_Avail_page.dart';
-import 'package:assfiex_app_it14/pages/create_sched_page.dart';
+import 'package:assfiex_app_it14/pages/createschedpages/create_sched_page.dart';
 import 'package:assfiex_app_it14/pages/requestpages/request_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';

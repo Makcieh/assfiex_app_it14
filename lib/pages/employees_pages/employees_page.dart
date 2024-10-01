@@ -51,21 +51,6 @@ class EmployeesPage extends StatelessWidget {
                     letterSpacing: 3,
                   ),
                 )),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 50),
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Center(
-                  child: Text(
-                    'Database is under development and it will read data in this page',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),

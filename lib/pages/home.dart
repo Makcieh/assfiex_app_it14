@@ -47,15 +47,25 @@ class Home extends StatelessWidget {
       ),
       body: Column(
         children: [
+          const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[
+                          300], // Background color (light grey or any color)
+                      borderRadius:
+                          BorderRadius.circular(10), // Rounded corners
+                    ),
                     padding: const EdgeInsets.all(8),
-                    color: Colors.grey,
-                    child: const Text('SCHEDULE FOR THIS MONTH')),
+                    child: const Text(
+                      'SCHEDULE FOR THIS MONTH',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    )),
               ],
             ),
           ),

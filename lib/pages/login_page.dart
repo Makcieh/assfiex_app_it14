@@ -85,97 +85,119 @@ class _LoginPageState extends State<LoginPage> {
             //logo
             const Icon(
               Icons.lock,
-              color: Colors.white,
+              color: Color.fromARGB(255, 255, 255, 255),
               size: 100,
             ),
 
             const SizedBox(height: 50),
 
-            //Welcome Manager!
-            const Text(
-              "Welcome Manager!",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    const Text(
+                      "Welcome Manager!",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 5, 5, 5),
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold),
+                    ),
 
-            const SizedBox(height: 25),
+                    const SizedBox(height: 25),
 
-            //email
-            MyTextfield(
-              controller: emailController,
-              hintText: 'Username',
-              obscureText: false,
-            ),
+                    //email
+                    MyTextfield(
+                      controller: emailController,
+                      hintText: 'Username',
+                      obscureText: false,
+                    ),
 
-            const SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
-            //password
-            MyTextfield(
-              controller: passwordController,
-              hintText: 'Password',
-              obscureText: true,
-            ),
+                    //password
+                    MyTextfield(
+                      controller: passwordController,
+                      hintText: 'Password',
+                      obscureText: true,
+                    ),
 
-            const SizedBox(
-              height: 10,
-            ),
+                    const SizedBox(
+                      height: 10,
+                    ),
 
-            //forgot pass
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Forgot Password?',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
+                    //forgot pass
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Forgot Password?',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
 
-            const SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
-            //sign in button
-            ElevatedButton(
-              onPressed: signUserIn,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                shadowColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                    //sign in button
+                    ElevatedButton(
+                      onPressed: signUserIn,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text('Sign In',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+
+                    const SizedBox(height: 15),
+                    //register new manager
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text('Are you a new',
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                        SizedBox(width: 4),
+                        Text('Manager?',
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    //enter as employee or guest
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Enter as',
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                        SizedBox(width: 4),
+                        Text('Employee or Guest',
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    )
+                  ],
                 ),
               ),
-              child:
-                  const Text('Sign In', style: TextStyle(color: Colors.white)),
             ),
-
-            const SizedBox(height: 15),
-            //register new manager
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Are you a new', style: TextStyle(color: Colors.white)),
-                SizedBox(width: 4),
-                Text('Manager?',
-                    style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold)),
-              ],
-            ),
-            const SizedBox(height: 10),
-            //enter as employee or guest
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Enter as', style: TextStyle(color: Colors.white)),
-                SizedBox(width: 4),
-                Text('Employee or Guest',
-                    style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold)),
-              ],
-            )
+            //Welcome Manager!
           ],
         ),
       ))),

@@ -25,7 +25,7 @@ class AllRequest extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'This page is under development',
           style: TextStyle(

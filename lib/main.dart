@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           '/employeepage': (context) => const EmployeesPage(),
           '/try': (context) => const BottomNav(),
           '/allrequest': (context) => const AllRequest(),
-          '/addemployee': (context) => EmployeeFill()
+          '/addemploye': (context) => const EmployeeFill()
         });
   }
 }

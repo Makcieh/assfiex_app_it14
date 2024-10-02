@@ -1,8 +1,14 @@
+import 'package:assfiex_app_it14/pages/createschedpages/databaseCreateSched.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:random_string/random_string.dart';
 
+final TextEditingController idController = TextEditingController();
 final TextEditingController nameController = TextEditingController();
-final TextEditingController snController = TextEditingController();
-final TextEditingController addressController = TextEditingController();
+final TextEditingController positionController = TextEditingController();
+final TextEditingController hoursController = TextEditingController();
+final TextEditingController startController = TextEditingController();
+final TextEditingController endController = TextEditingController();
 
 void createschedFill(BuildContext context) {
   showModalBottomSheet(
@@ -23,7 +29,7 @@ void createschedFill(BuildContext context) {
             children: [
               const Center(
                 child: Text(
-                  "Database is under development and this textfield is temporary",
+                  "Fill In Details",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -31,7 +37,7 @@ void createschedFill(BuildContext context) {
                 ),
               ),
               TextField(
-                controller: nameController,
+                controller: idController,
                 decoration: const InputDecoration(
                   labelText: "ID",
                   hintText: "",
@@ -51,8 +57,7 @@ void createschedFill(BuildContext context) {
                 height: 20,
               ),
               TextField(
-                keyboardType: TextInputType.number,
-                controller: snController,
+                controller: positionController,
                 decoration: const InputDecoration(
                   labelText: "POSITION",
                   hintText: "",
@@ -63,7 +68,7 @@ void createschedFill(BuildContext context) {
               ),
               TextField(
                 keyboardType: TextInputType.number,
-                controller: snController,
+                controller: hoursController,
                 decoration: const InputDecoration(
                   labelText: "HOURS",
                   hintText: "",
@@ -73,44 +78,54 @@ void createschedFill(BuildContext context) {
                 height: 20,
               ),
               TextField(
-                controller: addressController,
+                controller: startController,
                 decoration: const InputDecoration(
                   labelText: "START",
-                  hintText: "",
+                  hintText: "6am",
                 ),
               ),
               const SizedBox(
                 height: 20,
               ),
               TextField(
-                controller: addressController,
+                controller: endController,
                 decoration: const InputDecoration(
                   labelText: "END",
-                  hintText: "",
+                  hintText: "12pm",
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
               ElevatedButton(
-                  onPressed: () {
-                    final id = DateTime.now().microsecond.toString();
-                    // ignore: prefer_typing_uninitialized_variables
-                    var databaseReference;
-                    databaseReference.child(id).set({
-                      'name': nameController.text.toString(),
-                      'sn': snController.text.toString(),
-                      'address': addressController.text.toString(),
-                      'id': id //It's give the unique id every time.
-                    });
-                    // For clear the controller
-                    nameController.clear();
-                    snController.clear();
-                    addressController.clear();
-                    //For Dismiss the keyboard afte adding items
-                    Navigator.pop(context);
-                  },
-                  child: const Text("ADD SCHEDULE"))
+                onPressed: () async {
+                  // ignore: non_constant_identifier_names
+                  String ScheduleId = randomNumeric(5);
+                  Map<String, dynamic> createSchedInfoMap = {
+                    "ScheduleID": ScheduleId,
+                    "Name": nameController.text,
+                    "Position": positionController.text,
+                    "Hours": hoursController.text,
+                    "Start": startController.text,
+                    "End": endController.text,
+                  };
+                  await DatabaseMethods()
+                      .addCreateSched(createSchedInfoMap, ScheduleId)
+                      .then((value) {
+                    Fluttertoast.showToast(
+                        msg: "Schedule Details Added",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12.0, horizontal: 24.0),
+                ),
+                child: const Text('ADD'),
+              ),
             ],
           ),
         );

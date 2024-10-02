@@ -27,9 +27,7 @@ class TimeAvailPage extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('TimeAvailability')
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection('Employee').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -43,8 +41,8 @@ class TimeAvailPage extends StatelessWidget {
             itemBuilder: (context, index) {
               // Extract the fields from the document
               var document = data[index];
-              var name = document['name'];
-              var mon = document['mon'];
+              var name = document['Name'];
+              var nick = document['Nickname'];
 
               return ListTile(
                 title: const Text(
@@ -56,7 +54,7 @@ class TimeAvailPage extends StatelessWidget {
                   children: [
                     Text('Name: $name',
                         style: const TextStyle(color: Colors.white)),
-                    Text('Day: $mon',
+                    Text('Day: $nick',
                         style: const TextStyle(color: Colors.white)),
                   ],
                 ),

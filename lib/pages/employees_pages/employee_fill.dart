@@ -61,10 +61,9 @@ class _EmployeeState extends State<EmployeeFill> {
               child: Form(
                 child: Column(
                   children: [
-                    Container(
-                        padding: const EdgeInsets.all(10),
-                        color: Colors.blue,
-                        child: const Text('SEE ALL EMPLOYEES')),
+                    SizedBox(
+                      height: 30,
+                    ),
                     const Text(
                       "FILL IN DETAILS",
                       style: TextStyle(

@@ -10,6 +10,6 @@ class DatabaseMethods {
   }
 
   Future<Stream<QuerySnapshot>> getEmployeeDetails() async {
-    return FirebaseFirestore.instance.collection('Employee').snapshots();
+    return await FirebaseFirestore.instance.collection('Employee').snapshots();
   }
 }

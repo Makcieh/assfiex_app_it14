@@ -1,5 +1,5 @@
 // ignore: file_names
-import 'package:assfiex_app_it14/database.dart';
+import 'package:assfiex_app_it14/pages/employees_pages/databaseEmployee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +33,8 @@ class _EmployeesPageState extends State<EmployeesPage> {
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data.docs[index];
+
+                    //Ray Da Designer
                     return Material(
                       elevation: 5.0,
                       borderRadius: BorderRadius.circular(10),
@@ -41,14 +43,14 @@ class _EmployeesPageState extends State<EmployeesPage> {
                         padding: const EdgeInsets.all(15),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: const Color.fromARGB(255, 6, 33, 55),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Id : " + ds['Id'],
+                              "Id: " + ds['Id'],
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(
@@ -56,7 +58,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(
-                              "Nickname : " + ds['Nickname'],
+                              "Nickname: " + ds['Nickname'],
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(

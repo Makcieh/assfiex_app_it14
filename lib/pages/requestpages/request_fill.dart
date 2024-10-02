@@ -1,8 +1,11 @@
+import 'package:assfiex_app_it14/pages/requestpages/databaseRequest.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:random_string/random_string.dart';
 
+final TextEditingController idController = TextEditingController();
 final TextEditingController nameController = TextEditingController();
-final TextEditingController snController = TextEditingController();
-final TextEditingController addressController = TextEditingController();
+final TextEditingController dateController = TextEditingController();
 
 void createBottomSheet(BuildContext context) {
   showModalBottomSheet(
@@ -23,7 +26,7 @@ void createBottomSheet(BuildContext context) {
             children: [
               const Center(
                 child: Text(
-                  "Database is under development and this textfield is temporary",
+                  "Fill In Details",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -31,7 +34,7 @@ void createBottomSheet(BuildContext context) {
                 ),
               ),
               TextField(
-                controller: nameController,
+                controller: idController,
                 decoration: const InputDecoration(
                   labelText: "ID",
                   hintText: "",
@@ -51,30 +54,10 @@ void createBottomSheet(BuildContext context) {
                 height: 20,
               ),
               TextField(
-                keyboardType: TextInputType.number,
-                controller: snController,
+                keyboardType: TextInputType.datetime,
+                controller: dateController,
                 decoration: const InputDecoration(
-                  labelText: "MONTH",
-                  hintText: "",
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                controller: addressController,
-                decoration: const InputDecoration(
-                  labelText: "DAY",
-                  hintText: "",
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                controller: addressController,
-                decoration: const InputDecoration(
-                  labelText: "YEAR",
+                  labelText: "DATE",
                   hintText: "",
                 ),
               ),
@@ -82,24 +65,34 @@ void createBottomSheet(BuildContext context) {
                 height: 20,
               ),
               ElevatedButton(
-                  onPressed: () {
-                    final id = DateTime.now().microsecond.toString();
-                    // ignore: prefer_typing_uninitialized_variables
-                    var databaseReference;
-                    databaseReference.child(id).set({
-                      'name': nameController.text.toString(),
-                      'sn': snController.text.toString(),
-                      'address': addressController.text.toString(),
-                      'id': id //It's give the unique id every time.
-                    });
-                    // For clear the controller
-                    nameController.clear();
-                    snController.clear();
-                    addressController.clear();
-                    //For Dismiss the keyboard afte adding items
-                    Navigator.pop(context);
-                  },
-                  child: const Text("ADD REQUEST"))
+                onPressed: () async {
+                  // ignore: non_constant_identifier_names
+                  String RequestId = randomNumeric(5);
+                  Map<String, dynamic> requestInfoMap = {
+                    "RequestId": RequestId,
+                    "Name": nameController.text,
+                    "Date": dateController.text,
+                  };
+                  await DatabaseMethods()
+                      .addRequest(requestInfoMap, RequestId)
+                      .then((value) {
+                    Fluttertoast.showToast(
+                        msg: "Request Details Added",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12.0, horizontal: 24.0),
+                ),
+                child: const Text('ADD'),
+              ),
             ],
           ),
         );

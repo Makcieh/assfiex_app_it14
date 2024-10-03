@@ -10,7 +10,6 @@ class EmployeeFill extends StatefulWidget {
   State<EmployeeFill> createState() => _EmployeeState();
 
   // Controllers to retrieve user inputs
-
   // Clear all fields
   // void _clearFields() {
   //   idController.clear();

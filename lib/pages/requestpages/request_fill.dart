@@ -36,7 +36,7 @@ void createBottomSheet(BuildContext context) {
               TextField(
                 controller: idController,
                 decoration: const InputDecoration(
-                  labelText: "ID",
+                  labelText: "Employee ID",
                   hintText: "",
                 ),
               ),
@@ -67,14 +67,15 @@ void createBottomSheet(BuildContext context) {
               ElevatedButton(
                 onPressed: () async {
                   // ignore: non_constant_identifier_names
-                  String RequestId = randomNumeric(5);
+                  String RequestID = randomNumeric(5);
                   Map<String, dynamic> requestInfoMap = {
-                    "RequestId": RequestId,
+                    "RequestID": RequestID,
+                    "EmployeeID": idController.text,
                     "Name": nameController.text,
                     "Date": dateController.text,
                   };
                   await DatabaseMethods()
-                      .addRequest(requestInfoMap, RequestId)
+                      .addRequest(requestInfoMap, RequestID)
                       .then((value) {
                     Fluttertoast.showToast(
                         msg: "Request Details Added",

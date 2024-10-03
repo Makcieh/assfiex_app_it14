@@ -10,8 +10,25 @@ class DatabaseMethods {
   }
 
   Future<Stream<QuerySnapshot>> getRequestDetails() async {
+    return FirebaseFirestore.instance.collection('RequestLeave').snapshots();
+  }
+
+  //UPDATE
+  Future updateRequestDetail(
+      String id, Map<String, dynamic> updateRequestInfo) async {
     return await FirebaseFirestore.instance
         .collection('RequestLeave')
-        .snapshots();
+        .doc(id)
+        .update(updateRequestInfo);
+  }
+
+//DELETE
+  Future deleteRequestDetail(
+    String id,
+  ) async {
+    return await FirebaseFirestore.instance
+        .collection('RequestLeave')
+        .doc(id)
+        .delete();
   }
 }

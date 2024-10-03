@@ -100,6 +100,7 @@ void createschedFill(BuildContext context) {
                   String ScheduleId = randomNumeric(5);
                   Map<String, dynamic> createSchedInfoMap = {
                     "ScheduleID": ScheduleId,
+                    "Employee ID": idController.text,
                     "Name": nameController.text,
                     "Position": positionController.text,
                     "Hours": hoursController.text,

@@ -11,8 +11,24 @@ class DatabaseMethods {
   }
 
   Future<Stream<QuerySnapshot>> getCreateSchedDetails() async {
+    return FirebaseFirestore.instance.collection('CreateSched').snapshots();
+  }
+
+  Future updateSchedDetail(
+      String id, Map<String, dynamic> updateSchedInfo) async {
     return await FirebaseFirestore.instance
         .collection('CreateSched')
-        .snapshots();
+        .doc(id)
+        .update(updateSchedInfo);
+  }
+
+//DELETE
+  Future deleteSchedDetail(
+    String id,
+  ) async {
+    return await FirebaseFirestore.instance
+        .collection('CreateSched')
+        .doc(id)
+        .delete();
   }
 }

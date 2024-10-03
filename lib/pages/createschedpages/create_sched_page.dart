@@ -11,6 +11,12 @@ class CreateSchedPage extends StatefulWidget {
 }
 
 class _CreateSchedPageState extends State<CreateSchedPage> {
+  TextEditingController idController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController positionController = TextEditingController();
+  TextEditingController hoursController = TextEditingController();
+  TextEditingController startController = TextEditingController();
+  TextEditingController endController = TextEditingController();
   Stream? ScheduStream;
 
   getontheload() async {
@@ -49,8 +55,44 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "Schedule ID: " + data['ScheduleID'],
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    nameController.text = data["Name"];
+                                    positionController.text = data["Position"];
+                                    hoursController.text = data["Hours"];
+                                    startController.text = data["Start"];
+                                    endController.text = data["End"];
+                                    EditSchedDetail(data["ScheduleID"]);
+                                  },
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await DatabaseMethods()
+                                        .deleteSchedDetail(data['ScheduleID']);
+                                  },
+                                  child: const Icon(
+                                    Icons.delete_rounded,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
                             Text(
-                              "ScheduleID: " + data['ScheduleID'],
+                              "Employee ID: " + data['EmployeeID'],
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(
@@ -141,4 +183,109 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
           ),
         ));
   }
+
+  // ignore: non_constant_identifier_names
+  Future EditSchedDetail(String id) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            content: Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.cancel_rounded),
+                      ),
+                      const SizedBox(height: 60),
+                      const Text('Edit Details:')
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Name Field
+                  TextFormField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Station Trained Field
+                  TextFormField(
+                    controller: positionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Station Trained',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Position Field
+                  TextFormField(
+                    controller: positionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Position',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Date Employed Field
+                  TextFormField(
+                    controller: hoursController,
+                    decoration: const InputDecoration(
+                      labelText: 'Hours',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 10),
+
+                  TextFormField(
+                    controller: startController,
+                    decoration: const InputDecoration(
+                      labelText: 'Start',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: endController,
+                    decoration: const InputDecoration(
+                      labelText: 'End',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          Map<String, dynamic> updateSchedInfo = {
+                            "Name": nameController.text,
+                            "Position": positionController.text,
+                            "Hours": hoursController.text,
+                            "Start": startController.text,
+                            "End": endController.text,
+                          };
+                          await DatabaseMethods()
+                              .updateSchedDetail(id, updateSchedInfo)
+                              .then((value) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: const Text('Update')),
+                  )
+                ],
+              ),
+            ),
+          ));
 }

@@ -10,6 +10,9 @@ class AllRequest extends StatefulWidget {
 }
 
 class _AllRequestState extends State<AllRequest> {
+  TextEditingController idController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
   Stream? RequestStream;
 
   getontheload() async {
@@ -48,8 +51,42 @@ class _AllRequestState extends State<AllRequest> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "Request ID: " + db['RequestID'],
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    idController.text = db["EmployeeID"];
+                                    nameController.text = db["Name"];
+                                    dateController.text = db["Date"];
+                                    EditRequestDetail(db['RequestID']);
+                                  },
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await DatabaseMethods()
+                                        .deleteRequestDetail(db['RequestID']);
+                                  },
+                                  child: const Icon(
+                                    Icons.delete_rounded,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
                             Text(
-                              "Date: " + db['Date'],
+                              "Employee ID: " + db['EmployeeID'],
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(
@@ -57,7 +94,7 @@ class _AllRequestState extends State<AllRequest> {
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(
-                              "RequestId: " + db['RequestId'],
+                              "Date: " + db['Date'],
                               style: const TextStyle(color: Colors.white),
                             ),
                           ],
@@ -103,4 +140,71 @@ class _AllRequestState extends State<AllRequest> {
           ),
         ));
   }
+
+  Future EditRequestDetail(String id) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            content: Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.cancel_rounded),
+                      ),
+                      const SizedBox(height: 60),
+                      const Text('Edit Details:')
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: idController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Employee ID',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: dateController,
+                    keyboardType: TextInputType.datetime,
+                    decoration: const InputDecoration(
+                      labelText: 'Date',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          Map<String, dynamic> updateRequestInfo = {
+                            "EmployeeID": idController.text,
+                            "Name": nameController.text,
+                            "Date": dateController.text,
+                          };
+                          await DatabaseMethods()
+                              .updateRequestDetail(id, updateRequestInfo)
+                              .then((value) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: const Text('Update')),
+                  )
+                ],
+              ),
+            ),
+          ));
 }

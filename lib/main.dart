@@ -1,5 +1,4 @@
 import 'package:assfiex_app_it14/components/bottom_nav.dart';
-import 'package:assfiex_app_it14/firebase_options.dart';
 import 'package:assfiex_app_it14/pages/employees_pages/employee_fill.dart';
 import 'package:assfiex_app_it14/pages/employees_pages/employees_page.dart';
 import 'package:assfiex_app_it14/pages/requestpages/all_request.dart';

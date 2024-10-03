@@ -11,6 +11,14 @@ class EmployeesPage extends StatefulWidget {
 }
 
 class _EmployeesPageState extends State<EmployeesPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController nicknameController = TextEditingController();
+  TextEditingController contactController = TextEditingController();
+  TextEditingController stationController = TextEditingController();
+  TextEditingController positionController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
   Stream? EmployeeStream;
 
   getontheload() async {
@@ -39,7 +47,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
                       elevation: 5.0,
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
-                        margin: EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(top: 20),
                         padding: const EdgeInsets.all(15),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
@@ -49,9 +57,43 @@ class _EmployeesPageState extends State<EmployeesPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Id: " + ds['Id'],
-                              style: const TextStyle(color: Colors.white),
+                            Row(
+                              children: [
+                                Text(
+                                  "Employee ID: " + ds['Id'],
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    nameController.text = ds["Name"];
+                                    nicknameController.text = ds["Nickname"];
+                                    contactController.text = ds["Contact"];
+                                    stationController.text = ds["Station"];
+                                    positionController.text = ds["Position"];
+                                    dateController.text = ds["DateEmployed"];
+                                    addressController.text = ds["Address"];
+                                    EditEmployeeDetail(ds["Id"]);
+                                  },
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await DatabaseMethods()
+                                        .deleteEmployeeDetail(ds['Id']);
+                                  },
+                                  child: const Icon(
+                                    Icons.delete_rounded,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
                             ),
                             Text(
                               "Name: " + ds['Name'],
@@ -113,7 +155,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
           ),
         ),
         body: Container(
-          margin: EdgeInsets.only(left: 20, right: 20, top: 30),
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
           child: Column(
             children: [
               ElevatedButton(
@@ -146,4 +188,122 @@ class _EmployeesPageState extends State<EmployeesPage> {
           ),
         ));
   }
+
+  // ignore: non_constant_identifier_names
+  Future EditEmployeeDetail(String id) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            content: Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.cancel_rounded),
+                      ),
+                      const SizedBox(height: 60),
+                      const Text('Edit Details:')
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Name Field
+                  TextFormField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Nickname Field
+                  TextFormField(
+                    controller: nicknameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nickname',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Contact Number Field
+                  TextFormField(
+                    controller: contactController,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                      labelText: 'Contact No',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Station Trained Field
+                  TextFormField(
+                    controller: stationController,
+                    decoration: const InputDecoration(
+                      labelText: 'Station Trained',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Position Field
+                  TextFormField(
+                    controller: positionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Position',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Date Employed Field
+                  TextFormField(
+                    controller: dateController,
+                    decoration: const InputDecoration(
+                      labelText: 'Date Employed',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.datetime,
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Address Field
+                  TextFormField(
+                    controller: addressController,
+                    decoration: const InputDecoration(
+                      labelText: 'Address',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          Map<String, dynamic> updateInfo = {
+                            "Name": nameController.text,
+                            "Nickname": nicknameController.text,
+                            "Contact": contactController.text,
+                            "Station": stationController.text,
+                            "Position": positionController.text,
+                            "DateEmployed": dateController.text,
+                            "Address": addressController.text,
+                          };
+                          await DatabaseMethods()
+                              .updateEmployeeDetail(id, updateInfo)
+                              .then((value) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: const Text('Update')),
+                  )
+                ],
+              ),
+            ),
+          ));
 }

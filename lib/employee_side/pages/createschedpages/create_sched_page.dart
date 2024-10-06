@@ -65,7 +65,7 @@ class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(
-                              "Name: " + data['Name'],
+                              "Nickname: " + data['Nickname'],
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(

@@ -68,43 +68,12 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Text(
-                                  "Employee ID: " + ds['Id'],
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    nameController.text = ds["Name"];
-                                    nicknameController.text = ds["Nickname"];
-                                    contactController.text = ds["Contact"];
-                                    stationController.text = ds["Station"];
-                                    positionController.text = ds["Position"];
-                                    dateController.text = ds["DateEmployed"];
-                                    addressController.text = ds["Address"];
-                                    EditEmployeeDetail(ds["Id"]);
-                                  },
-                                  child: const Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await DatabaseMethods()
-                                        .deleteEmployeeDetail(ds['Id']);
-                                  },
-                                  child: const Icon(
-                                    Icons.delete_rounded,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
+                            Text(
+                              "Employee ID: " + ds['Id'],
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(
+                              width: 10,
                             ),
                             Text(
                               "Name: " + ds['Name'],
@@ -161,41 +130,14 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
             ),
           ),
           title: const Text(
-            'Employees',
+            'See Employees',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
         body: Container(
           margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
           child: Column(
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/addemploye');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: const Color.fromARGB(255, 26, 26, 26),
-                    backgroundColor:
-                        const Color.fromARGB(255, 255, 255, 255), // Text color
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 12), // Button size and padding
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
-                    ),
-                    elevation: 2, // Elevation to match the "raised" effect
-                  ),
-                  child: const Text(
-                    'ADD EMPLOYEE',
-                    style: TextStyle(
-                      letterSpacing: 3,
-                    ),
-                  )),
-              const SizedBox(
-                height: 10, //KANI SAD
-              ),
-              Expanded(child: allEmployeeDetails())
-            ],
+            children: [Expanded(child: allEmployeeDetails())],
           ),
         ));
   }

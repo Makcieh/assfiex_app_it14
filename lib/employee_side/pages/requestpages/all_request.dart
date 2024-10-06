@@ -95,7 +95,7 @@ class _AllRequestState extends State<Employee_AllRequest> {
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(
-                              "Date: " + db['Date'],
+                              "Dates: " + db['Dates'].join(", "),
                               style: const TextStyle(color: Colors.white),
                             ),
                           ],

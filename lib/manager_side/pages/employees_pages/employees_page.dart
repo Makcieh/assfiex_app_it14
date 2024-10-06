@@ -2,6 +2,7 @@
 import 'package:assfiex_app_it14/manager_side/pages/employees_pages/databaseEmployee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import the intl package
 
 class EmployeesPage extends StatefulWidget {
   const EmployeesPage({super.key});
@@ -42,7 +43,6 @@ class _EmployeesPageState extends State<EmployeesPage> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data.docs[index];
 
-                    //Ray Da Designer
                     return Material(
                       elevation: 5.0,
                       borderRadius: BorderRadius.circular(10),
@@ -193,117 +193,141 @@ class _EmployeesPageState extends State<EmployeesPage> {
   Future EditEmployeeDetail(String id) => showDialog(
       context: context,
       builder: (context) => AlertDialog(
-            content: Container(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(Icons.cancel_rounded),
-                      ),
-                      const SizedBox(height: 60),
-                      const Text('Edit Details:')
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Name Field
-                  TextFormField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Nickname Field
-                  TextFormField(
-                    controller: nicknameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nickname',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Contact Number Field
-                  TextFormField(
-                    controller: contactController,
-                    keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
-                      labelText: 'Contact No',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Station Trained Field
-                  TextFormField(
-                    controller: stationController,
-                    decoration: const InputDecoration(
-                      labelText: 'Station Trained',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Position Field
-                  TextFormField(
-                    controller: positionController,
-                    decoration: const InputDecoration(
-                      labelText: 'Position',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Date Employed Field
-                  TextFormField(
-                    controller: dateController,
-                    decoration: const InputDecoration(
-                      labelText: 'Date Employed',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.datetime,
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Address Field
-                  TextFormField(
-                    controller: addressController,
-                    decoration: const InputDecoration(
-                      labelText: 'Address',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          Map<String, dynamic> updateInfo = {
-                            "Name": nameController.text,
-                            "Nickname": nicknameController.text,
-                            "Contact": contactController.text,
-                            "Station": stationController.text,
-                            "Position": positionController.text,
-                            "DateEmployed": dateController.text,
-                            "Address": addressController.text,
-                          };
-                          await DatabaseMethods()
-                              .updateEmployeeDetail(id, updateInfo)
-                              .then((value) {
-                            // ignore: use_build_context_synchronously
+            content: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  mainAxisSize:
+                      MainAxisSize.min, // Adjusts height based on content
+                  children: [
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
                             Navigator.pop(context);
-                          });
-                        },
-                        child: const Text('Update')),
-                  )
-                ],
+                          },
+                          child: const Icon(Icons.cancel_rounded),
+                        ),
+                        const SizedBox(
+                            width: 8), // Spacing between icon and text
+                        const Text('Edit Details:')
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Name Field
+                    TextFormField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Name',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Nickname Field
+                    TextFormField(
+                      controller: nicknameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Nickname',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Contact Number Field
+                    TextFormField(
+                      controller: contactController,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                        labelText: 'Contact No',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Station Trained Field
+                    TextFormField(
+                      controller: stationController,
+                      decoration: const InputDecoration(
+                        labelText: 'Station Trained',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Position Field
+                    TextFormField(
+                      controller: positionController,
+                      decoration: const InputDecoration(
+                        labelText: 'Position',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Date Employed Field with Date Picker
+                    TextFormField(
+                      controller: dateController,
+                      keyboardType: TextInputType.datetime,
+                      decoration: InputDecoration(
+                        labelText: 'Date Employed',
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.calendar_today),
+                          onPressed: () =>
+                              _selectDate(context), // Opens date picker
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Address Field
+                    TextFormField(
+                      controller: addressController,
+                      decoration: const InputDecoration(
+                        labelText: 'Address',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            Map<String, dynamic> updateInfo = {
+                              "Name": nameController.text,
+                              "Nickname": nicknameController.text,
+                              "Contact": contactController.text,
+                              "Station": stationController.text,
+                              "Position": positionController.text,
+                              "DateEmployed": dateController.text,
+                              "Address": addressController.text,
+                            };
+                            await DatabaseMethods()
+                                .updateEmployeeDetail(id, updateInfo)
+                                .then((value) {
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: const Text('Update')),
+                    )
+                  ],
+                ),
               ),
             ),
           ));
+
+  // Function to open date picker and format the selected date
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+      });
+    }
+  }
 }

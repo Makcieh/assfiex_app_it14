@@ -58,13 +58,13 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                             Row(
                               children: [
                                 Text(
-                                  "Schedule ID: " + data['ScheduleID'],
+                                  "Nickname: " + data['Nickname'],
                                   style: const TextStyle(color: Colors.white),
                                 ),
                                 const Spacer(),
                                 GestureDetector(
                                   onTap: () {
-                                    nameController.text = data["Name"];
+                                    nicknameController.text = data["Nickname"];
                                     positionController.text = data["Position"];
                                     hoursController.text = data["Hours"];
                                     startController.text = data["Start"];
@@ -90,14 +90,6 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                                   ),
                                 )
                               ],
-                            ),
-                            Text(
-                              "Employee ID: " + data['EmployeeID'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              "Name: " + data['Name'],
-                              style: const TextStyle(color: Colors.white),
                             ),
                             Text(
                               "Position: " + data['Position'],
@@ -188,103 +180,105 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
   Future EditSchedDetail(String id) => showDialog(
       context: context,
       builder: (context) => AlertDialog(
-            content: Container(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(Icons.cancel_rounded),
-                      ),
-                      const SizedBox(height: 60),
-                      const Text('Edit Details:')
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
-                  TextFormField(
-                    controller: idController,
-                    decoration: const InputDecoration(
-                      labelText: 'EmployeeID',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Name Field
-                  TextFormField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Station Trained Field
-                  TextFormField(
-                    controller: positionController,
-                    decoration: const InputDecoration(
-                      labelText: 'Station Trained',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Date Employed Field
-                  TextFormField(
-                    controller: hoursController,
-                    decoration: const InputDecoration(
-                      labelText: 'Hours',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 10),
-
-                  TextFormField(
-                    controller: startController,
-                    decoration: const InputDecoration(
-                      labelText: 'Start',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: endController,
-                    decoration: const InputDecoration(
-                      labelText: 'End',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 10),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          Map<String, dynamic> updateSchedInfo = {
-                            "EmployeeID": idController.text,
-                            "Name": nameController.text,
-                            "Position": positionController.text,
-                            "Hours": hoursController.text,
-                            "Start": startController.text,
-                            "End": endController.text,
-                          };
-                          await DatabaseMethods()
-                              .updateSchedDetail(id, updateSchedInfo)
-                              .then((value) {
-                            // ignore: use_build_context_synchronously
+            content: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
                             Navigator.pop(context);
-                          });
-                        },
-                        child: const Text('Update')),
-                  )
-                ],
+                          },
+                          child: const Icon(Icons.cancel_rounded),
+                        ),
+                        const SizedBox(height: 60),
+                        const Text('Edit Details:')
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    TextFormField(
+                      controller: idController,
+                      decoration: const InputDecoration(
+                        labelText: 'EmployeeID',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Name Field
+                    TextFormField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Name',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Station Trained Field
+                    TextFormField(
+                      controller: positionController,
+                      decoration: const InputDecoration(
+                        labelText: 'Station Trained',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Date Employed Field
+                    TextFormField(
+                      controller: hoursController,
+                      decoration: const InputDecoration(
+                        labelText: 'Hours',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 10),
+
+                    TextFormField(
+                      controller: startController,
+                      decoration: const InputDecoration(
+                        labelText: 'Start',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: endController,
+                      decoration: const InputDecoration(
+                        labelText: 'End',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 10),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            Map<String, dynamic> updateSchedInfo = {
+                              "EmployeeID": idController.text,
+                              "Name": nameController.text,
+                              "Position": positionController.text,
+                              "Hours": hoursController.text,
+                              "Start": startController.text,
+                              "End": endController.text,
+                            };
+                            await DatabaseMethods()
+                                .updateSchedDetail(id, updateSchedInfo)
+                                .then((value) {
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: const Text('Update')),
+                    )
+                  ],
+                ),
               ),
             ),
           ));

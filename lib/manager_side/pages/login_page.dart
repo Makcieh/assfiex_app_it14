@@ -162,24 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     const SizedBox(height: 15),
-                    //register new manager
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text('Are you a new',
-                            style:
-                                TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                        SizedBox(width: 4),
-                        Text('Manager?',
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
+
                     //enter as employee or guest
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

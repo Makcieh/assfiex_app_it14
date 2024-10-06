@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
 
 final TextEditingController idController = TextEditingController();
-final TextEditingController nameController = TextEditingController();
+final TextEditingController nicknameController = TextEditingController();
 final TextEditingController positionController = TextEditingController();
 final TextEditingController hoursController = TextEditingController();
 final TextEditingController startController = TextEditingController();
@@ -12,7 +12,7 @@ final TextEditingController endController = TextEditingController();
 
 void clearTextFields() {
   idController.clear();
-  nameController.clear();
+  nicknameController.clear();
   positionController.clear();
   hoursController.clear();
   startController.clear();
@@ -45,20 +45,13 @@ void createschedFill(BuildContext context) {
                   ),
                 ),
               ),
-              TextField(
-                controller: idController,
-                decoration: const InputDecoration(
-                  labelText: "Employee ID",
-                  hintText: "",
-                ),
-              ),
               const SizedBox(
                 height: 20,
               ),
               TextField(
-                controller: nameController,
+                controller: nicknameController,
                 decoration: const InputDecoration(
-                  labelText: "NAME",
+                  labelText: "Nickname",
                   hintText: "",
                 ),
               ),
@@ -105,38 +98,12 @@ void createschedFill(BuildContext context) {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  String employeeId = idController.text;
-
-                  if (employeeId.isEmpty) {
-                    Fluttertoast.showToast(
-                      msg: "Employee ID is required",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                    );
-                    return;
-                  }
-
-                  bool isEmployeeValid = await DatabaseMethods()
-                      .checkEmployeeIdInDatabase(employeeId);
-                  if (!isEmployeeValid) {
-                    Fluttertoast.showToast(
-                      msg: "Invalid Employee ID",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                    );
-                    return;
-                  }
-
-                  // Proceed with adding schedule if Employee ID is valid
+                  // ignore: non_constant_identifier_names
                   String ScheduleId = randomNumeric(5);
                   Map<String, dynamic> createSchedInfoMap = {
                     "ScheduleID": ScheduleId,
                     "EmployeeID": idController.text,
-                    "Name": nameController.text,
+                    "Nickname": nicknameController.text,
                     "Position": positionController.text,
                     "Hours": hoursController.text,
                     "Start": startController.text,

@@ -132,11 +132,11 @@ class RequestPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "NAME:",
+                          "NICKNAME:",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          " MICHAEL",
+                          " MAKI",
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],

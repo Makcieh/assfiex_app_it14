@@ -1,9 +1,8 @@
 // ignore: file_names
-import 'package:assfiex_app_it14/employee_side/pages/employees_pages/databaseEmployee.dart';
+import 'package:assfiex_app_it14/manager_side/pages/employees_pages/databaseEmployee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-// ignore: camel_case_types
 class See_EmployeesPage extends StatefulWidget {
   const See_EmployeesPage({super.key});
 
@@ -47,20 +46,65 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
                     return Material(
                       elevation: 5.0,
                       borderRadius: BorderRadius.circular(10),
+                      color: Colors.transparent, //gi coloran nako
+
                       child: Container(
                         margin: const EdgeInsets.only(top: 20),
                         padding: const EdgeInsets.all(15),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 6, 33, 55),
+                          gradient: LinearGradient(
+                            //kani akong gi ilisdan
+                            end: Alignment.topLeft,
+                            begin: Alignment.bottomLeft,
+                            colors: [
+                              Color.fromARGB(255, 0, 63, 90),
+                              Color.fromARGB(255, 100, 206, 255),
+                              // Color.fromARGB(255, 16, 133, 229),
+                            ],
+                          ), //hantod diri
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Employee ID: " + ds['Id'],
-                              style: const TextStyle(color: Colors.white),
+                            Row(
+                              children: [
+                                Text(
+                                  "Employee ID: " + ds['Id'],
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    nameController.text = ds["Name"];
+                                    nicknameController.text = ds["Nickname"];
+                                    contactController.text = ds["Contact"];
+                                    stationController.text = ds["Station"];
+                                    positionController.text = ds["Position"];
+                                    dateController.text = ds["DateEmployed"];
+                                    addressController.text = ds["Address"];
+                                    EditEmployeeDetail(ds["Id"]);
+                                  },
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await DatabaseMethods()
+                                        .deleteEmployeeDetail(ds['Id']);
+                                  },
+                                  child: const Icon(
+                                    Icons.delete_rounded,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
                             ),
                             Text(
                               "Name: " + ds['Name'],
@@ -117,7 +161,7 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
             ),
           ),
           title: const Text(
-            'See Employees',
+            'Employees',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
@@ -125,31 +169,31 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
           margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
           child: Column(
             children: [
-              // ElevatedButton(
-              //     onPressed: () {
-              //       Navigator.pushNamed(context, '/employee_addemploye');
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       foregroundColor: Colors.white,
-              //       backgroundColor:
-              //           const Color.fromARGB(255, 61, 102, 135), // Text color
-              //       padding: const EdgeInsets.symmetric(
-              //           horizontal: 30,
-              //           vertical: 12), // Button size and padding
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(8), // Rounded corners
-              //       ),
-              //       elevation: 2, // Elevation to match the "raised" effect
-              //     ),
-              //     child: const Text(
-              //       'ADD EMPLOYEE',
-              //       style: TextStyle(
-              //         letterSpacing: 3,
-              //       ),
-              //     )),
-              // const SizedBox(
-              //   height: 30,
-              // ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/addemploye');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: const Color.fromARGB(255, 26, 26, 26),
+                    backgroundColor:
+                        const Color.fromARGB(255, 255, 255, 255), // Text color
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 12), // Button size and padding
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // Rounded corners
+                    ),
+                    elevation: 2, // Elevation to match the "raised" effect
+                  ),
+                  child: const Text(
+                    'ADD EMPLOYEE',
+                    style: TextStyle(
+                      letterSpacing: 3,
+                    ),
+                  )),
+              const SizedBox(
+                height: 10, //KANI SAD
+              ),
               Expanded(child: allEmployeeDetails())
             ],
           ),

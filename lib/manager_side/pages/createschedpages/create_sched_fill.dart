@@ -22,7 +22,7 @@ void clearTextFields() {
 void createschedFill(BuildContext context) {
   showModalBottomSheet(
       isScrollControlled: true,
-      backgroundColor: Colors.blue[100],
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       context: context,
       builder: (BuildContext context) {
         return Padding(

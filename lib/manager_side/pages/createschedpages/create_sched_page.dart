@@ -134,7 +134,7 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
             ),
           ),
           title: const Text(
-            'Create Scheduleeee',
+            'Schedules',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),

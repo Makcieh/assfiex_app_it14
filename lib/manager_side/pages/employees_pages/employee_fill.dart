@@ -1,8 +1,9 @@
 import 'package:assfiex_app_it14/manager_side/pages/employees_pages/databaseEmployee.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:random_string/random_string.dart'; // Import the intl package
+import 'package:random_string/random_string.dart';
 
 class EmployeeFill extends StatefulWidget {
   const EmployeeFill({super.key});
@@ -12,14 +13,12 @@ class EmployeeFill extends StatefulWidget {
 }
 
 class _EmployeeState extends State<EmployeeFill> {
-  // Controllers to retrieve user inputs
   TextEditingController nameController = TextEditingController();
   TextEditingController nicknameController = TextEditingController();
   TextEditingController contactController = TextEditingController();
   TextEditingController stationController = TextEditingController();
   TextEditingController positionController = TextEditingController();
-  TextEditingController dateController =
-      TextEditingController(); // Date employed controller
+  TextEditingController dateController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
   // Employee ID counter
@@ -35,7 +34,7 @@ class _EmployeeState extends State<EmployeeFill> {
     });
   }
 
-  // Function to open date picker and format the selected date
+  // Date Picker
   Future<void> _selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -50,6 +49,16 @@ class _EmployeeState extends State<EmployeeFill> {
             formattedDate; // Set formatted date in the controller
       });
     }
+  }
+
+  // Checking for duplicate nicknames
+  Future<bool> _checkDuplicateNickname(String nickname) async {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('Employee') // Use your Firestore collection name
+        .where('Nickname', isEqualTo: nickname)
+        .get();
+
+    return snapshot.docs.isNotEmpty;
   }
 
   @override
@@ -175,33 +184,22 @@ class _EmployeeState extends State<EmployeeFill> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Add Employee Button
+                        // Add Employee Button and will check if the nickname duplicates
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
-                              // int currentId = await getStoredEmployeeId();
-                              // currentId++;
-                              // await saveEmployeeId(currentId);
-                              String employeeaydi = randomNumeric(3);
+                              // Get the nickname from the input
+                              String nickname = nicknameController.text.trim();
 
-                              // String employeeId = currentId.toString();
-                              Map<String, dynamic> employeeInfoMap = {
-                                "Id": employeeaydi,
-                                "Name": nameController.text,
-                                "Nickname": nicknameController.text,
-                                "Contact": contactController.text,
-                                "Station": stationController.text,
-                                "Position": positionController.text,
-                                "DateEmployed": dateController.text,
-                                "Address": addressController.text
-                              };
+                              // Check if the nickname already exists
+                              bool isDuplicate =
+                                  await _checkDuplicateNickname(nickname);
 
-                              await DatabaseMethods()
-                                  .addEmployeeDetails(
-                                      employeeInfoMap, employeeaydi)
-                                  .then((value) {
+                              if (isDuplicate) {
+                                // Show error message if nickname already exists
                                 Fluttertoast.showToast(
-                                  msg: "Employee Details Added",
+                                  msg:
+                                      "Nickname already exists. Please choose another one.",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER,
                                   timeInSecForIosWeb: 1,
@@ -209,7 +207,36 @@ class _EmployeeState extends State<EmployeeFill> {
                                   textColor: Colors.white,
                                   fontSize: 16.0,
                                 );
-                              });
+                              } else {
+                                // If the nickname is unique, proceed to add the employee
+                                String employeeaydi = randomNumeric(3);
+
+                                Map<String, dynamic> employeeInfoMap = {
+                                  "Id": employeeaydi,
+                                  "Name": nameController.text,
+                                  "Nickname": nickname,
+                                  "Contact": contactController.text,
+                                  "Station": stationController.text,
+                                  "Position": positionController.text,
+                                  "DateEmployed": dateController.text,
+                                  "Address": addressController.text
+                                };
+
+                                await DatabaseMethods()
+                                    .addEmployeeDetails(
+                                        employeeInfoMap, employeeaydi)
+                                    .then((value) {
+                                  Fluttertoast.showToast(
+                                    msg: "Employee Details Added",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.green,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+                                });
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,

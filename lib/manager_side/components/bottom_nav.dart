@@ -1,5 +1,5 @@
 import 'package:assfiex_app_it14/manager_side/pages/employees_pages/employees_page.dart';
-import 'package:assfiex_app_it14/manager_side/pages/Time_Avail_page.dart';
+import 'package:assfiex_app_it14/manager_side/pages/TA_pages/Time_Avail_page.dart';
 import 'package:assfiex_app_it14/manager_side/pages/createschedpages/create_sched_page.dart';
 import 'package:assfiex_app_it14/manager_side/pages/requestpages/request_page.dart';
 import 'package:flutter/material.dart';

@@ -1,19 +1,55 @@
 import 'package:assfiex_app_it14/manager_side/components/button_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 DateTime today = DateTime.now();
 
 // ignore: must_be_immutable
-class Home extends StatelessWidget {
-  Home({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
 
   DateTime today = DateTime.now();
+  List<Map<String, dynamic>> schedules = [];
+
+  // Function to fetch and sort schedules by start time
+  void fetchSchedules(String selectedDate) async {
+    FirebaseFirestore.instance
+        .collection(
+            'CreateSched') // Assumes collection 'schedules' exists in Firestore
+        .where('scheduleDate', isEqualTo: selectedDate)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      setState(() {
+        schedules = querySnapshot.docs
+            .map((doc) => {
+                  'employeeId': doc['EmployeeID'],
+                  'start': doc['Start'],
+                  'end': doc['End'],
+                  'nickname': doc['Nickname'],
+                  'position': doc['Position'],
+                  'hours': doc['Hours'],
+                  'scheduleId': doc['ScheduleID'],
+                })
+            .toList();
+
+        // Sorting schedules by start time
+        schedules.sort((a, b) {
+          return a['start'].compareTo(b['start']);
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +74,9 @@ class Home extends StatelessWidget {
             icon: const Icon(Icons.logout),
           )
         ],
-        title: const Center(
-          child: Text(
-            'WELCOME TO ASFIEX',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
+        title: const Text(
+          'WELCOME TO ASFIEX',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: Column(
@@ -55,12 +89,10 @@ class Home extends StatelessWidget {
               children: [
                 Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey[
-                          300], // Background color (light grey or any color)
-                      borderRadius:
-                          BorderRadius.circular(10), // Rounded corners
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(10),
                     child: const Text(
                       'SCHEDULE FOR THIS MONTH',
                       style:
@@ -69,11 +101,52 @@ class Home extends StatelessWidget {
               ],
             ),
           ),
+          // Calendar to select dates
           TableCalendar(
               focusedDay: today,
               firstDay: DateTime.utc(2024, 9, 24),
-              lastDay: DateTime.utc(2030, 5, 6)),
-          const SizedBox(height: 150),
+              lastDay: DateTime.utc(2030, 5, 6),
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  today = selectedDay;
+                  fetchSchedules(selectedDay
+                      .toIso8601String()
+                      .split('T')[0]); // Fetch schedules for selected day
+                });
+              }),
+          const SizedBox(height: 20),
+
+          // Displaying the sorted schedules
+          Expanded(
+            child: ListView.builder(
+              itemCount: schedules.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text('Nickname: ${schedules[index]['nickname']}',
+                      style: const TextStyle(color: Colors.white)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Position: ${schedules[index]['position']}',
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      Text(
+                        'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      Text(
+                        'Hours: ${schedules[index]['hours']}',
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+
+          const SizedBox(height: 20),
           const ButtonMenu(),
         ],
       ),

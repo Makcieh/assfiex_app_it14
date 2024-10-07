@@ -4,9 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-DateTime today = DateTime.now();
-
-// ignore: must_be_immutable
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -15,40 +12,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  DateTime today = DateTime.now();
+
+  // Function to sign out the user
   void signUserOut() {
     FirebaseAuth.instance.signOut();
-  }
-
-  DateTime today = DateTime.now();
-  List<Map<String, dynamic>> schedules = [];
-
-  // Function to fetch and sort schedules by start time
-  void fetchSchedules(String selectedDate) async {
-    FirebaseFirestore.instance
-        .collection(
-            'CreateSched') // Assumes collection 'schedules' exists in Firestore
-        .where('scheduleDate', isEqualTo: selectedDate)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      setState(() {
-        schedules = querySnapshot.docs
-            .map((doc) => {
-                  'employeeId': doc['EmployeeID'],
-                  'start': doc['Start'],
-                  'end': doc['End'],
-                  'nickname': doc['Nickname'],
-                  'position': doc['Position'],
-                  'hours': doc['Hours'],
-                  'scheduleId': doc['ScheduleID'],
-                })
-            .toList();
-
-        // Sorting schedules by start time
-        schedules.sort((a, b) {
-          return a['start'].compareTo(b['start']);
-        });
-      });
-    });
   }
 
   @override
@@ -94,58 +62,118 @@ class _HomeState extends State<Home> {
                     ),
                     padding: const EdgeInsets.all(10),
                     child: const Text(
-                      'SCHEDULE FOR THIS MONTH',
+                      'SCHEDULE FOR EVERYDAY',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     )),
               ],
             ),
           ),
-          // Calendar to select dates
+          // Calendar to display the current day with customized styles
           TableCalendar(
-              focusedDay: today,
-              firstDay: DateTime.utc(2024, 9, 24),
-              lastDay: DateTime.utc(2030, 5, 6),
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  today = selectedDay;
-                  fetchSchedules(selectedDay
-                      .toIso8601String()
-                      .split('T')[0]); // Fetch schedules for selected day
-                });
-              }),
+            focusedDay: today,
+            firstDay: DateTime.utc(2024, 9, 24),
+            lastDay: DateTime.utc(2030, 5, 6),
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                today = selectedDay; // Set the selected day
+              });
+            },
+            calendarStyle: CalendarStyle(
+              defaultTextStyle: TextStyle(color: Colors.white, fontSize: 16),
+              weekendTextStyle: TextStyle(color: Colors.red, fontSize: 16),
+              selectedTextStyle:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              selectedDecoration: BoxDecoration(
+                color: Colors.blueAccent,
+                shape: BoxShape.circle,
+              ),
+              todayTextStyle: TextStyle(color: Colors.white),
+              todayDecoration: BoxDecoration(
+                color: Colors.green,
+                shape: BoxShape.circle,
+              ),
+            ),
+            daysOfWeekStyle: DaysOfWeekStyle(
+              weekdayStyle: TextStyle(color: Colors.white, fontSize: 14),
+              weekendStyle: TextStyle(color: Colors.red, fontSize: 14),
+            ),
+            headerStyle: HeaderStyle(
+              titleTextStyle: TextStyle(color: Colors.white, fontSize: 18),
+              formatButtonTextStyle: TextStyle(color: Colors.white),
+              formatButtonDecoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+                color: Colors.white,
+              ),
+              titleCentered: true,
+              formatButtonVisible: false, // Hide format button if not needed
+            ),
+          ),
           const SizedBox(height: 20),
 
-          // Displaying the sorted schedules
+          // StreamBuilder for real-time updates of schedules
           Expanded(
-            child: ListView.builder(
-              itemCount: schedules.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text('Nickname: ${schedules[index]['nickname']}',
-                      style: const TextStyle(color: Colors.white)),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Position: ${schedules[index]['position']}',
-                        style: const TextStyle(color: Colors.grey),
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('CreateSched')
+                  .snapshots(), // Listen to the 'CreateSched' collection
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                // Extracting schedules from the Firestore snapshot
+                var schedules = snapshot.data!.docs.map((doc) {
+                  return {
+                    'employeeId': doc['EmployeeID'],
+                    'start': doc['Start'],
+                    'end': doc['End'],
+                    'nickname': doc['Nickname'],
+                    'position': doc['Position'],
+                    'hours': doc['Hours'],
+                    'scheduleId': doc['ScheduleID'],
+                  };
+                }).toList();
+
+                return ListView.builder(
+                  itemCount: schedules.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text('Nickname: ${schedules[index]['nickname']}',
+                          style: const TextStyle(color: Colors.white)),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Position: ${schedules[index]['position']}',
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                          Text(
+                            'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                          Text(
+                            'Hours: ${schedules[index]['hours']}',
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                      Text(
-                        'Hours: ${schedules[index]['hours']}',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 );
               },
             ),
           ),
-
           const SizedBox(height: 20),
           const ButtonMenu(),
         ],

@@ -17,10 +17,10 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
   TextEditingController hoursController = TextEditingController();
   TextEditingController startController = TextEditingController();
   TextEditingController endController = TextEditingController();
-  Stream? ScheduStream;
+  Stream? scheduStream;
 
   getontheload() async {
-    ScheduStream = await DatabaseMethods().getCreateSchedDetails();
+    scheduStream = await DatabaseMethods().getCreateSchedDetails();
     setState(() {});
   }
 
@@ -32,7 +32,7 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
 
   Widget allCreateSchedDetails() {
     return StreamBuilder(
-        stream: ScheduStream,
+        stream: scheduStream,
         builder: (context, AsyncSnapshot snapshot) {
           return snapshot.hasData
               ? ListView.builder(
@@ -40,7 +40,7 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot data = snapshot.data.docs[index];
 
-                    //Ray Da Designer
+                    // Ray Da Designer
                     return Material(
                       elevation: 5.0,
                       borderRadius: BorderRadius.circular(10),
@@ -64,12 +64,13 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                                 const Spacer(),
                                 GestureDetector(
                                   onTap: () {
-                                    nicknameController.text = data["Nickname"];
+                                    idController.text = data["EmployeeID"];
+                                    nameController.text = data["Name"];
                                     positionController.text = data["Position"];
                                     hoursController.text = data["Hours"];
                                     startController.text = data["Start"];
                                     endController.text = data["End"];
-                                    EditSchedDetail(data["ScheduleID"]);
+                                    editSchedDetail(data["ScheduleID"]);
                                   },
                                   child: const Icon(
                                     Icons.edit,
@@ -177,108 +178,97 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
   }
 
   // ignore: non_constant_identifier_names
-  Future EditSchedDetail(String id) => showDialog(
+  Future editSchedDetail(String id) => showDialog(
       context: context,
       builder: (context) => AlertDialog(
             content: SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.cancel_rounded),
+                      ),
+                      const SizedBox(height: 60),
+                      const Text('Edit Details:')
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: idController,
+                    decoration: const InputDecoration(
+                      labelText: 'EmployeeID',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: positionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Station Trained',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: hoursController,
+                    decoration: const InputDecoration(
+                      labelText: 'Hours',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: startController,
+                    decoration: const InputDecoration(
+                      labelText: 'Start',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: endController,
+                    decoration: const InputDecoration(
+                      labelText: 'End',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          Map<String, dynamic> updateSchedInfo = {
+                            "EmployeeID": idController.text,
+                            "Name": nameController.text,
+                            "Position": positionController.text,
+                            "Hours": hoursController.text,
+                            "Start": startController.text,
+                            "End": endController.text,
+                          };
+                          await DatabaseMethods()
+                              .updateSchedDetail(id, updateSchedInfo)
+                              .then((value) {
                             Navigator.pop(context);
-                          },
-                          child: const Icon(Icons.cancel_rounded),
-                        ),
-                        const SizedBox(height: 60),
-                        const Text('Edit Details:')
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-
-                    TextFormField(
-                      controller: idController,
-                      decoration: const InputDecoration(
-                        labelText: 'EmployeeID',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Name Field
-                    TextFormField(
-                      controller: nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Station Trained Field
-                    TextFormField(
-                      controller: positionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Station Trained',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Date Employed Field
-                    TextFormField(
-                      controller: hoursController,
-                      decoration: const InputDecoration(
-                        labelText: 'Hours',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 10),
-
-                    TextFormField(
-                      controller: startController,
-                      decoration: const InputDecoration(
-                        labelText: 'Start',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: endController,
-                      decoration: const InputDecoration(
-                        labelText: 'End',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 10),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            Map<String, dynamic> updateSchedInfo = {
-                              "EmployeeID": idController.text,
-                              "Name": nameController.text,
-                              "Position": positionController.text,
-                              "Hours": hoursController.text,
-                              "Start": startController.text,
-                              "End": endController.text,
-                            };
-                            await DatabaseMethods()
-                                .updateSchedDetail(id, updateSchedInfo)
-                                .then((value) {
-                              // ignore: use_build_context_synchronously
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: const Text('Update')),
-                    )
-                  ],
-                ),
+                          });
+                        },
+                        child: const Text('Update')),
+                  )
+                ],
               ),
             ),
           ));

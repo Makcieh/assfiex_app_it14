@@ -177,7 +177,9 @@ void createschedFill(BuildContext context) {
                         "Start": startController.text,
                         "End": endController.text,
                       };
+
                       clearTextFields();
+
                       await DatabaseMethods()
                           .addCreateSched(createSchedInfoMap, scheduleId)
                           .then((value) {

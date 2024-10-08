@@ -14,7 +14,7 @@ class ButtonMenu extends StatelessWidget {
             foregroundColor: Colors.white,
             backgroundColor: Colors.blue, // Text color
             padding: const EdgeInsets.symmetric(
-                horizontal: 30, vertical: 12), // Button size and padding
+                horizontal: 20, vertical: 12), // Button size and padding
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8), // Rounded corners
             ),

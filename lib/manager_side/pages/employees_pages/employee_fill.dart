@@ -21,6 +21,16 @@ class _EmployeeState extends State<EmployeeFill> {
   TextEditingController dateController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
+  void clearTextFields() {
+    nameController.clear();
+    nicknameController.clear();
+    stationController.clear();
+    positionController.clear();
+    contactController.clear();
+    dateController.clear();
+    addressController.clear();
+  }
+
   // Employee ID counter
   int employeeIdCounter = 100;
 
@@ -188,6 +198,27 @@ class _EmployeeState extends State<EmployeeFill> {
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
+                              // Check if any required field is empty
+                              if (nameController.text.isEmpty ||
+                                  nicknameController.text.isEmpty ||
+                                  contactController.text.isEmpty ||
+                                  stationController.text.isEmpty ||
+                                  positionController.text.isEmpty ||
+                                  dateController.text.isEmpty ||
+                                  addressController.text.isEmpty) {
+                                // Show error message if any field is empty
+                                Fluttertoast.showToast(
+                                  msg: "Please fill in all fields.",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                                return; // Stop execution if any field is empty
+                              }
+
                               // Get the nickname from the input
                               String nickname = nicknameController.text.trim();
 
@@ -210,7 +241,6 @@ class _EmployeeState extends State<EmployeeFill> {
                               } else {
                                 // If the nickname is unique, proceed to add the employee
                                 String employeeaydi = randomNumeric(3);
-
                                 Map<String, dynamic> employeeInfoMap = {
                                   "Id": employeeaydi,
                                   "Name": nameController.text,
@@ -221,6 +251,8 @@ class _EmployeeState extends State<EmployeeFill> {
                                   "DateEmployed": dateController.text,
                                   "Address": addressController.text
                                 };
+
+                                clearTextFields();
 
                                 await DatabaseMethods()
                                     .addEmployeeDetails(

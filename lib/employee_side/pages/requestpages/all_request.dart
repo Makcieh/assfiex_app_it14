@@ -87,11 +87,7 @@ class _AllRequestState extends State<Employee_AllRequest> {
                               ],
                             ),
                             Text(
-                              "Employee ID: " + db['EmployeeID'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              "Name: " + db['Name'],
+                              "Name: " + db['Nickname'],
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(
@@ -161,15 +157,6 @@ class _AllRequestState extends State<Employee_AllRequest> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  TextFormField(
-                    controller: idController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Employee ID',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
                   TextFormField(
                     controller: nameController,
                     decoration: const InputDecoration(

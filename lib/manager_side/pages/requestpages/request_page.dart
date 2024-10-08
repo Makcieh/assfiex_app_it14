@@ -1,4 +1,4 @@
-import 'package:assfiex_app_it14/manager_side/pages/requestpages/request_fill.dart';
+import 'package:assfiex_app_it14/manager_side/pages/requestpages/request_fill.dart'; // Import the RequestBottomSheet
 import 'package:flutter/material.dart';
 
 class RequestPage extends StatelessWidget {
@@ -33,28 +33,29 @@ class RequestPage extends StatelessWidget {
               height: 30,
             ),
 
-            //see all request buttom
+            //see all request button
             ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/allrequest');
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor:
-                      const Color.fromARGB(255, 61, 102, 135), // Text color
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30, vertical: 12), // Button size and padding
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8), // Rounded corners
-                  ),
-                  elevation: 2, // Elevation to match the "raised" effect
+              onPressed: () {
+                Navigator.pushNamed(context, '/allrequest');
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor:
+                    const Color.fromARGB(255, 61, 102, 135), // Text color
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 30, vertical: 12), // Button size and padding
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8), // Rounded corners
                 ),
-                child: const Text(
-                  'SEE ALL REQUEST',
-                  style: TextStyle(
-                    letterSpacing: 3,
-                  ),
-                )),
+                elevation: 2, // Elevation to match the "raised" effect
+              ),
+              child: const Text(
+                'SEE ALL REQUEST',
+                style: TextStyle(
+                  letterSpacing: 3,
+                ),
+              ),
+            ),
 
             const SizedBox(
               height: 30,
@@ -102,8 +103,7 @@ class RequestPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 16),
                       decoration: BoxDecoration(
-                        color: Colors.grey[
-                            300], // Background color (light grey or any color)
+                        color: Colors.grey[300], // Background color
                         borderRadius:
                             BorderRadius.circular(10), // Rounded corners
                       ),
@@ -179,7 +179,12 @@ class RequestPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () => createBottomSheet(context),
+                        // Instead of calling createBottomSheet directly, we show the RequestBottomSheet widget
+                        onPressed: () => showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => const RequestBottomSheet(),
+                        ),
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.blue, // Text color
@@ -201,7 +206,7 @@ class RequestPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

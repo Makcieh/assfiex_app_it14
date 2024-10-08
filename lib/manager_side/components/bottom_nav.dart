@@ -57,7 +57,7 @@ class _BottomNavState extends State<BottomNav> {
             tabs: const [
               GButton(
                 icon: Icons.calendar_month,
-                text: 'Create Schedule',
+                text: 'Createe Schedule',
                 textStyle: TextStyle(color: Colors.white, fontSize: 10),
               ),
               GButton(

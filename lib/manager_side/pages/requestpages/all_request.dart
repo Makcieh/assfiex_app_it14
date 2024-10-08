@@ -11,11 +11,10 @@ class AllRequest extends StatefulWidget {
 }
 
 class _AllRequestState extends State<AllRequest> {
-  TextEditingController idController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
+  TextEditingController nicknameController = TextEditingController();
   TextEditingController searchController = TextEditingController();
 
-  String searchField = 'EmployeeID'; // Default search field
+  String searchField = 'Nickname'; // Default search field
   String searchQuery = '';
   Stream? requestStream;
 
@@ -23,10 +22,9 @@ class _AllRequestState extends State<AllRequest> {
   int selectedDays = 1; // Default to 1 day
 
   List<String> searchOptions = [
-    'EmployeeID',
-    'Name',
+    'Nickname',
     'Dates'
-  ]; // Search options
+  ]; // Search options (Removed 'EmployeeID')
   final DateFormat dateFormat = DateFormat('yyyy-MM-dd'); // Date format
 
   // Fetch the request details from Firestore
@@ -97,14 +95,13 @@ class _AllRequestState extends State<AllRequest> {
                       Row(
                         children: [
                           Text(
-                            "Employee ID: " + db['EmployeeID'],
+                            "Nickname: " + db['Nickname'],
                             style: const TextStyle(color: Colors.white),
                           ),
                           const Spacer(),
                           GestureDetector(
                             onTap: () {
-                              idController.text = db["EmployeeID"];
-                              nameController.text = db["Name"];
+                              nicknameController.text = db["Nickname"];
 
                               // Fetch the dates from Firestore and convert to DateTime list
                               selectedDates = List<DateTime>.from(
@@ -137,10 +134,6 @@ class _AllRequestState extends State<AllRequest> {
                             ),
                           )
                         ],
-                      ),
-                      Text(
-                        "Name: " + db['Name'],
-                        style: const TextStyle(color: Colors.white),
                       ),
                       // Display all the dates as a comma-separated string
                       Text(
@@ -255,18 +248,9 @@ class _AllRequestState extends State<AllRequest> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: idController,
-                        keyboardType: TextInputType.number,
+                        controller: nicknameController,
                         decoration: const InputDecoration(
-                          labelText: 'Employee ID',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        controller: nameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Name',
+                          labelText: 'Nickname',
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -323,6 +307,7 @@ class _AllRequestState extends State<AllRequest> {
                         child: ElevatedButton(
                             onPressed: () async {
                               if (selectedDates.any((date) => date == null)) {
+                                // Ensure all dates are selected
                                 return;
                               }
 
@@ -331,9 +316,9 @@ class _AllRequestState extends State<AllRequest> {
                                   .toList();
 
                               Map<String, dynamic> updateRequestInfo = {
-                                "EmployeeID": idController.text,
-                                "Name": nameController.text,
-                                "Dates": formattedDates,
+                                "Nickname": nicknameController.text,
+                                "Dates":
+                                    formattedDates, // Store dates list in Firestore
                               };
 
                               await DatabaseMethods()

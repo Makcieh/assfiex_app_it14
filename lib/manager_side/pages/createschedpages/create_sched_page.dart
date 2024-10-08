@@ -65,7 +65,7 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                                 GestureDetector(
                                   onTap: () {
                                     idController.text = data["EmployeeID"];
-                                    nameController.text = data["Name"];
+                                    nameController.text = data["Nickname"];
                                     positionController.text = data["Position"];
                                     hoursController.text = data["Hours"];
                                     startController.text = data["Start"];
@@ -196,19 +196,13 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                       const Text('Edit Details:')
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: idController,
-                    decoration: const InputDecoration(
-                      labelText: 'EmployeeID',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
                   const SizedBox(height: 10),
                   TextFormField(
+                    style: TextStyle(color: Colors.grey),
                     controller: nameController,
+                    readOnly: true,
                     decoration: const InputDecoration(
-                      labelText: 'Name',
+                      labelText: 'Nickname',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -247,7 +241,6 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                     ),
                     keyboardType: TextInputType.number,
                   ),
-                  const SizedBox(height: 10),
                   const SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(

@@ -1,6 +1,6 @@
 import 'package:assfiex_app_it14/manager_side/components/button_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -69,6 +69,7 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
+
           // Calendar to display the current day with customized styles
           TableCalendar(
             focusedDay: today,
@@ -174,7 +175,7 @@ class _HomeState extends State<Home> {
               },
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           const ButtonMenu(),
         ],
       ),

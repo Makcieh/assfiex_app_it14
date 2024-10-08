@@ -43,7 +43,7 @@ class Employee_TimeAvailPage extends StatelessWidget {
             itemBuilder: (context, index) {
               // Extract the fields from the document
               var document = data[index];
-              var name = document['name'];
+              var name = document['nickname'];
               var nick = document['mon'];
 
               return ListTile(

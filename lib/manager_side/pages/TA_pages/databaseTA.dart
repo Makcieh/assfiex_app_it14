@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //CREATE
 class DatabaseMethods {
   Future addTimeAvailDetails(
-      Map<String, dynamic> timeAvailInfoMap, String name) async {
+      Map<String, dynamic> timeAvailInfoMap, String id) async {
     return await FirebaseFirestore.instance
         .collection('TimeAvailability')
-        .doc(name)
+        .doc(id)
         .set(timeAvailInfoMap);
   }
 
@@ -20,20 +20,20 @@ class DatabaseMethods {
 
 //UPDATE
   Future updateTimeAvailDetail(
-      String name, Map<String, dynamic> updateInfo) async {
+      String id, Map<String, dynamic> updateInfo) async {
     return await FirebaseFirestore.instance
         .collection('TimeAvailability')
-        .doc(name)
+        .doc(id)
         .update(updateInfo);
   }
 
 //DELETE
   Future deleteTimeAvailDetail(
-    String name,
+    String id,
   ) async {
     return await FirebaseFirestore.instance
         .collection('TimeAvailability')
-        .doc(name)
+        .doc(id)
         .delete();
   }
 }

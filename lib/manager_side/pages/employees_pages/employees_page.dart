@@ -1,6 +1,8 @@
 import 'package:assfiex_app_it14/manager_side/pages/employees_pages/databaseEmployee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class EmployeesPage extends StatefulWidget {
   const EmployeesPage({super.key});
@@ -10,6 +12,14 @@ class EmployeesPage extends StatefulWidget {
 }
 
 class _EmployeesPageState extends State<EmployeesPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController nicknameController = TextEditingController();
+  TextEditingController contactController = TextEditingController();
+  TextEditingController stationController = TextEditingController();
+  TextEditingController positionController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
   TextEditingController searchController = TextEditingController();
   String searchField = 'Name'; // Default search field
   String searchQuery = '';
@@ -31,6 +41,23 @@ class _EmployeesPageState extends State<EmployeesPage> {
   void initState() {
     getontheload();
     super.initState();
+  }
+
+  // Date Picker
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      setState(() {
+        dateController.text =
+            formattedDate; // Set formatted date in the controller
+      });
+    }
   }
 
   // Function to handle search input change
@@ -81,14 +108,20 @@ class _EmployeesPageState extends State<EmployeesPage> {
                             Row(
                               children: [
                                 Text(
-                                  "Employee ID: " + ds['Id'],
+                                  "Nickname: " + ds['Nickname'],
                                   style: const TextStyle(color: Colors.white),
                                 ),
                                 const Spacer(),
                                 GestureDetector(
                                   onTap: () {
-                                    // Edit employee details
-                                    EditEmployeeDetail(ds['Id'], ds);
+                                    nameController.text = ds["Name"];
+                                    nicknameController.text = ds["Nickname"];
+                                    contactController.text = ds["Contact"];
+                                    stationController.text = ds["Station"];
+                                    positionController.text = ds["Position"];
+                                    dateController.text = ds['DateEmployed'];
+                                    addressController.text = ds['Address'];
+                                    EditEmployeeDetail(ds['Id']);
                                   },
                                   child: const Icon(
                                     Icons.edit,
@@ -112,10 +145,6 @@ class _EmployeesPageState extends State<EmployeesPage> {
                             ),
                             Text(
                               "Name: " + ds['Name'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              "Nickname: " + ds['Nickname'],
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(
@@ -244,7 +273,8 @@ class _EmployeesPageState extends State<EmployeesPage> {
     );
   }
 
-  Future EditEmployeeDetail(String id, DocumentSnapshot ds) => showDialog(
+  // ignore: non_constant_identifier_names
+  Future EditEmployeeDetail(String id) => showDialog(
       context: context,
       builder: (context) => AlertDialog(
             content: SingleChildScrollView(
@@ -252,48 +282,111 @@ class _EmployeesPageState extends State<EmployeesPage> {
                 mainAxisSize:
                     MainAxisSize.min, // Adjusts height based on content
                 children: [
-                  TextFormField(
-                    controller: TextEditingController(text: ds['Name']),
-                    decoration: const InputDecoration(labelText: 'Name'),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.cancel_rounded),
+                      ),
+                      const SizedBox(height: 60),
+                      const Text('Edit Details:')
+                    ],
                   ),
                   TextFormField(
-                    controller: TextEditingController(text: ds['Nickname']),
-                    decoration: const InputDecoration(labelText: 'Nickname'),
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: "Name",
+                      border: OutlineInputBorder(),
+                    ),
                   ),
+                  const SizedBox(height: 20),
                   TextFormField(
-                    controller: TextEditingController(text: ds['Contact']),
-                    keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(labelText: 'Contact'),
+                    controller: nicknameController,
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      labelText: "Nickname",
+                      border: OutlineInputBorder(),
+                    ),
                   ),
+                  const SizedBox(height: 20),
                   TextFormField(
-                    controller: TextEditingController(text: ds['Station']),
-                    decoration:
-                        const InputDecoration(labelText: 'Station Trained'),
+                      controller: contactController,
+                      decoration: const InputDecoration(
+                        labelText: "Contact",
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: stationController,
+                    decoration: const InputDecoration(
+                      labelText: "Station Trained",
+                      border: OutlineInputBorder(),
+                    ),
                   ),
+                  const SizedBox(height: 20),
                   TextFormField(
-                    controller: TextEditingController(text: ds['Position']),
-                    decoration: const InputDecoration(labelText: 'Position'),
+                    controller: positionController,
+                    decoration: const InputDecoration(
+                      labelText: "Position",
+                      border: OutlineInputBorder(),
+                    ),
                   ),
+                  const SizedBox(height: 20),
                   TextFormField(
-                    controller: TextEditingController(text: ds['DateEmployed']),
-                    decoration:
-                        const InputDecoration(labelText: 'Date Employed'),
+                    controller: dateController,
+                    keyboardType: TextInputType.datetime,
+                    decoration: InputDecoration(
+                      labelText: 'Date Employed',
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () =>
+                            _selectDate(context), // Opens date picker
+                      ),
+                    ),
                   ),
+                  const SizedBox(height: 20),
                   TextFormField(
-                    controller: TextEditingController(text: ds['Address']),
-                    decoration: const InputDecoration(labelText: 'Address'),
+                    controller: addressController,
+                    decoration: const InputDecoration(
+                      labelText: "Address",
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
+                      if (nameController.text.isEmpty ||
+                          nicknameController.text.isEmpty ||
+                          contactController.text.isEmpty ||
+                          stationController.text.isEmpty ||
+                          positionController.text.isEmpty ||
+                          dateController.text.isEmpty ||
+                          addressController.text.isEmpty) {
+                        // Show error message if any field is empty
+                        Fluttertoast.showToast(
+                          msg: "Please fill in all fields.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                        return; // Stop execution if any field is empty
+                      }
+
                       Map<String, dynamic> updateInfo = {
-                        "Name": ds['Name'],
-                        "Nickname": ds['Nickname'],
-                        "Contact": ds['Contact'],
-                        "Station": ds['Station'],
-                        "Position": ds['Position'],
-                        "DateEmployed": ds['DateEmployed'],
-                        "Address": ds['Address'],
+                        "Name": nameController.text,
+                        "Nickname": nicknameController.text,
+                        "Contact": contactController.text,
+                        "Station": stationController.text,
+                        "Position": positionController.text,
+                        "DateEmployed": dateController.text,
+                        "Address": addressController.text
                       };
                       await DatabaseMethods()
                           .updateEmployeeDetail(id, updateInfo);

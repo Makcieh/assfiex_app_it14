@@ -9,6 +9,7 @@ import 'package:assfiex_app_it14/manager_side/pages/TA_pages/Time_Avail_fill.dar
 import 'package:assfiex_app_it14/manager_side/pages/employees_pages/employee_fill.dart';
 import 'package:assfiex_app_it14/manager_side/pages/employees_pages/employees_page.dart';
 import 'package:assfiex_app_it14/manager_side/pages/requestpages/all_request.dart';
+import 'package:assfiex_app_it14/manager_side/pages/requestpages/request_fill.dart';
 import 'package:assfiex_app_it14/manager_side/pages/requestpages/request_page.dart';
 import 'package:assfiex_app_it14/manager_side/pages/TA_pages/Time_Avail_page.dart';
 import 'package:assfiex_app_it14/manager_side/pages/auth_page.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           '/try': (context) => const BottomNav(),
           '/allrequest': (context) => const AllRequest(),
           '/addemploye': (context) => const EmployeeFill(),
+          '/addrequest': (context) => const RequestFill(),
           '/addta': (context) => const TimeAvailFill(),
 
           //Employee Side Routes

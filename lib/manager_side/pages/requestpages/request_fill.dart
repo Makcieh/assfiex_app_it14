@@ -5,24 +5,23 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
 import 'package:intl/intl.dart';
 
-class RequestBottomSheet extends StatefulWidget {
-  const RequestBottomSheet({Key? key}) : super(key: key);
+class RequestFill extends StatefulWidget {
+  const RequestFill({super.key});
 
   @override
-  _RequestBottomSheetState createState() => _RequestBottomSheetState();
+  State<RequestFill> createState() => _RequestState();
 }
 
-class _RequestBottomSheetState extends State<RequestBottomSheet> {
-  // Controllers for input fields
+class _RequestState extends State<RequestFill> {
   TextEditingController idController = TextEditingController();
   TextEditingController nicknameController = TextEditingController();
 
-  final DateFormat dateFormat = DateFormat('yyyy-MM-dd'); // Date format
+  DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
   int selectedDays = 1; // Default to 1 day
   List<DateTime?> selectedDates = [null]; // To store selected dates
 
-// Validate Nickname
+// Function to validate if the entered nickname exists in Firestore
   Future<bool> isNicknameValid(String nickname) async {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('Employee') // Adjust collection name as necessary
@@ -33,162 +32,181 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
     return snapshot.docs.isNotEmpty;
   }
 
-  // Function to create the bottom sheet
-  void createBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      backgroundColor: Colors.blue[100],
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            top: 20,
-            right: 20,
-            left: 20,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 30, 30, 30),
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topLeft,
+              colors: [
+                Color.fromARGB(255, 100, 206, 255),
+                Color.fromARGB(255, 16, 133, 229)
+              ],
+            ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Center(
-                child: Text(
-                  "Fill In Details",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+        ),
+        title: const Text(
+          'Add Request Leave',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.all(50),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Center(
+                  child: Text(
+                    "Fill In Details",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: nicknameController,
-                decoration: const InputDecoration(
-                  labelText: "Nickname",
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Dropdown for number of days selection
-              Row(
-                children: [
-                  const Text("Select Number of Days: "),
-                  DropdownButton<int>(
-                    value: selectedDays,
-                    items: [1, 2, 3, 4].map((int value) {
-                      return DropdownMenuItem<int>(
-                        value: value,
-                        child: Text("$value day(s)"),
-                      );
-                    }).toList(),
-                    onChanged: (int? newValue) {
-                      setState(() {
-                        selectedDays = newValue!;
-                        selectedDates =
-                            List<DateTime?>.filled(selectedDays, null);
-                      });
-                    },
+                const SizedBox(height: 20),
+                TextField(
+                  controller: nicknameController,
+                  decoration: const InputDecoration(
+                    labelText: "Nickname",
+                    hintText: "",
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
+                ),
+                const SizedBox(height: 20),
 
-              // Date pickers for each day
-              Text("Select Dates"),
-              Column(
-                children: List.generate(
-                  selectedDays,
-                  (index) => Row(
-                    children: [
-                      Text("Day ${index + 1}: "),
-                      TextButton(
-                        onPressed: () => _selectDate(context, index),
-                        child: Text(
-                          selectedDates[index] == null
-                              ? "Select Date"
-                              : dateFormat.format(selectedDates[index]!),
+                // Dropdown for number of days selection
+                Row(
+                  children: [
+                    const Text("Select Number of Days: "),
+                    DropdownButton<int>(
+                      value: selectedDays,
+                      items: [1, 2, 3, 4].map((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          child: Text("$value day(s)"),
+                        );
+                      }).toList(),
+                      onChanged: (int? newValue) {
+                        // Wrap state-changing logic inside setState()
+                        setState(() {
+                          selectedDays = newValue!;
+                          selectedDates =
+                              List<DateTime?>.filled(selectedDays, null);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+
+                // Date pickers for each day
+                Text("Select Dates"),
+                Column(
+                  children: List.generate(
+                    selectedDays,
+                    (index) => Row(
+                      children: [
+                        Text("Day ${index + 1}: "),
+                        TextButton(
+                          onPressed: () => _selectDate(context, index),
+                          child: Text(
+                            selectedDates[index] == null
+                                ? "Select Date"
+                                : dateFormat.format(selectedDates[index]!),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              ElevatedButton(
-                onPressed: () async {
-                  // Validate that all dates have been selected
-                  if (selectedDates.any((date) => date == null)) {
-                    Fluttertoast.showToast(
-                        msg: "Please select all the dates",
+                ElevatedButton(
+                  onPressed: () async {
+                    // Check if the nickname is empty
+                    if (nicknameController.text.isEmpty) {
+                      Fluttertoast.showToast(
+                        msg: "Nickname is required",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
                         backgroundColor: Colors.red,
                         textColor: Colors.white,
-                        fontSize: 16.0);
-                    return;
-                  }
+                        fontSize: 16.0,
+                      );
+                      return;
+                    }
 
-                  // Validate nickname from Firestore
-                  bool isValidNickname =
-                      await isNicknameValid(nicknameController.text.trim());
+                    // Validate nickname from Firestore
+                    bool isValidNickname =
+                        await isNicknameValid(nicknameController.text.trim());
 
-                  if (!isValidNickname) {
-                    Fluttertoast.showToast(
-                      msg: "Nickname not found",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-                    return;
-                  }
-
-                  // Generate request data
-                  String RequestID = randomNumeric(5);
-                  Map<String, dynamic> requestInfoMap = {
-                    "RequestID": RequestID,
-                    "Nickname": nicknameController.text,
-                    "Dates": selectedDates
-                        .map((date) => dateFormat.format(date!))
-                        .toList(), // Store formatted dates
-                  };
-
-                  // Add request to the database
-                  await DatabaseMethods()
-                      .addRequest(requestInfoMap, RequestID)
-                      .then((value) {
-                    Fluttertoast.showToast(
-                        msg: "Request Details Added",
+                    if (!isValidNickname) {
+                      Fluttertoast.showToast(
+                        msg: "Nickname not found",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.green,
+                        backgroundColor: Colors.red,
                         textColor: Colors.white,
-                        fontSize: 16.0);
+                        fontSize: 16.0,
+                      );
+                      return;
+                    }
 
-                    // Clear the text fields and reset the form after adding the request
-                    idController.clear();
-                    nicknameController.clear();
-                    setState(() {
-                      selectedDates = [null]; // Reset selected dates
-                      selectedDays = 1; // Reset the number of days
+                    // Generate request data
+                    String RequestID = randomNumeric(5);
+                    Map<String, dynamic> requestInfoMap = {
+                      "RequestID": RequestID,
+                      "EmployeeID": idController.text,
+                      "Nickname": nicknameController.text,
+                      "Dates": selectedDates
+                          .map((date) => dateFormat.format(date!))
+                          .toList(), // Store formatted dates
+                    };
+
+                    // Add request to the database
+                    await DatabaseMethods()
+                        .addRequest(requestInfoMap, RequestID)
+                        .then((value) {
+                      Fluttertoast.showToast(
+                          msg: "Request Details Added",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.green,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+
+                      // Clear the text fields and reset the form after adding the request
+                      setState(() {
+                        idController.clear();
+                        nicknameController.clear();
+                        selectedDates = [null]; // Reset selected dates
+                        selectedDays = 1; // Reset the number of days
+                      });
                     });
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 12.0, horizontal: 24.0),
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 24.0),
+                  ),
+                  child: const Text('ADD'),
                 ),
-                child: const Text('ADD'),
-              ),
-            ],
+              ],
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -201,22 +219,10 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
       lastDate: DateTime(2101),
     );
     if (picked != null) {
+      // Wrap state-changing logic inside setState()
       setState(() {
         selectedDates[index] = picked;
       });
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Request Form")),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () => createBottomSheet(context),
-          child: const Text("Create Request"),
-        ),
-      ),
-    );
   }
 }

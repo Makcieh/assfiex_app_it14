@@ -252,8 +252,6 @@ class _EmployeesPageState extends State<EmployeesPage> {
         ),
       ),
       body: Container(
-        // color: Colors.white,
-        // height: 700,
         margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
         padding: EdgeInsets.only(bottom: 10),
         child: SingleChildScrollView(

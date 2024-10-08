@@ -1,4 +1,3 @@
-import 'package:assfiex_app_it14/manager_side/pages/requestpages/request_fill.dart';
 import 'package:flutter/material.dart';
 
 class RequestPage extends StatelessWidget {
@@ -112,7 +111,6 @@ class RequestPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const SizedBox(height: 10),
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -164,11 +162,9 @@ class RequestPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () => showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => const RequestBottomSheet(),
-                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/addrequest');
+                        },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.blue,

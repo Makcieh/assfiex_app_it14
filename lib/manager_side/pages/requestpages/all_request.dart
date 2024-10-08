@@ -79,7 +79,7 @@ class _AllRequestState extends State<AllRequest> {
               onPressed: () async {
                 // Delete the document from Firestore
                 await FirebaseFirestore.instance
-                    .collection('CreateSched')
+                    .collection('RequestLeave')
                     .doc(docId)
                     .delete();
                 Navigator.of(context).pop(); // Close the dialog
@@ -155,20 +155,14 @@ class _AllRequestState extends State<AllRequest> {
                           ),
                           const SizedBox(width: 10),
                           GestureDetector(
-                            onTap: () async {
-                              await DatabaseMethods()
-                                  .deleteRequestDetail(db['RequestID']);
+                            onTap: () {
+                              _showDeleteConfirmationDialog(context, db.id);
                             },
-                            child: GestureDetector(
-                              onTap: () {
-                                _showDeleteConfirmationDialog(context, db.id);
-                              },
-                              child: const Icon(
-                                Icons.delete_rounded,
-                                color: Colors.white,
-                              ),
+                            child: const Icon(
+                              Icons.delete_rounded,
+                              color: Colors.white,
                             ),
-                          )
+                          ),
                         ],
                       ),
                       // Display all the dates as a comma-separated string

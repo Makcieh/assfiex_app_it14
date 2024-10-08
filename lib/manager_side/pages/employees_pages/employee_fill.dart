@@ -95,12 +95,8 @@ class _EmployeeState extends State<EmployeeFill> {
         ),
       ),
       body: Container(
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(20)
-        // ),
         height: 750,
         padding: EdgeInsets.symmetric(vertical: 35, horizontal: 25),
-
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: Colors.white),

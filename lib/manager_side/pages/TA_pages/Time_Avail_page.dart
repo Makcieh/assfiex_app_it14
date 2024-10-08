@@ -97,15 +97,22 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.docs[index];
 
-                  return Material(
-                    elevation: 5.0,
-                    borderRadius: BorderRadius.circular(10),
+                  return Container(
+                      child: Material(
+                    color: const Color.fromARGB(0, 75, 54, 54),
                     child: Container(
-                      margin: const EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 10),
                       padding: const EdgeInsets.all(15),
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 6, 33, 55),
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topLeft,
+                          colors: [
+                            Color.fromARGB(255, 6, 83, 146),
+                            Color.fromARGB(255, 100, 206, 255),
+                          ],
+                        ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -113,6 +120,10 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                         children: [
                           Row(
                             children: [
+                              Text("Nickname: " + ds['nickname'],
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
                               const Spacer(),
                               GestureDetector(
                                 onTap: () {
@@ -150,8 +161,6 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                               )
                             ],
                           ),
-                          Text("Nickname: " + ds['nickname'],
-                              style: const TextStyle(color: Colors.white)),
                           Text("Monday: " + ds['mon'],
                               style: const TextStyle(color: Colors.white)),
                           Text("Tuesday: " + ds['tues'],
@@ -169,7 +178,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                         ],
                       ),
                     ),
-                  );
+                  ));
                 },
               )
             : const Center(child: Text('No data available'));
@@ -199,42 +208,73 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
       ),
       body: Container(
         margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
-        child: Column(
-          children: [
-            // Search Bar
-            TextField(
-              controller: searchController,
-              onChanged: (value) {
-                searchTimeAvail(value); // Trigger search on typing
-              },
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                labelText: 'Search by Nickname',
-                labelStyle: TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/addta');
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: const Color.fromARGB(255, 61, 102, 135),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+        padding: EdgeInsets.only(bottom: 10),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Search Bar
+              TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  searchTimeAvail(value); // Trigger search on typing
+                },
+                style:
+                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                decoration: InputDecoration(
+                  labelText: 'Search',
+                  hintText: 'Search by Nickname',
+                  hintStyle: const TextStyle(
+                      color: Color.fromARGB(137, 255, 255, 255)),
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 71, 71, 71),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  prefixIcon: const Icon(Icons.search, color: Colors.white),
                 ),
-                elevation: 2,
               ),
-              child: const Text('ADD Time Availability',
-                  style: TextStyle(letterSpacing: 3)),
-            ),
-            const SizedBox(height: 30),
-            Expanded(child: allTADetails())
-          ],
+              const SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 6, 83, 146),
+                      Color.fromARGB(255, 100, 206, 255),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/addta');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    elevation: 2,
+                  ),
+                  child: const Text('Add Time Availability',
+                      style: TextStyle(letterSpacing: 1, color: Colors.white)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                  height: 440,
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  child: Expanded(child: allTADetails()))
+            ],
+          ),
         ),
       ),
     );

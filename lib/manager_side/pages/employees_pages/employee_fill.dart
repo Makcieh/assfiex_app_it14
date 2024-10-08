@@ -75,7 +75,7 @@ class _EmployeeState extends State<EmployeeFill> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color.fromARGB(255, 17, 17, 18),
+      backgroundColor: const Color.fromARGB(255, 30, 30, 30),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -94,108 +94,127 @@ class _EmployeeState extends State<EmployeeFill> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Form(
-              child: Column(
-                children: [
-                  const SizedBox(height: 30),
-                  const Text(
-                    "FILL IN DETAILS",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(221, 255, 255, 255),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 20),
+      body: Container(
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(20)
+        // ),
+        height: 750,
+        padding: EdgeInsets.symmetric(vertical: 35, horizontal: 25),
 
-                        // Name Field
-                        TextFormField(
-                          controller: nameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Name',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10), color: Colors.white),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 25, right: 25, top: 0, bottom: 10),
+              child: SingleChildScrollView(
+                child: Form(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 30),
+                      const Text(
+                        "FILL IN DETAILS",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(221, 0, 0, 0),
+                            letterSpacing: 1.8),
+                      ),
+                      Container(
+                        color: const Color.fromARGB(0, 255, 255, 255),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 30),
 
-                        // Nickname Field
-                        TextFormField(
-                          controller: nicknameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Nickname',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-
-                        // Contact Number Field
-                        TextFormField(
-                          controller: contactController,
-                          keyboardType: TextInputType.phone,
-                          decoration: const InputDecoration(
-                            labelText: 'Contact No',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-
-                        // Station Trained Field
-                        TextFormField(
-                          controller: stationController,
-                          decoration: const InputDecoration(
-                            labelText: 'Station Trained',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-
-                        // Position Field
-                        TextFormField(
-                          controller: positionController,
-                          decoration: const InputDecoration(
-                            labelText: 'Position',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-
-                        // Date Employed Field
-                        TextFormField(
-                          controller: dateController,
-                          keyboardType: TextInputType.datetime,
-                          decoration: InputDecoration(
-                            labelText: 'Date Employed',
-                            border: const OutlineInputBorder(),
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.calendar_today),
-                              onPressed: () =>
-                                  _selectDate(context), // Opens date picker
+                            TextFormField(
+                              controller: nicknameController,
+                              decoration: const InputDecoration(
+                                labelText: 'Nickname: ',
+                                border: OutlineInputBorder(),
+                              ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
+                            const SizedBox(height: 10),
+                            // Name Field
+                            TextFormField(
+                              controller: nameController,
+                              decoration: const InputDecoration(
+                                labelText: 'Name: ',
+                                // labelStyle: TextStyle(
+                                //   color: Color.fromARGB(255, 0, 0, 0),
+                                // ),
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
 
-                        // Address Field
-                        TextFormField(
-                          controller: addressController,
-                          decoration: const InputDecoration(
-                            labelText: 'Address',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
+                            // Nickname Field
 
-                        // Add Employee Button and will check if the nickname duplicates
-                        Center(
+                            // Contact Number Field
+                            TextFormField(
+                              controller: contactController,
+                              keyboardType: TextInputType.phone,
+                              decoration: const InputDecoration(
+                                labelText: 'Contact No:',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            // Station Trained Field
+                            TextFormField(
+                              controller: stationController,
+                              decoration: const InputDecoration(
+                                labelText: 'Station Trained:',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            // Position Field
+                            TextFormField(
+                              controller: positionController,
+                              decoration: const InputDecoration(
+                                labelText: 'Position:',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            // Date Employed Field
+                            TextFormField(
+                              controller: dateController,
+                              keyboardType: TextInputType.datetime,
+                              decoration: InputDecoration(
+                                labelText: 'Date Employed:',
+                                border: const OutlineInputBorder(),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.calendar_today),
+                                  onPressed: () =>
+                                      _selectDate(context), // Opens date picker
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            // Address Field
+                            TextFormField(
+                              controller: addressController,
+                              decoration: const InputDecoration(
+                                labelText: 'Address:',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            // Add Employee Button and will check if the nickname duplicates
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.only(top: 10, bottom: 20),
                           child: ElevatedButton(
                             onPressed: () async {
                               // Check if any required field is empty
@@ -273,15 +292,18 @@ class _EmployeeState extends State<EmployeeFill> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 24.0),
+                                  vertical: 12.0, horizontal: 30.0),
                             ),
-                            child: const Text('ADD'),
+                            child: const Text(
+                              'Add',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),

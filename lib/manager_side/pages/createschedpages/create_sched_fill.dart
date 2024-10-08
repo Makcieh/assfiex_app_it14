@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // For Firebase Firestore
 
-final TextEditingController idController = TextEditingController();
 final TextEditingController nicknameController = TextEditingController();
 final TextEditingController positionController = TextEditingController();
 final TextEditingController hoursController = TextEditingController();
@@ -14,7 +13,6 @@ final TextEditingController endController = TextEditingController();
 List<String> nicknameSuggestions = []; // List to store nickname suggestions
 
 void clearTextFields() {
-  idController.clear();
   nicknameController.clear();
   positionController.clear();
   hoursController.clear();
@@ -170,7 +168,6 @@ void createschedFill(BuildContext context) {
                       String scheduleId = randomNumeric(5);
                       Map<String, dynamic> createSchedInfoMap = {
                         "ScheduleID": scheduleId,
-                        "EmployeeID": idController.text,
                         "Nickname": nicknameController.text,
                         "Position": positionController.text,
                         "Hours": hoursController.text,
@@ -187,7 +184,8 @@ void createschedFill(BuildContext context) {
                             msg: "Schedule Details Added",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.CENTER,
-                            backgroundColor: Colors.green,
+                            backgroundColor:
+                                const Color.fromARGB(255, 37, 123, 39),
                             textColor: Colors.white,
                             fontSize: 16.0);
                       });

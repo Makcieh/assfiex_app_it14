@@ -1,4 +1,4 @@
-import 'package:assfiex_app_it14/manager_side/pages/requestpages/request_fill.dart'; // Import the RequestBottomSheet
+import 'package:assfiex_app_it14/manager_side/pages/requestpages/request_fill.dart';
 import 'package:flutter/material.dart';
 
 class RequestPage extends StatelessWidget {
@@ -7,7 +7,7 @@ class RequestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 17, 17, 18),
+      backgroundColor: const Color.fromARGB(255, 39, 39, 39),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -40,14 +40,13 @@ class RequestPage extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor:
-                    const Color.fromARGB(255, 61, 102, 135), // Text color
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 30, vertical: 12), // Button size and padding
+                backgroundColor: const Color.fromARGB(255, 61, 102, 135),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                elevation: 2, // Elevation to match the "raised" effect
+                elevation: 2,
               ),
               child: const Text(
                 'SEE ALL REQUEST',
@@ -103,9 +102,8 @@ class RequestPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 16),
                       decoration: BoxDecoration(
-                        color: Colors.grey[300], // Background color
-                        borderRadius:
-                            BorderRadius.circular(10), // Rounded corners
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
                         'FILL IN DETAILS',
@@ -114,19 +112,6 @@ class RequestPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "ID:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          " 123",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
                     const SizedBox(height: 10),
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -143,7 +128,7 @@ class RequestPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     const Text(
-                      "M O N T H | D A Y  | Y E A R",
+                      "Y E A R | M O N T H | D A Y",
                       style: TextStyle(
                           letterSpacing: 1,
                           color: Colors.black,
@@ -154,23 +139,23 @@ class RequestPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          "07",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "|",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "07",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "|",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
                           "2024",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          "|",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          "07",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          "|",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          "7",
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],
@@ -179,7 +164,6 @@ class RequestPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        // Instead of calling createBottomSheet directly, we show the RequestBottomSheet widget
                         onPressed: () => showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
@@ -187,22 +171,19 @@ class RequestPage extends StatelessWidget {
                         ),
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
-                          backgroundColor: Colors.blue, // Text color
+                          backgroundColor: Colors.blue,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 30,
-                              vertical: 12), // Button size and padding
+                              horizontal: 30, vertical: 12),
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(8), // Rounded corners
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          elevation:
-                              2, // Elevation to match the "raised" effect
+                          elevation: 2,
                         ),
                         child: const Text(
                           "ADD REQUEST",
                           style: TextStyle(
-                            fontSize: 14, // Font size
-                            fontWeight: FontWeight.bold, // Bold text
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),

@@ -61,6 +61,37 @@ class _AllRequestState extends State<AllRequest> {
         .contains(searchQuery); // General search filter
   }
 
+  void _showDeleteConfirmationDialog(BuildContext context, String docId) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Confirm Deletion"),
+          content: Text("Are you sure you want to delete this schedule?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Delete the document from Firestore
+                await FirebaseFirestore.instance
+                    .collection('CreateSched')
+                    .doc(docId)
+                    .delete();
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget allRequestDetails() {
     return StreamBuilder(
         stream: requestStream,
@@ -128,9 +159,14 @@ class _AllRequestState extends State<AllRequest> {
                               await DatabaseMethods()
                                   .deleteRequestDetail(db['RequestID']);
                             },
-                            child: const Icon(
-                              Icons.delete_rounded,
-                              color: Colors.white,
+                            child: GestureDetector(
+                              onTap: () {
+                                _showDeleteConfirmationDialog(context, db.id);
+                              },
+                              child: const Icon(
+                                Icons.delete_rounded,
+                                color: Colors.white,
+                              ),
                             ),
                           )
                         ],
@@ -152,7 +188,7 @@ class _AllRequestState extends State<AllRequest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 17, 17, 18),
+        backgroundColor: const Color.fromARGB(255, 39, 39, 39),
         appBar: AppBar(
           flexibleSpace: Container(
             decoration: const BoxDecoration(

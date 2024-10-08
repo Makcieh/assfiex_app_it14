@@ -43,6 +43,37 @@ class _EmployeesPageState extends State<EmployeesPage> {
     super.initState();
   }
 
+  void _showDeleteConfirmationDialog(BuildContext context, String docId) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Confirm Deletion"),
+          content: Text("Are you sure you want to delete this schedule?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Delete the document from Firestore
+                await FirebaseFirestore.instance
+                    .collection('Employee')
+                    .doc(docId)
+                    .delete();
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // Date Picker
   Future<void> _selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -69,10 +100,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
 
   // Filter function based on the selected search option
   bool searchFilter(DocumentSnapshot ds) {
-    return ds[searchField]
-        .toString()
-        .toLowerCase()
-        .contains(searchQuery); // Filter logic
+    return ds[searchField].toString().toLowerCase().contains(searchQuery);
   }
 
   Widget allEmployeeDetails() {
@@ -91,83 +119,105 @@ class _EmployeesPageState extends State<EmployeesPage> {
                           .shrink(); // Hide non-matching results
                     }
 
-                    return Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        padding: const EdgeInsets.all(15),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 6, 33, 55),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  "Nickname: " + ds['Nickname'],
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    nameController.text = ds["Name"];
-                                    nicknameController.text = ds["Nickname"];
-                                    contactController.text = ds["Contact"];
-                                    stationController.text = ds["Station"];
-                                    positionController.text = ds["Position"];
-                                    dateController.text = ds['DateEmployed'];
-                                    addressController.text = ds['Address'];
-                                    EditEmployeeDetail(ds['Id']);
-                                  },
-                                  child: const Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await DatabaseMethods()
-                                        .deleteEmployeeDetail(ds['Id']);
-                                  },
-                                  child: const Icon(
-                                    Icons.delete_rounded,
-                                    color: Colors.white,
-                                  ),
-                                )
+                    return Container(
+                      child: Material(
+                        color: const Color.fromARGB(0, 75, 54, 54),
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.all(15),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topLeft,
+                              colors: [
+                                Color.fromARGB(255, 6, 83, 146),
+                                Color.fromARGB(255, 100, 206, 255),
                               ],
                             ),
-                            Text(
-                              "Name: " + ds['Name'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              "Contact: " + ds['Contact'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              "Station Trained: " + ds['Station'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              "Position: " + ds['Position'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              "Date Employed: " + ds['DateEmployed'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              "Address: " + ds['Address'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Nickname: " + ds['Nickname'],
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const Spacer(),
+                                  GestureDetector(
+                                    onTap: () {
+                                      nameController.text = ds["Name"];
+                                      nicknameController.text = ds["Nickname"];
+                                      contactController.text = ds["Contact"];
+                                      stationController.text = ds["Station"];
+                                      positionController.text = ds["Position"];
+                                      dateController.text = ds['DateEmployed'];
+                                      addressController.text = ds['Address'];
+                                      EditEmployeeDetail(ds['Id']);
+                                    },
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _showDeleteConfirmationDialog(
+                                          context, ds.id);
+                                    },
+                                    child: const Icon(
+                                      Icons.delete_rounded,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "Name: " + ds['Name'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Contact: " + ds['Contact'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Station Trained: " + ds['Station'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Position: " + ds['Position'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Date Employed: " + ds['DateEmployed'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Address: " + ds['Address'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -179,7 +229,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 17, 17, 18),
+      backgroundColor: const Color.fromARGB(255, 39, 39, 39),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -195,79 +245,106 @@ class _EmployeesPageState extends State<EmployeesPage> {
         ),
         title: const Text(
           'Employees',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              letterSpacing: .3),
         ),
       ),
       body: Container(
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: searchController,
-                    onChanged: handleSearch,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      hintStyle: const TextStyle(color: Colors.white54),
-                      filled: true,
-                      fillColor: const Color.fromARGB(255, 6, 33, 55),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+        // color: Colors.white,
+        // height: 700,
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+        padding: EdgeInsets.only(bottom: 10),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: searchController,
+                      onChanged: handleSearch,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        hintStyle: const TextStyle(color: Colors.white54),
+                        filled: true,
+                        fillColor: const Color.fromARGB(255, 71, 71, 71),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.white),
                       ),
-                      prefixIcon: const Icon(Icons.search, color: Colors.white),
                     ),
                   ),
+                  const SizedBox(width: 10),
+                  DropdownButton<String>(
+                    value: searchField,
+                    dropdownColor: const Color.fromARGB(255, 6, 33, 55),
+                    style: const TextStyle(color: Colors.white),
+                    icon:
+                        const Icon(Icons.arrow_drop_down, color: Colors.white),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        searchField = newValue!;
+                      });
+                    },
+                    items: searchOptions
+                        .map<DropdownMenuItem<String>>((String option) {
+                      return DropdownMenuItem<String>(
+                        value: option,
+                        child: Text(option),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 6, 83, 146),
+                      Color.fromARGB(255, 100, 206, 255),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(25),
                 ),
-                const SizedBox(width: 10),
-                DropdownButton<String>(
-                  value: searchField,
-                  dropdownColor: const Color.fromARGB(255, 6, 33, 55),
-                  style: const TextStyle(color: Colors.white),
-                  icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      searchField = newValue!;
-                    });
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/addemploye');
                   },
-                  items: searchOptions
-                      .map<DropdownMenuItem<String>>((String option) {
-                    return DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(option),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/addemploye');
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor:
-                    const Color.fromARGB(255, 61, 102, 135), // Text color
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 30, vertical: 12), // Button size and padding
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Rounded corners
-                ),
-                elevation: 2, // Elevation to match the "raised" effect
-              ),
-              child: const Text(
-                'ADD EMPLOYEE',
-                style: TextStyle(
-                  letterSpacing: 3,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    elevation: 2,
+                  ),
+                  child: const Text(
+                    'Add Employee',
+                    style: TextStyle(letterSpacing: 1, color: Colors.white),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 30),
-            Expanded(child: allEmployeeDetails()),
-          ],
+              const SizedBox(height: 20),
+              Container(
+                  height: 440,
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  child: Expanded(child: allEmployeeDetails())),
+            ],
+          ),
         ),
       ),
     );

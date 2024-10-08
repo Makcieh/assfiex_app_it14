@@ -8,13 +8,13 @@ class ButtonMenu extends StatelessWidget {
     return InkWell(
       child: Container(
         padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.symmetric(horizontal: 100),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
             backgroundColor: Colors.blue, // Text color
             padding: const EdgeInsets.symmetric(
-                horizontal: 20, vertical: 12), // Button size and padding
+                horizontal: 15, vertical: 6), // Button size and padding
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8), // Rounded corners
             ),
@@ -25,7 +25,7 @@ class ButtonMenu extends StatelessWidget {
           },
           child: const Center(
             child: Icon(
-              Icons.add,
+              Icons.add_rounded,
               color: Color.fromARGB(255, 255, 255, 255),
               size: 60,
             ),

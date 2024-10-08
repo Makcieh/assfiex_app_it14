@@ -53,7 +53,7 @@ class _TimeAvailState extends State<TimeAvailFill> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color.fromARGB(255, 17, 17, 18),
+      backgroundColor: const Color.fromARGB(255, 39, 39, 39),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(

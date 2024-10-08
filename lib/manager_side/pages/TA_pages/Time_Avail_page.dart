@@ -13,6 +13,7 @@ class TimeAvailPage extends StatefulWidget {
 
 class _TimeAvailPageState extends State<TimeAvailPage> {
   TextEditingController nicknameController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
   TextEditingController monController = TextEditingController();
   TextEditingController tuesController = TextEditingController();
   TextEditingController wedsController = TextEditingController();
@@ -28,6 +29,20 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
     setState(() {});
   }
 
+  // Search Functionality: filter based on nickname
+  searchTimeAvail(String query) {
+    if (query.isEmpty) {
+      getontheload(); // Load all if query is empty
+    } else {
+      TimeAvailStream = FirebaseFirestore.instance
+          .collection('TimeAvailability')
+          .where('nickname', isGreaterThanOrEqualTo: query)
+          .where('nickname', isLessThanOrEqualTo: query + '\uf8ff')
+          .snapshots();
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     getontheload();
@@ -39,6 +54,37 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
     final RegExp timeRegExp = RegExp(
         r'^(?:[1-9]|1[0-2])(am|pm)\s+to\s+(?:[1-9]|1[0-2])(am|pm)$|^NA$');
     return timeRegExp.hasMatch(input);
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, String docId) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Confirm Deletion"),
+          content: Text("Are you sure you want to delete this schedule?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Delete the document from Firestore
+                await FirebaseFirestore.instance
+                    .collection('CreateSched')
+                    .doc(docId)
+                    .delete();
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget allTADetails() {
@@ -91,9 +137,15 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                                   await DatabaseMethods()
                                       .deleteTimeAvailDetail(ds['Id']);
                                 },
-                                child: const Icon(
-                                  Icons.delete_rounded,
-                                  color: Colors.white,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _showDeleteConfirmationDialog(
+                                        context, ds.id);
+                                  },
+                                  child: const Icon(
+                                    Icons.delete_rounded,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               )
                             ],
@@ -120,7 +172,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                   );
                 },
               )
-            : Container();
+            : const Center(child: Text('No data available'));
       },
     );
   }
@@ -128,7 +180,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 17, 17, 18),
+      backgroundColor: const Color.fromARGB(255, 39, 39, 39),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -149,6 +201,20 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
         margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
         child: Column(
           children: [
+            // Search Bar
+            TextField(
+              controller: searchController,
+              onChanged: (value) {
+                searchTimeAvail(value); // Trigger search on typing
+              },
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: 'Search by Nickname',
+                labelStyle: TextStyle(color: Colors.grey),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/addta');
@@ -178,154 +244,136 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
         context: context,
         builder: (context) => AlertDialog(
           content: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(Icons.cancel_rounded),
-                      ),
-                      const SizedBox(width: 10),
-                      const Text('Edit Details:')
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Name Field
-                  TextFormField(
-                    controller: nicknameController,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Nickname',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Monday Field
-                  TextFormField(
-                    controller: monController,
-                    decoration: const InputDecoration(
-                      labelText: 'Monday',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Tuesday Field
-                  TextFormField(
-                    controller: tuesController,
-                    decoration: const InputDecoration(
-                      labelText: 'Tuesday',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Wednesday Field
-                  TextFormField(
-                    controller: wedsController,
-                    decoration: const InputDecoration(
-                      labelText: 'Wednesday',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Thursday Field
-                  TextFormField(
-                    controller: thursController,
-                    decoration: const InputDecoration(
-                      labelText: 'Thursday',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Friday Field
-                  TextFormField(
-                    controller: friController,
-                    decoration: const InputDecoration(
-                      labelText: 'Friday',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Saturday Field
-                  TextFormField(
-                    controller: satController,
-                    decoration: const InputDecoration(
-                      labelText: 'Saturday',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Sunday Field
-                  TextFormField(
-                    controller: sunController,
-                    decoration: const InputDecoration(
-                      labelText: 'Sunday',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        // Validate time formats or "NA"
-                        List<TextEditingController> controllers = [
-                          monController,
-                          tuesController,
-                          wedsController,
-                          thursController,
-                          friController,
-                          satController,
-                          sunController,
-                        ];
-
-                        for (var controller in controllers) {
-                          if (!isValidTimeFormat(controller.text.trim())) {
-                            Fluttertoast.showToast(
-                              msg:
-                                  "Invalid time format in ${controller.text}. Please use '6am to 10pm' format or 'NA'.",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0,
-                            );
-                            return;
-                          }
-                        }
-
-                        // Update data
-                        Map<String, dynamic> updateInfo = {
-                          "nickname": nicknameController.text,
-                          "mon": monController.text,
-                          "tues": tuesController.text,
-                          "weds": wedsController.text,
-                          "thurs": thursController.text,
-                          "fri": friController.text,
-                          "sat": satController.text,
-                          "sun": sunController.text,
-                        };
-                        await DatabaseMethods()
-                            .updateTimeAvailDetail(id, updateInfo);
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
                         Navigator.pop(context);
                       },
-                      child: const Text('Update'),
+                      child: const Icon(Icons.cancel_rounded),
                     ),
-                  )
-                ],
-              ),
+                    const SizedBox(width: 10),
+                    const Text('Edit Details:')
+                  ],
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: nicknameController,
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Nickname',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: monController,
+                  decoration: const InputDecoration(
+                    labelText: 'Monday',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: tuesController,
+                  decoration: const InputDecoration(
+                    labelText: 'Tuesday',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: wedsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Wednesday',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: thursController,
+                  decoration: const InputDecoration(
+                    labelText: 'Thursday',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: friController,
+                  decoration: const InputDecoration(
+                    labelText: 'Friday',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: satController,
+                  decoration: const InputDecoration(
+                    labelText: 'Saturday',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: sunController,
+                  decoration: const InputDecoration(
+                    labelText: 'Sunday',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      // Validate time formats or "NA"
+                      List<TextEditingController> controllers = [
+                        monController,
+                        tuesController,
+                        wedsController,
+                        thursController,
+                        friController,
+                        satController,
+                        sunController,
+                      ];
+
+                      for (var controller in controllers) {
+                        if (!isValidTimeFormat(controller.text.trim())) {
+                          Fluttertoast.showToast(
+                            msg:
+                                "Invalid time format in ${controller.text}. Please use '6am to 10pm' format or 'NA'.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                          return;
+                        }
+                      }
+
+                      // Update data
+                      Map<String, dynamic> updateInfo = {
+                        "nickname": nicknameController.text,
+                        "mon": monController.text,
+                        "tues": tuesController.text,
+                        "weds": wedsController.text,
+                        "thurs": thursController.text,
+                        "fri": friController.text,
+                        "sat": satController.text,
+                        "sun": sunController.text,
+                      };
+                      await DatabaseMethods()
+                          .updateTimeAvailDetail(id, updateInfo);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Update'),
+                  ),
+                )
+              ],
             ),
           ),
         ),

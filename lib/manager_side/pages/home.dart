@@ -36,20 +36,17 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: signUserOut,
-            icon: const Icon(Icons.logout),
-          )
-        ],
-        title: const Text(
-          'WELCOME TO ASFIEX',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Center(
+          child: const Text(
+            'WELCOME TO ASFIEX',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+          ),
         ),
       ),
       body: Column(
         children: [
-          const SizedBox(height: 30),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -80,9 +77,9 @@ class _HomeState extends State<Home> {
                 today = selectedDay; // Set the selected day
               });
             },
-            calendarStyle: CalendarStyle(
+            calendarStyle: const CalendarStyle(
               defaultTextStyle: TextStyle(color: Colors.white, fontSize: 16),
-              weekendTextStyle: TextStyle(color: Colors.red, fontSize: 16),
+              weekendTextStyle: TextStyle(color: Colors.blue, fontSize: 16),
               selectedTextStyle:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               selectedDecoration: BoxDecoration(
@@ -91,26 +88,27 @@ class _HomeState extends State<Home> {
               ),
               todayTextStyle: TextStyle(color: Colors.white),
               todayDecoration: BoxDecoration(
-                color: Colors.green,
+                color: Colors.blue,
                 shape: BoxShape.circle,
               ),
             ),
-            daysOfWeekStyle: DaysOfWeekStyle(
+            daysOfWeekStyle: const DaysOfWeekStyle(
               weekdayStyle: TextStyle(color: Colors.white, fontSize: 14),
-              weekendStyle: TextStyle(color: Colors.red, fontSize: 14),
+              weekendStyle: TextStyle(color: Colors.blue, fontSize: 14),
             ),
             headerStyle: HeaderStyle(
-              titleTextStyle: TextStyle(color: Colors.white, fontSize: 18),
-              formatButtonTextStyle: TextStyle(color: Colors.white),
+              titleTextStyle:
+                  const TextStyle(color: Colors.white, fontSize: 18),
+              formatButtonTextStyle: const TextStyle(color: Colors.white),
               formatButtonDecoration: BoxDecoration(
                 color: Colors.blueAccent,
                 borderRadius: BorderRadius.circular(10),
               ),
-              leftChevronIcon: Icon(
+              leftChevronIcon: const Icon(
                 Icons.chevron_left,
                 color: Colors.white,
               ),
-              rightChevronIcon: Icon(
+              rightChevronIcon: const Icon(
                 Icons.chevron_right,
                 color: Colors.white,
               ),
@@ -136,7 +134,6 @@ class _HomeState extends State<Home> {
                 // Extracting schedules from the Firestore snapshot
                 var schedules = snapshot.data!.docs.map((doc) {
                   return {
-                    'employeeId': doc['EmployeeID'],
                     'start': doc['Start'],
                     'end': doc['End'],
                     'nickname': doc['Nickname'],
@@ -149,25 +146,55 @@ class _HomeState extends State<Home> {
                 return ListView.builder(
                   itemCount: schedules.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('Nickname: ${schedules[index]['nickname']}',
-                          style: const TextStyle(color: Colors.white)),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Position: ${schedules[index]['position']}',
-                            style: const TextStyle(color: Colors.grey),
+                    return Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              12), // Set the desired border radius here
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors
+                                  .blue, // Optional: Add a shadow for better appearance
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              12), // Ensure the child is clipped with the same radius
+                          child: ListTile(
+                            title: Text(
+                              'Nickname: ${schedules[index]['nickname']}',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Position: ${schedules[index]['position']}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  'Hours: ${schedules[index]['hours']}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          Text(
-                            'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          Text(
-                            'Hours: ${schedules[index]['hours']}',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ],
+                        ),
                       ),
                     );
                   },
@@ -176,7 +203,25 @@ class _HomeState extends State<Home> {
             ),
           ),
           const SizedBox(height: 10),
-          const ButtonMenu(),
+          Row(
+            children: [
+              Container(
+                  padding: EdgeInsets.only(left: 115),
+                  child: const ButtonMenu()),
+              Container(
+                padding: EdgeInsets.only(left: 40),
+                child: GestureDetector(
+                  onTap: signUserOut,
+                  child: Text(
+                    'Log Out',
+                    style: TextStyle(
+                        color: const Color.fromARGB(255, 189, 54, 54),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

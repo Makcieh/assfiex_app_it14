@@ -36,9 +36,10 @@ class _HomeState extends State<EmployeeHome> {
             ),
           ),
         ),
-        title: Center(
+        title: Container(
+          padding: EdgeInsets.only(left: 20),
           child: const Text(
-            'WELCOME TO ASFIEX, Employee or Guest',
+            'WELCOME TO ASFIEX',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),

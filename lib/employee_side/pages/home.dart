@@ -1,19 +1,23 @@
-import 'package:assfiex_app_it14/employee_side/pages/components/button_menu.dart';
+import 'package:assfiex_app_it14/employee_side/components/button_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-DateTime today = DateTime.now();
+class EmployeeHome extends StatefulWidget {
+  const EmployeeHome({super.key});
 
-// ignore: must_be_immutable
-class EmployeeHome extends StatelessWidget {
-  EmployeeHome({super.key});
+  @override
+  State<EmployeeHome> createState() => _HomeState();
+}
 
+class _HomeState extends State<EmployeeHome> {
+  DateTime today = DateTime.now();
+
+  // Function to sign out the user
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
-
-  DateTime today = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -32,22 +36,17 @@ class EmployeeHome extends StatelessWidget {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: signUserOut,
-            icon: const Icon(Icons.logout),
-          )
-        ],
-        title: const Center(
-          child: Text(
-            'WELCOME TO ASFIEX',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Center(
+          child: const Text(
+            'WELCOME TO ASFIEX, Employee or Guest',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
       ),
       body: Column(
         children: [
-          const SizedBox(height: 30),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -55,26 +54,164 @@ class EmployeeHome extends StatelessWidget {
               children: [
                 Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey[
-                          300], // Background color (light grey or any color)
-                      borderRadius:
-                          BorderRadius.circular(10), // Rounded corners
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(10),
                     child: const Text(
-                      'SCHEDULE FOR THIS MONTH',
+                      'SCHEDULE FOR EVERYDAY',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     )),
               ],
             ),
           ),
+
+          // Calendar to display the current day with customized styles
           TableCalendar(
-              focusedDay: today,
-              firstDay: DateTime.utc(2024, 9, 24),
-              lastDay: DateTime.utc(2030, 5, 6)),
-          const SizedBox(height: 150),
-          const Employee_ButtonMenu(),
+            focusedDay: today,
+            firstDay: DateTime.utc(2024, 9, 24),
+            lastDay: DateTime.utc(2030, 5, 6),
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                today = selectedDay; // Set the selected day
+              });
+            },
+            calendarStyle: const CalendarStyle(
+              defaultTextStyle: TextStyle(color: Colors.white, fontSize: 16),
+              weekendTextStyle: TextStyle(color: Colors.blue, fontSize: 16),
+              selectedTextStyle:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              selectedDecoration: BoxDecoration(
+                color: Colors.blueAccent,
+                shape: BoxShape.circle,
+              ),
+              todayTextStyle: TextStyle(color: Colors.white),
+              todayDecoration: BoxDecoration(
+                color: Colors.blue,
+                shape: BoxShape.circle,
+              ),
+            ),
+            daysOfWeekStyle: const DaysOfWeekStyle(
+              weekdayStyle: TextStyle(color: Colors.white, fontSize: 14),
+              weekendStyle: TextStyle(color: Colors.blue, fontSize: 14),
+            ),
+            headerStyle: HeaderStyle(
+              titleTextStyle:
+                  const TextStyle(color: Colors.white, fontSize: 18),
+              formatButtonTextStyle: const TextStyle(color: Colors.white),
+              formatButtonDecoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              leftChevronIcon: const Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+              ),
+              rightChevronIcon: const Icon(
+                Icons.chevron_right,
+                color: Colors.white,
+              ),
+              titleCentered: true,
+              formatButtonVisible: false, // Hide format button if not needed
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // StreamBuilder for real-time updates of schedules
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('CreateSched')
+                  .snapshots(), // Listen to the 'CreateSched' collection
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                // Extracting schedules from the Firestore snapshot
+                var schedules = snapshot.data!.docs.map((doc) {
+                  return {
+                    'start': doc['Start'],
+                    'end': doc['End'],
+                    'nickname': doc['Nickname'],
+                    'position': doc['Position'],
+                    'hours': doc['Hours'],
+                    'scheduleId': doc['ScheduleID'],
+                  };
+                }).toList();
+
+                return ListView.builder(
+                  itemCount: schedules.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Container(
+                          color: const Color.fromARGB(0, 75, 54, 54),
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 2),
+                            padding: const EdgeInsets.all(2),
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topLeft,
+                                colors: [
+                                  Color.fromARGB(255, 6, 83, 146),
+                                  Color.fromARGB(255, 100, 206, 255),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  12), // Ensure the child is clipped with the same radius
+                              child: ListTile(
+                                title: Text(
+                                  'Nickname: ${schedules[index]['nickname']}',
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Position: ${schedules[index]['position']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      'Hours: ${schedules[index]['hours']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ));
+                  },
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+              padding: EdgeInsets.all(10), child: const Employee_ButtonMenu()),
         ],
       ),
     );

@@ -17,7 +17,7 @@ class _BottomNavState extends State<BottomNav> {
 
   // List of pages corresponding to each tab
   static final List<Widget> _pages = <Widget>[
-    CreateSchedPage(),
+    const CreateSchedPage(),
     const TimeAvailPage(),
     const RequestPage(),
     const EmployeesPage()

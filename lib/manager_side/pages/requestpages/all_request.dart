@@ -259,7 +259,14 @@ class _AllRequestState extends State<AllRequest> {
                 ],
               ),
               const SizedBox(height: 30),
-              Expanded(child: allRequestDetails())
+              Container(
+                  height: 530,
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  child: Expanded(child: allRequestDetails()))
             ],
           ),
         ));

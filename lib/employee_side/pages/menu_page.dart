@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Employee_MenuPage extends StatelessWidget {
-  const Employee_MenuPage({super.key});
+class MenuPage extends StatelessWidget {
+  const MenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {

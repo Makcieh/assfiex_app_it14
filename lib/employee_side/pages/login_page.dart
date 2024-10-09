@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:assfiex_app_it14/manager_side/components/my_textfield.dart';
+import 'package:assfiex_app_it14/employee_side/components/my_textfield.dart';
+import 'package:assfiex_app_it14/employee_side/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -161,36 +162,53 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     const SizedBox(height: 15),
-                    //register new manager
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text('Are you a new',
-                            style:
-                                TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                        SizedBox(width: 4),
-                        Text('Manager?',
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
+
                     //enter as employee or guest
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Enter as',
-                            style:
-                                TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                        Text(
+                          'Enter as',
+                          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                        ),
                         SizedBox(width: 4),
-                        Text('Employee or Guest',
+                        GestureDetector(
+                          onTap: () {
+                            // Navigate to Employee Page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EmployeeHome()),
+                            );
+                          },
+                          child: Text(
+                            'Employee',
                             style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold)),
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Text('or'),
+                        SizedBox(width: 4),
+                        GestureDetector(
+                          onTap: () {
+                            // Navigate to Guest Page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EmployeeHome()),
+                            );
+                          },
+                          child: Text(
+                            'Guest',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ],
                     )
                   ],

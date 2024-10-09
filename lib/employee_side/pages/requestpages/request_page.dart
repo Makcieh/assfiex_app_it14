@@ -1,13 +1,12 @@
-import 'package:assfiex_app_it14/employee_side/pages/requestpages/request_fill.dart';
 import 'package:flutter/material.dart';
 
-class Employee_RequestPage extends StatelessWidget {
-  const Employee_RequestPage({super.key});
+class RequestPage extends StatelessWidget {
+  const RequestPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 17, 17, 18),
+      backgroundColor: const Color.fromARGB(255, 39, 39, 39),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -33,26 +32,39 @@ class Employee_RequestPage extends StatelessWidget {
               height: 30,
             ),
 
-            //see all request buttom
-            ElevatedButton(
-                onPressed: () {},
+            //see all request button
+            Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 6, 83, 146),
+                    Color.fromARGB(255, 100, 206, 255),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/allrequest');
+                },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor:
-                      const Color.fromARGB(255, 61, 102, 135), // Text color
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30, vertical: 12), // Button size and padding
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                    borderRadius: BorderRadius.circular(25),
                   ),
-                  elevation: 2, // Elevation to match the "raised" effect
+                  elevation: 2,
                 ),
                 child: const Text(
-                  'SEE ALL REQUEST',
-                  style: TextStyle(
-                    letterSpacing: 3,
-                  ),
-                )),
+                  'All Request Leave',
+                  style: TextStyle(letterSpacing: 2, color: Colors.white),
+                ),
+              ),
+            ),
 
             const SizedBox(
               height: 30,
@@ -100,10 +112,8 @@ class Employee_RequestPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 16),
                       decoration: BoxDecoration(
-                        color: Colors.grey[
-                            300], // Background color (light grey or any color)
-                        borderRadius:
-                            BorderRadius.circular(10), // Rounded corners
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
                         'FILL IN DETAILS',
@@ -116,90 +126,70 @@ class Employee_RequestPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "ID:",
+                          "NICKNAME:",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          " 123",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "NAME:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          " MICHAEL",
+                          " MAKI",
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),
                     const SizedBox(height: 20),
                     const Text(
-                      "M O N T H | D A Y  | Y E A R",
+                      "Select Number of Days: Day 2",
                       style: TextStyle(
-                          letterSpacing: 1,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
+                          color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    const Column(
                       children: [
                         Text(
-                          "07",
+                          'Day 1: 2024-10-9',
                           style: TextStyle(color: Colors.grey),
                         ),
                         Text(
-                          "|",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "07",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "|",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "2024",
+                          'Day 2: 2024-10-10',
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    const SizedBox(height: 20),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 6, 83, 146),
+                            Color.fromARGB(255, 100, 206, 255),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
                       child: ElevatedButton(
-                        onPressed: () => createBottomSheet(context),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/addrequest');
+                        },
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.blue, // Text color
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 30,
-                              vertical: 12), // Button size and padding
+                              horizontal: 20, vertical: 15),
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(8), // Rounded corners
+                            borderRadius: BorderRadius.circular(25),
                           ),
-                          elevation:
-                              2, // Elevation to match the "raised" effect
+                          elevation: 2,
                         ),
                         child: const Text(
-                          "ADD REQUEST",
+                          "Add Request",
                           style: TextStyle(
-                            fontSize: 14, // Font size
-                            fontWeight: FontWeight.bold, // Bold text
-                          ),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

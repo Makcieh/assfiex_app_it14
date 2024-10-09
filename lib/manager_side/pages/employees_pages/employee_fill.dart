@@ -96,7 +96,7 @@ class _EmployeeState extends State<EmployeeFill> {
       ),
       body: Container(
         height: 750,
-        padding: EdgeInsets.symmetric(vertical: 35, horizontal: 25),
+        padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 25),
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: Colors.white),
@@ -123,7 +123,6 @@ class _EmployeeState extends State<EmployeeFill> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(height: 30),
-
                             TextFormField(
                               controller: nicknameController,
                               decoration: const InputDecoration(
@@ -132,22 +131,14 @@ class _EmployeeState extends State<EmployeeFill> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            // Name Field
                             TextFormField(
                               controller: nameController,
                               decoration: const InputDecoration(
                                 labelText: 'Name: ',
-                                // labelStyle: TextStyle(
-                                //   color: Color.fromARGB(255, 0, 0, 0),
-                                // ),
                                 border: OutlineInputBorder(),
                               ),
                             ),
                             const SizedBox(height: 10),
-
-                            // Nickname Field
-
-                            // Contact Number Field
                             TextFormField(
                               controller: contactController,
                               keyboardType: TextInputType.phone,
@@ -157,8 +148,6 @@ class _EmployeeState extends State<EmployeeFill> {
                               ),
                             ),
                             const SizedBox(height: 10),
-
-                            // Station Trained Field
                             TextFormField(
                               controller: stationController,
                               decoration: const InputDecoration(
@@ -167,8 +156,6 @@ class _EmployeeState extends State<EmployeeFill> {
                               ),
                             ),
                             const SizedBox(height: 10),
-
-                            // Position Field
                             TextFormField(
                               controller: positionController,
                               decoration: const InputDecoration(
@@ -177,8 +164,6 @@ class _EmployeeState extends State<EmployeeFill> {
                               ),
                             ),
                             const SizedBox(height: 10),
-
-                            // Date Employed Field
                             TextFormField(
                               controller: dateController,
                               keyboardType: TextInputType.datetime,
@@ -187,14 +172,11 @@ class _EmployeeState extends State<EmployeeFill> {
                                 border: const OutlineInputBorder(),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.calendar_today),
-                                  onPressed: () =>
-                                      _selectDate(context), // Opens date picker
+                                  onPressed: () => _selectDate(context),
                                 ),
                               ),
                             ),
                             const SizedBox(height: 10),
-
-                            // Address Field
                             TextFormField(
                               controller: addressController,
                               decoration: const InputDecoration(
@@ -203,8 +185,6 @@ class _EmployeeState extends State<EmployeeFill> {
                               ),
                             ),
                             const SizedBox(height: 10),
-
-                            // Add Employee Button and will check if the nickname duplicates
                           ],
                         ),
                       ),

@@ -262,7 +262,7 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                       });
                     },
                     style: const TextStyle(color: Colors.white),
-                    dropdownColor: Colors.black,
+                    dropdownColor: const Color.fromARGB(255, 6, 33, 55),
                   ),
                   const SizedBox(width: 10),
                 ],

@@ -4,14 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class TimeAvailPage extends StatefulWidget {
-  const TimeAvailPage({super.key});
+class Employee_TimeAvailPage extends StatefulWidget {
+  const Employee_TimeAvailPage({super.key});
 
   @override
-  State<TimeAvailPage> createState() => _TimeAvailPageState();
+  State<Employee_TimeAvailPage> createState() => _TimeAvailPageState();
 }
 
-class _TimeAvailPageState extends State<TimeAvailPage> {
+class _TimeAvailPageState extends State<Employee_TimeAvailPage> {
   TextEditingController nicknameController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   TextEditingController monController = TextEditingController();
@@ -154,41 +154,41 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold)),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  nicknameController.text = ds["nickname"];
-                                  monController.text = ds["mon"];
-                                  tuesController.text = ds["tues"];
-                                  wedsController.text = ds["weds"];
-                                  thursController.text = ds["thurs"];
-                                  friController.text = ds["fri"];
-                                  satController.text = ds["sat"];
-                                  sunController.text = ds["sun"];
-                                  EditTimeAvailDetail(ds['Id']);
-                                },
-                                child: const Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              GestureDetector(
-                                onTap: () async {
-                                  await DatabaseMethods()
-                                      .deleteTimeAvailDetail(ds['Id']);
-                                },
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _showDeleteConfirmationDialog(
-                                        context, ds.id);
-                                  },
-                                  child: const Icon(
-                                    Icons.delete_rounded,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              )
+                              // const Spacer(),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     nicknameController.text = ds["nickname"];
+                              //     monController.text = ds["mon"];
+                              //     tuesController.text = ds["tues"];
+                              //     wedsController.text = ds["weds"];
+                              //     thursController.text = ds["thurs"];
+                              //     friController.text = ds["fri"];
+                              //     satController.text = ds["sat"];
+                              //     sunController.text = ds["sun"];
+                              //     EditTimeAvailDetail(ds['Id']);
+                              //   },
+                              //   child: const Icon(
+                              //     Icons.edit,
+                              //     color: Colors.white,
+                              //   ),
+                              // ),
+                              // const SizedBox(width: 10),
+                              // GestureDetector(
+                              //   onTap: () async {
+                              //     await DatabaseMethods()
+                              //         .deleteTimeAvailDetail(ds['Id']);
+                              //   },
+                              //   child: GestureDetector(
+                              //     onTap: () {
+                              //       _showDeleteConfirmationDialog(
+                              //           context, ds.id);
+                              //     },
+                              //     child: const Icon(
+                              //       Icons.delete_rounded,
+                              //       color: Colors.white,
+                              //     ),
+                              //   ),
+                              // )
                             ],
                           ),
                           Text("Monday: " + ds['mon'],
@@ -247,7 +247,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
             ),
           ),
         ),
-        title: const Text('Time Availability',
+        title: const Text("Employee's Time Avail.",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
       body: Container(
@@ -305,40 +305,40 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
               ),
               const SizedBox(height: 20),
 
-              Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromARGB(255, 6, 83, 146),
-                      Color.fromARGB(255, 100, 206, 255),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/addta');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    elevation: 2,
-                  ),
-                  child: const Text('Add Time Availability',
-                      style: TextStyle(letterSpacing: 1, color: Colors.white)),
-                ),
-              ),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     gradient: const LinearGradient(
+              //       colors: [
+              //         Color.fromARGB(255, 6, 83, 146),
+              //         Color.fromARGB(255, 100, 206, 255),
+              //       ],
+              //       begin: Alignment.topLeft,
+              //       end: Alignment.bottomRight,
+              //     ),
+              //     borderRadius: BorderRadius.circular(25),
+              //   ),
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       Navigator.pushNamed(context, '/addta');
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: Colors.transparent,
+              //       shadowColor: Colors.transparent,
+              //       padding: const EdgeInsets.symmetric(
+              //           horizontal: 30, vertical: 12),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(8),
+              //       ),
+              //       elevation: 2,
+              //     ),
+              //     child: const Text('Add Time Availability',
+              //         style: TextStyle(letterSpacing: 1, color: Colors.white)),
+              //   ),
+              // ),
               const SizedBox(height: 20),
 
               Container(
-                  height: 340,
+                  height: 450,
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
@@ -347,16 +347,6 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                   child: Expanded(child: allTADetails())),
               const SizedBox(
                 height: 5,
-              ),
-              const Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'NOTE: PLEASE DELETE CURRENT T.A WHEN CREATING NEW',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14),
-                ),
               ),
             ],
           ),

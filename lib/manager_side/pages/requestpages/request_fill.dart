@@ -149,76 +149,97 @@ class _RequestState extends State<RequestFill> {
                 ),
                 const SizedBox(height: 20),
 
-                ElevatedButton(
-                  onPressed: () async {
-                    // Check if the nickname is empty
-                    if (nicknameController.text.isEmpty) {
-                      Fluttertoast.showToast(
-                        msg: "Nickname is required",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                      return;
-                    }
-
-                    // Validate nickname from Firestore
-                    bool isValidNickname =
-                        await isNicknameValid(nicknameController.text.trim());
-
-                    if (!isValidNickname) {
-                      Fluttertoast.showToast(
-                        msg: "Nickname not found",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                      return;
-                    }
-
-                    // Generate request data
-                    String RequestID = randomNumeric(5);
-                    Map<String, dynamic> requestInfoMap = {
-                      "RequestID": RequestID,
-                      "EmployeeID": idController.text,
-                      "Nickname": nicknameController.text,
-                      "Dates": selectedDates
-                          .map((date) => dateFormat.format(date!))
-                          .toList(), // Store formatted dates
-                    };
-
-                    // Add request to the database
-                    await DatabaseMethods()
-                        .addRequest(requestInfoMap, RequestID)
-                        .then((value) {
-                      Fluttertoast.showToast(
-                          msg: "Request Details Added",
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 6, 83, 146),
+                        Color.fromARGB(255, 100, 206, 255),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      // Check if the nickname is empty
+                      if (nicknameController.text.isEmpty) {
+                        Fluttertoast.showToast(
+                          msg: "Nickname is required",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.green,
+                          backgroundColor: Colors.red,
                           textColor: Colors.white,
-                          fontSize: 16.0);
+                          fontSize: 16.0,
+                        );
+                        return;
+                      }
 
-                      // Clear the text fields and reset the form after adding the request
-                      setState(() {
-                        idController.clear();
-                        nicknameController.clear();
-                        selectedDates = [null]; // Reset selected dates
-                        selectedDays = 1; // Reset the number of days
+                      // Validate nickname from Firestore
+                      bool isValidNickname =
+                          await isNicknameValid(nicknameController.text.trim());
+
+                      if (!isValidNickname) {
+                        Fluttertoast.showToast(
+                          msg: "Nickname not found",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                        return;
+                      }
+
+                      // Generate request data
+                      String RequestID = randomNumeric(5);
+                      Map<String, dynamic> requestInfoMap = {
+                        "RequestID": RequestID,
+                        "EmployeeID": idController.text,
+                        "Nickname": nicknameController.text,
+                        "Dates": selectedDates
+                            .map((date) => dateFormat.format(date!))
+                            .toList(), // Store formatted dates
+                      };
+
+                      // Add request to the database
+                      await DatabaseMethods()
+                          .addRequest(requestInfoMap, RequestID)
+                          .then((value) {
+                        Fluttertoast.showToast(
+                            msg: "Request Details Added",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.green,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+
+                        // Clear the text fields and reset the form after adding the request
+                        setState(() {
+                          idController.clear();
+                          nicknameController.clear();
+                          selectedDates = [null]; // Reset selected dates
+                          selectedDays = 1; // Reset the number of days
+                        });
                       });
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 24.0),
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      elevation: 2,
+                    ),
+                    child: const Text(
+                      'Add Request',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  child: const Text('ADD'),
                 ),
               ],
             ),

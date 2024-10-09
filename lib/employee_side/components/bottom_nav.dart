@@ -1,11 +1,10 @@
-import 'package:assfiex_app_it14/employee_side/pages/Time_Avail_page.dart';
+import 'package:assfiex_app_it14/employee_side/pages/TA_pages/Time_Avail_page.dart';
 import 'package:assfiex_app_it14/employee_side/pages/createschedpages/create_sched_page.dart';
 import 'package:assfiex_app_it14/employee_side/pages/employees_pages/employees_page.dart';
 import 'package:assfiex_app_it14/employee_side/pages/requestpages/all_request.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-// ignore: camel_case_types
 class Employee_BottomNav extends StatefulWidget {
   const Employee_BottomNav({super.key});
 
@@ -58,7 +57,7 @@ class _BottomNavState extends State<Employee_BottomNav> {
             tabs: const [
               GButton(
                 icon: Icons.calendar_month,
-                text: 'Create Schedule',
+                text: 'Createe Schedule',
                 textStyle: TextStyle(color: Colors.white, fontSize: 10),
               ),
               GButton(

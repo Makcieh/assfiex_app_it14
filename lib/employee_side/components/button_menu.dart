@@ -9,13 +9,13 @@ class Employee_ButtonMenu extends StatelessWidget {
     return InkWell(
       child: Container(
         padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.symmetric(horizontal: 100),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
             backgroundColor: Colors.blue, // Text color
             padding: const EdgeInsets.symmetric(
-                horizontal: 30, vertical: 12), // Button size and padding
+                horizontal: 15, vertical: 6), // Button size and padding
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8), // Rounded corners
             ),
@@ -26,7 +26,7 @@ class Employee_ButtonMenu extends StatelessWidget {
           },
           child: const Center(
             child: Icon(
-              Icons.add,
+              Icons.remove_red_eye_outlined,
               color: Color.fromARGB(255, 255, 255, 255),
               size: 60,
             ),

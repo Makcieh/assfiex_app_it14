@@ -147,56 +147,63 @@ class _HomeState extends State<Home> {
                   itemCount: schedules.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                              12), // Set the desired border radius here
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors
-                                  .blue, // Optional: Add a shadow for better appearance
-                              spreadRadius: 2,
+                        padding: const EdgeInsets.all(5),
+                        child: Container(
+                          color: const Color.fromARGB(0, 75, 54, 54),
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 2),
+                            padding: const EdgeInsets.all(2),
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topLeft,
+                                colors: [
+                                  Color.fromARGB(255, 6, 83, 146),
+                                  Color.fromARGB(255, 100, 206, 255),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              12), // Ensure the child is clipped with the same radius
-                          child: ListTile(
-                            title: Text(
-                              'Nickname: ${schedules[index]['nickname']}',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Position: ${schedules[index]['position']}',
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  12), // Ensure the child is clipped with the same radius
+                              child: ListTile(
+                                title: Text(
+                                  'Nickname: ${schedules[index]['nickname']}',
                                   style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                Text(
-                                  'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                subtitle: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Position: ${schedules[index]['position']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      'Hours: ${schedules[index]['hours']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  'Hours: ${schedules[index]['hours']}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    );
+                        ));
                   },
                 );
               },

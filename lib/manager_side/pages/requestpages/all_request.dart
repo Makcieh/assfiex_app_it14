@@ -110,14 +110,21 @@ class _AllRequestState extends State<AllRequest> {
               }
 
               return Material(
-                elevation: 5.0,
+                color: const Color.fromARGB(0, 75, 54, 54),
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
-                  margin: const EdgeInsets.only(top: 20),
+                  margin: const EdgeInsets.only(top: 10),
                   padding: const EdgeInsets.all(15),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 6, 33, 55),
+                    gradient: const LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topLeft,
+                      colors: [
+                        Color.fromARGB(255, 6, 83, 146),
+                        Color.fromARGB(255, 100, 206, 255),
+                      ],
+                    ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(
@@ -127,7 +134,9 @@ class _AllRequestState extends State<AllRequest> {
                         children: [
                           Text(
                             "Nickname: " + db['Nickname'],
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -208,6 +217,7 @@ class _AllRequestState extends State<AllRequest> {
               Row(
                 children: [
                   Expanded(
+                    // Search Bar
                     child: TextField(
                       controller: searchController,
                       onChanged: handleSearch,
@@ -216,9 +226,10 @@ class _AllRequestState extends State<AllRequest> {
                         hintText: 'Search',
                         hintStyle: const TextStyle(color: Colors.white54),
                         filled: true,
-                        fillColor: const Color.fromARGB(255, 6, 33, 55),
+                        fillColor: const Color.fromARGB(255, 71, 71, 71),
+                        labelStyle: const TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(25),
                         ),
                         prefixIcon:
                             const Icon(Icons.search, color: Colors.white),
@@ -279,6 +290,7 @@ class _AllRequestState extends State<AllRequest> {
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: nicknameController,
+                        readOnly: true,
                         decoration: const InputDecoration(
                           labelText: 'Nickname',
                           border: OutlineInputBorder(),

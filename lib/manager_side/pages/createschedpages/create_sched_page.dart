@@ -12,11 +12,18 @@ class CreateSchedPage extends StatefulWidget {
 
 class _CreateSchedPageState extends State<CreateSchedPage> {
   TextEditingController searchController = TextEditingController();
-  String searchBy = 'Nickname';
+  String searchBy = 'Nickname'; // Default search by Nickname
   String searchQuery = '';
   Stream<QuerySnapshot>? scheduStream;
-  // List of search options without EmployeeID
-  List<String> searchOptions = ['Nickname', 'Position', 'Station'];
+
+  // Updated search options without 'Station' but with 'Hours', 'Start', and 'End'
+  List<String> searchOptions = [
+    'Nickname',
+    'Position',
+    'Hours',
+    'Start',
+    'End'
+  ];
 
   // Load schedules without search
   getSchedules() async {
@@ -31,12 +38,22 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
       // If search bar is empty, load all schedules
       getSchedules();
     } else {
-      // Search query based on selected field
-      scheduStream = FirebaseFirestore.instance
-          .collection('CreateSched')
-          .where(searchBy, isGreaterThanOrEqualTo: query)
-          .where(searchBy, isLessThanOrEqualTo: query + '\uf8ff')
-          .snapshots();
+      // Handle specific cases for numeric or string fields like Hours, Start, End
+      if (searchBy == 'Hours' || searchBy == 'Start' || searchBy == 'End') {
+        // For Hours, Start, and End, treat them as string comparisons
+        scheduStream = FirebaseFirestore.instance
+            .collection('CreateSched')
+            .where(searchBy, isGreaterThanOrEqualTo: query)
+            .where(searchBy, isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      } else {
+        // Handle text fields (Nickname, Position)
+        scheduStream = FirebaseFirestore.instance
+            .collection('CreateSched')
+            .where(searchBy, isGreaterThanOrEqualTo: query)
+            .where(searchBy, isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      }
       setState(() {});
     }
   }
@@ -97,83 +114,80 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
               itemBuilder: (context, index) {
                 DocumentSnapshot data = snapshot.data!.docs[index];
 
-                return Container(
-                  child: Material(
-                    color: const Color.fromARGB(0, 75, 54, 54),
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      padding: const EdgeInsets.all(15),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.bottomLeft,
-                          end: Alignment.topLeft,
-                          colors: [
-                            Color.fromARGB(255, 6, 83, 146),
-                            Color.fromARGB(255, 100, 206, 255),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Nickname: " + data['Nickname'],
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  nicknameController.text = data["Nickname"];
-                                  positionController.text = data["Position"];
-                                  hoursController.text = data["Hours"];
-                                  startController.text = data["Start"];
-                                  endController.text = data["End"];
-                                  editSchedDetail(data["ScheduleID"]);
-                                },
-                                child: const Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              GestureDetector(
-                                onTap: () {
-                                  // Show confirmation dialog before deletion
-                                  _showDeleteConfirmationDialog(
-                                      context, data.id);
-                                },
-                                child: const Icon(
-                                  Icons.delete_rounded,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                          Text(
-                            "Position: " + data['Position'],
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            "Hours: " + data['Hours'],
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            "Start: " + data['Start'],
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            "End: " + data['End'],
-                            style: const TextStyle(color: Colors.white),
-                          ),
+                return Material(
+                  color: const Color.fromARGB(0, 75, 54, 54),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.all(15),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topLeft,
+                        colors: [
+                          Color.fromARGB(255, 6, 83, 146),
+                          Color.fromARGB(255, 100, 206, 255),
                         ],
                       ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Nickname: " + data['Nickname'],
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                nicknameController.text = data["Nickname"];
+                                positionController.text = data["Position"];
+                                hoursController.text = data["Hours"];
+                                startController.text = data["Start"];
+                                endController.text = data["End"];
+                                editSchedDetail(data["ScheduleID"]);
+                              },
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () {
+                                // Show confirmation dialog before deletion
+                                _showDeleteConfirmationDialog(context, data.id);
+                              },
+                              child: const Icon(
+                                Icons.delete_rounded,
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        ),
+                        Text(
+                          "Position: " + data['Position'],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "Hours: " + data['Hours'],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "Start: " + data['Start'],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "End: " + data['End'],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -211,7 +225,7 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
             children: [
               Row(
                 children: [
-                  // Search bar
+                  // Search Bar
                   Expanded(
                     child: TextField(
                       controller: searchController,

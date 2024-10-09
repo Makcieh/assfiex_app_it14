@@ -55,29 +55,45 @@ class _RequestState extends State<RequestFill> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.only(top: 100, left: 20, right: 20),
         child: Container(
-          color: Colors.white,
-          padding: EdgeInsets.all(50),
+          padding: const EdgeInsets.all(50),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                width: 2.0,
+              )),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Center(
-                  child: Text(
-                    "Fill In Details",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                Center(
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Text(
+                      "FILL IN DETAILS",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
                 TextField(
                   controller: nicknameController,
                   decoration: const InputDecoration(
-                    labelText: "Nickname",
+                    labelText: "NICKNAME",
                     hintText: "",
                   ),
                 ),
@@ -86,7 +102,10 @@ class _RequestState extends State<RequestFill> {
                 // Dropdown for number of days selection
                 Row(
                   children: [
-                    const Text("Select Number of Days: "),
+                    const Text(
+                      "Select Number of Days:  ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     DropdownButton<int>(
                       value: selectedDays,
                       items: [1, 2, 3, 4].map((int value) {
@@ -107,10 +126,9 @@ class _RequestState extends State<RequestFill> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
 
                 // Date pickers for each day
-                Text("Select Dates"),
                 Column(
                   children: List.generate(
                     selectedDays,

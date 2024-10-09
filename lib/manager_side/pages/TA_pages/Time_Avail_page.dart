@@ -29,16 +29,61 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
     setState(() {});
   }
 
-  // Search Functionality: filter based on nickname
   searchTimeAvail(String query) {
     if (query.isEmpty) {
       getontheload(); // Load all if query is empty
     } else {
-      TimeAvailStream = FirebaseFirestore.instance
-          .collection('TimeAvailability')
-          .where('nickname', isGreaterThanOrEqualTo: query)
-          .where('nickname', isLessThanOrEqualTo: query + '\uf8ff')
-          .snapshots();
+      // Check for weekday search queries
+      if (monController.text.isNotEmpty) {
+        TimeAvailStream = FirebaseFirestore.instance
+            .collection('TimeAvailability')
+            .where('mon', isGreaterThanOrEqualTo: query)
+            .where('mon', isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      } else if (tuesController.text.isNotEmpty) {
+        TimeAvailStream = FirebaseFirestore.instance
+            .collection('TimeAvailability')
+            .where('tues', isGreaterThanOrEqualTo: query)
+            .where('tues', isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      } else if (wedsController.text.isNotEmpty) {
+        TimeAvailStream = FirebaseFirestore.instance
+            .collection('TimeAvailability')
+            .where('weds', isGreaterThanOrEqualTo: query)
+            .where('weds', isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      } else if (thursController.text.isNotEmpty) {
+        TimeAvailStream = FirebaseFirestore.instance
+            .collection('TimeAvailability')
+            .where('thurs', isGreaterThanOrEqualTo: query)
+            .where('thurs', isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      } else if (friController.text.isNotEmpty) {
+        TimeAvailStream = FirebaseFirestore.instance
+            .collection('TimeAvailability')
+            .where('fri', isGreaterThanOrEqualTo: query)
+            .where('fri', isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      } else if (satController.text.isNotEmpty) {
+        TimeAvailStream = FirebaseFirestore.instance
+            .collection('TimeAvailability')
+            .where('sat', isGreaterThanOrEqualTo: query)
+            .where('sat', isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      } else if (sunController.text.isNotEmpty) {
+        TimeAvailStream = FirebaseFirestore.instance
+            .collection('TimeAvailability')
+            .where('sun', isGreaterThanOrEqualTo: query)
+            .where('sun', isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      } else {
+        // Default to nickname search if no specific weekday search is requested
+        TimeAvailStream = FirebaseFirestore.instance
+            .collection('TimeAvailability')
+            .where('nickname', isGreaterThanOrEqualTo: query)
+            .where('nickname', isLessThanOrEqualTo: query + '\uf8ff')
+            .snapshots();
+      }
       setState(() {});
     }
   }
@@ -216,17 +261,15 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
               TextField(
                 controller: searchController,
                 onChanged: (value) {
-                  searchTimeAvail(value); // Trigger search on typing
+                  searchTimeAvail(value);
                 },
                 style:
                     const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                 decoration: InputDecoration(
-                  labelText: 'Search',
-                  hintText: 'Search by Nickname',
-                  hintStyle: const TextStyle(
-                      color: Color.fromARGB(137, 255, 255, 255)),
+                  labelText: 'Search Nickname',
                   filled: true,
                   fillColor: const Color.fromARGB(255, 71, 71, 71),
+                  labelStyle: const TextStyle(color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -234,6 +277,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                 ),
               ),
               const SizedBox(height: 20),
+
               Container(
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
@@ -265,14 +309,28 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                 ),
               ),
               const SizedBox(height: 20),
+
               Container(
-                  height: 440,
+                  height: 340,
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Expanded(child: allTADetails()))
+                  child: Expanded(child: allTADetails())),
+              const SizedBox(
+                height: 5,
+              ),
+              const Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'NOTE: PLEASE DELETE CURRENT T.A WHEN CREATING NEW',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),
+                ),
+              ),
             ],
           ),
         ),

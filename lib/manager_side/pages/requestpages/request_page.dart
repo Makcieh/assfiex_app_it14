@@ -126,34 +126,19 @@ class RequestPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     const Text(
-                      "Y E A R | M O N T H | D A Y",
+                      "Select Number of Days: Day 2",
                       style: TextStyle(
-                          letterSpacing: 1,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
+                          color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    const Column(
                       children: [
                         Text(
-                          "2024",
+                          'Day 1: 2024-10-9',
                           style: TextStyle(color: Colors.grey),
                         ),
                         Text(
-                          "|",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "07",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "|",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "7",
+                          'Day 2: 2024-10-10',
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],

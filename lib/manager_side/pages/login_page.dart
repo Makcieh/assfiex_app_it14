@@ -189,26 +189,6 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 4),
-                        Text('or'),
-                        SizedBox(width: 4),
-                        GestureDetector(
-                          onTap: () {
-                            // Navigate to Guest Page
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EmployeeHome()),
-                            );
-                          },
-                          child: Text(
-                            'Guest',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
                       ],
                     )
                   ],

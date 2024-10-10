@@ -104,7 +104,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
               onPressed: () async {
                 // Delete the document from Firestore
                 await FirebaseFirestore.instance
-                    .collection('CreateSched')
+                    .collection('TimeAvailability')
                     .doc(docId)
                     .delete();
                 Navigator.of(context).pop(); // Close the dialog
@@ -121,6 +121,13 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
     return StreamBuilder(
       stream: TimeAvailStream,
       builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('No Time Availability found'));
+        }
         return snapshot.hasData
             ? ListView.builder(
                 itemCount: snapshot.data.docs.length,

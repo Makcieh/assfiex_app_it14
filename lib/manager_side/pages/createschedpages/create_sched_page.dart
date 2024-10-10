@@ -22,7 +22,8 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
     'Position',
     'Hours',
     'Start',
-    'End'
+    'End',
+    'Created Date'
   ];
 
   // Load schedules without search
@@ -32,20 +33,53 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
     setState(() {});
   }
 
-  // Function to search schedules based on the selected filter
   searchSchedules(String query) {
     if (query.isEmpty) {
       // If search bar is empty, load all schedules
       getSchedules();
     } else {
-      // Handle specific cases for numeric or string fields like Hours, Start, End
       if (searchBy == 'Hours' || searchBy == 'Start' || searchBy == 'End') {
-        // For Hours, Start, and End, treat them as string comparisons
+        // Numeric or string comparisons for Hours, Start, End
         scheduStream = FirebaseFirestore.instance
             .collection('CreateSched')
             .where(searchBy, isGreaterThanOrEqualTo: query)
             .where(searchBy, isLessThanOrEqualTo: query + '\uf8ff')
             .snapshots();
+      } else if (searchBy == 'CreatedDate') {
+        // Handle date query for CreatedDate
+        // If only year is provided (e.g., '2024')
+        if (RegExp(r"^\d{4}$").hasMatch(query)) {
+          // Search by the entire year
+          String startOfYear = query + '-01-01';
+          String endOfYear = query + '-12-31';
+          scheduStream = FirebaseFirestore.instance
+              .collection('CreateSched')
+              .where('CreatedDate', isGreaterThanOrEqualTo: startOfYear)
+              .where('CreatedDate', isLessThanOrEqualTo: endOfYear)
+              .snapshots();
+        }
+        // If year and month are provided (e.g., '2024-05')
+        else if (RegExp(r"^\d{4}-\d{2}$").hasMatch(query)) {
+          // Search by the entire month
+          String startOfMonth = query + '-01';
+          String endOfMonth = query + '-31'; // Simplified for all months
+          scheduStream = FirebaseFirestore.instance
+              .collection('CreateSched')
+              .where('CreatedDate', isGreaterThanOrEqualTo: startOfMonth)
+              .where('CreatedDate', isLessThanOrEqualTo: endOfMonth)
+              .snapshots();
+        }
+        // If full date is provided (e.g., '2024-05-15')
+        else if (RegExp(r"^\d{4}-\d{2}-\d{2}$").hasMatch(query)) {
+          // Search for the exact date
+          scheduStream = FirebaseFirestore.instance
+              .collection('CreateSched')
+              .where('CreatedDate', isEqualTo: query)
+              .snapshots();
+        } else {
+          // Invalid date format, show nothing
+          scheduStream = null;
+        }
       } else {
         // Handle text fields (Nickname, Position)
         scheduStream = FirebaseFirestore.instance
@@ -118,78 +152,83 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                   color: const Color.fromARGB(0, 75, 54, 54),
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    padding: const EdgeInsets.all(15),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topLeft,
-                        colors: [
-                          Color.fromARGB(255, 6, 83, 146),
-                          Color.fromARGB(255, 100, 206, 255),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Nickname: " + data['Nickname'],
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                nicknameController.text = data["Nickname"];
-                                positionController.text = data["Position"];
-                                hoursController.text = data["Hours"];
-                                startController.text = data["Start"];
-                                endController.text = data["End"];
-                                editSchedDetail(data["ScheduleID"]);
-                              },
-                              child: const Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            GestureDetector(
-                              onTap: () {
-                                // Show confirmation dialog before deletion
-                                _showDeleteConfirmationDialog(context, data.id);
-                              },
-                              child: const Icon(
-                                Icons.delete_rounded,
-                                color: Colors.white,
-                              ),
-                            )
+                      margin: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.all(15),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topLeft,
+                          colors: [
+                            Color.fromARGB(255, 6, 83, 146),
+                            Color.fromARGB(255, 100, 206, 255),
                           ],
                         ),
-                        Text(
-                          "Position: " + data['Position'],
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        Text(
-                          "Hours: " + data['Hours'],
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        Text(
-                          "Start: " + data['Start'],
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        Text(
-                          "End: " + data['End'],
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Scheduled Date: " + data['CreatedDate'],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "Nickname: " + data['Nickname'],
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  nicknameController.text = data["Nickname"];
+                                  positionController.text = data["Position"];
+                                  hoursController.text = data["Hours"];
+                                  startController.text = data["Start"];
+                                  endController.text = data["End"];
+                                  editSchedDetail(data["ScheduleID"]);
+                                },
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              GestureDetector(
+                                onTap: () {
+                                  // Show confirmation dialog before deletion
+                                  _showDeleteConfirmationDialog(
+                                      context, data.id);
+                                },
+                                child: const Icon(
+                                  Icons.delete_rounded,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                          Text(
+                            "Position: " + data['Position'],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            "Hours: " + data['Hours'],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            "Start: " + data['Start'],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            "End: " + data['End'],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          // Display CreatedDate
+                        ],
+                      )),
                 );
               });
         });
@@ -233,6 +272,7 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         labelText: 'Search',
+                        hintText: searchBy == 'CreatedDate' ? 'yyyy-MM-dd' : '',
                         hintStyle: const TextStyle(color: Colors.white54),
                         filled: true,
                         fillColor: const Color.fromARGB(255, 71, 71, 71),
@@ -245,6 +285,7 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                       ),
                     ),
                   ),
+
                   const SizedBox(width: 10),
 
                   // Dropdown for search filter
@@ -342,7 +383,6 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                   TextFormField(
                     style: const TextStyle(color: Colors.grey),
                     controller: nicknameController,
-                    readOnly: true,
                     decoration: const InputDecoration(
                       labelText: 'Nickname',
                       border: OutlineInputBorder(),
@@ -372,7 +412,6 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                       labelText: 'Start',
                       border: OutlineInputBorder(),
                     ),
-                    keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -381,7 +420,6 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                       labelText: 'End',
                       border: OutlineInputBorder(),
                     ),
-                    keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 20),
                   Center(

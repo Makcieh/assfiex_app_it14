@@ -290,8 +290,7 @@ class _TimeAvailState extends State<TimeAvailFill> {
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.CENTER,
                                         timeInSecForIosWeb: 1,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 17, 255, 49),
+                                        backgroundColor: Colors.green,
                                         textColor: Colors.white,
                                         fontSize: 16.0,
                                       );

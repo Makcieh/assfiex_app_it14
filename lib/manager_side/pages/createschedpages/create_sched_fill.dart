@@ -1,14 +1,17 @@
-import 'package:assfiex_app_it14/manager_side/pages/createschedpages/databaseCreateSched.dart';
+import 'package:assfiex_app_it14/employee_side/pages/createschedpages/databaseCreateSched.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // For Firebase Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart'; // For formatting dates
 
 final TextEditingController nicknameController = TextEditingController();
 final TextEditingController positionController = TextEditingController();
 final TextEditingController hoursController = TextEditingController();
 final TextEditingController startController = TextEditingController();
 final TextEditingController endController = TextEditingController();
+final TextEditingController dateController =
+    TextEditingController(); // New controller for date
 
 List<String> nicknameSuggestions = []; // List to store nickname suggestions
 
@@ -18,6 +21,7 @@ void clearTextFields() {
   hoursController.clear();
   startController.clear();
   endController.clear();
+  dateController.clear(); // Clear the date input field as well
 }
 
 // Function to fetch nickname suggestions from Firebase
@@ -29,15 +33,11 @@ void getNicknameSuggestions(String query) async {
 
   // Fetch nicknames from Firestore based on input
   QuerySnapshot snapshot = await FirebaseFirestore.instance
-      .collection(
-          'Employee') // Replace 'nicknames' with your actual collection name
+      .collection('Employee')
       .where('Nickname', isGreaterThanOrEqualTo: query)
-      .where('Nickname',
-          isLessThanOrEqualTo:
-              query + '\uf8ff') // Ensure range query works correctly
+      .where('Nickname', isLessThanOrEqualTo: query + '\uf8ff')
       .get();
 
-  // Map the results to a list of nicknames
   nicknameSuggestions =
       snapshot.docs.map((doc) => doc['Nickname'] as String).toList();
 }
@@ -45,7 +45,7 @@ void getNicknameSuggestions(String query) async {
 // Function to validate if the entered nickname exists in Firestore
 Future<bool> isNicknameValid(String nickname) async {
   QuerySnapshot snapshot = await FirebaseFirestore.instance
-      .collection('Employee') // Adjust collection name as necessary
+      .collection('Employee')
       .where('Nickname', isEqualTo: nickname)
       .limit(1)
       .get();
@@ -68,136 +68,199 @@ void createschedFill(BuildContext context) {
           ),
           child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Center(
-                    child: Text(
-                      "Fill In Details",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+              // Date Picker inside StatefulBuilder
+              Future<void> _selectDate(BuildContext context) async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2101),
+                );
+                if (pickedDate != null) {
+                  String formattedDate =
+                      DateFormat('yyyy-MM-dd').format(pickedDate);
+                  setState(() {
+                    dateController.text =
+                        formattedDate; // Set formatted date in the controller
+                  });
+                }
+              }
+
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Center(
+                      child: Text(
+                        "Fill In Details",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  // TextField for nickname with dynamic suggestions
-                  TextField(
-                    controller: nicknameController,
-                    decoration: const InputDecoration(
-                      labelText: "Nickname",
-                      hintText: "",
+                    const SizedBox(height: 20),
+
+                    // TextField for nickname
+                    TextField(
+                      controller: nicknameController,
+                      decoration: const InputDecoration(
+                        labelText: "Nickname",
+                      ),
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        getNicknameSuggestions(
-                            value); // Fetch suggestions on every change
-                      });
-                    },
-                  ),
+                    const SizedBox(height: 20),
 
-                  const SizedBox(height: 20),
-
-                  TextField(
-                    controller: positionController,
-                    decoration: const InputDecoration(
-                      labelText: "POSITION",
-                      hintText: "",
+                    // TextField for position
+                    TextField(
+                      controller: positionController,
+                      decoration: const InputDecoration(
+                        labelText: "Position",
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: hoursController,
-                    decoration: const InputDecoration(
-                      labelText: "HOURS",
-                      hintText: "",
+                    const SizedBox(height: 20),
+
+                    // TextField for hours
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: hoursController,
+                      decoration: const InputDecoration(
+                        labelText: "Hours",
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: startController,
-                    decoration: const InputDecoration(
-                      labelText: "START",
-                      hintText: "6am",
+                    const SizedBox(height: 20),
+
+                    // TextField for start time
+                    TextField(
+                      controller: startController,
+                      decoration: const InputDecoration(
+                        labelText: "Start",
+                        hintText: "6am",
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: endController,
-                    decoration: const InputDecoration(
-                      labelText: "END",
-                      hintText: "12pm",
+                    const SizedBox(height: 20),
+
+                    // TextField for end time
+                    TextField(
+                      controller: endController,
+                      decoration: const InputDecoration(
+                        labelText: "End",
+                        hintText: "12pm",
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Check if the nickname is empty
-                      if (nicknameController.text.isEmpty) {
-                        Fluttertoast.showToast(
-                          msg: "Nickname is required",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                        return;
-                      }
+                    const SizedBox(height: 20),
 
-                      // Validate nickname from Firestore
-                      bool isValidNickname =
-                          await isNicknameValid(nicknameController.text.trim());
+                    // TextField for custom date input (new field)
+                    TextField(
+                      controller: dateController,
+                      keyboardType: TextInputType.datetime,
+                      decoration: InputDecoration(
+                        labelText: 'Schedule Date:',
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.calendar_today),
+                          onPressed: () => _selectDate(context),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
 
-                      if (!isValidNickname) {
-                        Fluttertoast.showToast(
-                          msg: "Nickname not found",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                        return;
-                      }
+                    // Add Schedule Button
+                    ElevatedButton(
+                      onPressed: () async {
+                        // Check if the nickname is empty
+                        if (nicknameController.text.isEmpty) {
+                          Fluttertoast.showToast(
+                            msg: "Nickname is required",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                          return;
+                        }
 
-                      // Proceed with adding the schedule if validation passes
-                      String scheduleId = randomNumeric(5);
-                      Map<String, dynamic> createSchedInfoMap = {
-                        "ScheduleID": scheduleId,
-                        "Nickname": nicknameController.text,
-                        "Position": positionController.text,
-                        "Hours": hoursController.text,
-                        "Start": startController.text,
-                        "End": endController.text,
-                      };
+                        // Validate nickname from Firestore
+                        bool isValidNickname = await isNicknameValid(
+                            nicknameController.text.trim());
 
-                      clearTextFields();
+                        if (!isValidNickname) {
+                          Fluttertoast.showToast(
+                            msg: "Nickname not found",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                          return;
+                        }
 
-                      await DatabaseMethods()
-                          .addCreateSched(createSchedInfoMap, scheduleId)
-                          .then((value) {
-                        Fluttertoast.showToast(
+                        // Validate the date format entered by the user
+                        String enteredDate = dateController.text.trim();
+                        if (enteredDate.isEmpty) {
+                          Fluttertoast.showToast(
+                            msg: "Date is required",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                          return;
+                        }
+                        // Parse the entered date to check validity
+                        try {
+                          DateFormat('yyyy-MM-dd').parseStrict(enteredDate);
+                        } catch (e) {
+                          Fluttertoast.showToast(
+                            msg: "Invalid date format. Please use yyyy-MM-dd.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                          return;
+                        }
+
+                        // Proceed with adding the schedule
+                        String scheduleId = randomNumeric(5);
+                        Map<String, dynamic> createSchedInfoMap = {
+                          "ScheduleID": scheduleId,
+                          "Nickname": nicknameController.text,
+                          "Position": positionController.text,
+                          "Hours": hoursController.text,
+                          "Start": startController.text,
+                          "End": endController.text,
+                          "CreatedDate": enteredDate, // Use the entered date
+                        };
+
+                        clearTextFields();
+
+                        await DatabaseMethods()
+                            .addCreateSched(createSchedInfoMap, scheduleId)
+                            .then((value) {
+                          Fluttertoast.showToast(
                             msg: "Schedule Details Added",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.CENTER,
                             backgroundColor:
                                 const Color.fromARGB(255, 37, 123, 39),
                             textColor: Colors.white,
-                            fontSize: 16.0);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 24.0),
+                            fontSize: 16.0,
+                          );
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 24.0),
+                      ),
+                      child: const Text('ADD'),
                     ),
-                    child: const Text('ADD'),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),

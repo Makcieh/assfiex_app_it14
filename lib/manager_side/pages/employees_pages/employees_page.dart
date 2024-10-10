@@ -29,8 +29,10 @@ class _EmployeesPageState extends State<EmployeesPage> {
     'Name',
     'Nickname',
     'Station',
-    'Position'
-  ]; // Search by Name, Nickname, Station, or Position
+    'Position',
+    'Date Employed', // Add Date Employed
+    'Address', // Add Address
+  ];
 
   getontheload() async {
     EmployeeStream = await DatabaseMethods().getEmployeeDetails();
@@ -100,13 +102,38 @@ class _EmployeesPageState extends State<EmployeesPage> {
 
   // Filter function based on the selected search option
   bool searchFilter(DocumentSnapshot ds) {
-    return ds[searchField].toString().toLowerCase().contains(searchQuery);
+    switch (searchField) {
+      case 'Name':
+        return ds['Name'].toString().toLowerCase().contains(searchQuery);
+      case 'Nickname':
+        return ds['Nickname'].toString().toLowerCase().contains(searchQuery);
+      case 'Station':
+        return ds['Station'].toString().toLowerCase().contains(searchQuery);
+      case 'Position':
+        return ds['Position'].toString().toLowerCase().contains(searchQuery);
+      case 'Date Employed':
+        return ds['DateEmployed']
+            .toString()
+            .toLowerCase()
+            .contains(searchQuery);
+      case 'Address':
+        return ds['Address'].toString().toLowerCase().contains(searchQuery);
+      default:
+        return false;
+    }
   }
 
   Widget allEmployeeDetails() {
     return StreamBuilder(
         stream: EmployeeStream,
         builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('No Employee found'));
+          }
           return snapshot.hasData
               ? ListView.builder(
                   itemCount: snapshot.data.docs.length,

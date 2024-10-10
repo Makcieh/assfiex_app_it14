@@ -2,6 +2,7 @@ import 'package:assfiex_app_it14/employee_side/components/button_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class EmployeeHome extends StatefulWidget {
@@ -12,11 +13,17 @@ class EmployeeHome extends StatefulWidget {
 }
 
 class _HomeState extends State<EmployeeHome> {
-  DateTime today = DateTime.now();
+  DateTime selectedDay = DateTime.now();
+  DateTime focusedDay = DateTime.now();
 
   // Function to sign out the user
   void signUserOut() {
     FirebaseAuth.instance.signOut();
+  }
+
+  // Function to format the date in 'yyyy-MM-dd' format
+  String formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
   }
 
   @override
@@ -37,7 +44,7 @@ class _HomeState extends State<EmployeeHome> {
           ),
         ),
         title: Container(
-          padding: EdgeInsets.only(left: 20),
+          padding: const EdgeInsets.only(right: 30),
           child: const Text(
             'WELCOME TO ASFIEX',
             style: TextStyle(
@@ -70,13 +77,17 @@ class _HomeState extends State<EmployeeHome> {
 
           // Calendar to display the current day with customized styles
           TableCalendar(
-            focusedDay: today,
+            focusedDay: focusedDay,
             firstDay: DateTime.utc(2024, 9, 24),
             lastDay: DateTime.utc(2030, 5, 6),
             onDaySelected: (selectedDay, focusedDay) {
               setState(() {
-                today = selectedDay; // Set the selected day
+                this.selectedDay = selectedDay; // Set the selected day
+                this.focusedDay = focusedDay; // Update focused day
               });
+            },
+            selectedDayPredicate: (day) {
+              return isSameDay(selectedDay, day);
             },
             calendarStyle: const CalendarStyle(
               defaultTextStyle: TextStyle(color: Colors.white, fontSize: 16),
@@ -119,12 +130,15 @@ class _HomeState extends State<EmployeeHome> {
           ),
           const SizedBox(height: 20),
 
-          // StreamBuilder for real-time updates of schedules
+          // StreamBuilder for real-time updates of schedules based on selected day
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('CreateSched')
-                  .snapshots(), // Listen to the 'CreateSched' collection
+                  .where('CreatedDate',
+                      isEqualTo:
+                          formatDate(selectedDay)) // Filtering by selected day
+                  .snapshots(), // Listen to schedules created on the selected day
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -211,8 +225,13 @@ class _HomeState extends State<EmployeeHome> {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
-              padding: EdgeInsets.all(10), child: const Employee_ButtonMenu()),
+          Row(
+            children: [
+              Container(
+                  padding: const EdgeInsets.only(left: 115),
+                  child: const Employee_ButtonMenu()),
+            ],
+          ),
         ],
       ),
     );

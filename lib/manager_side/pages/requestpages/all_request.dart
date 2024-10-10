@@ -99,6 +99,10 @@ class _AllRequestState extends State<AllRequest> {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('No Requests found'));
+          }
+
           return ListView.builder(
             itemCount: snapshot.data.docs.length,
             itemBuilder: (context, index) {
@@ -210,64 +214,66 @@ class _AllRequestState extends State<AllRequest> {
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
-        body: Container(
-          margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    // Search Bar
-                    child: TextField(
-                      controller: searchController,
-                      onChanged: handleSearch,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: 'Search',
-                        hintStyle: const TextStyle(color: Colors.white54),
-                        filled: true,
-                        fillColor: const Color.fromARGB(255, 71, 71, 71),
-                        labelStyle: const TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      // Search Bar
+                      child: TextField(
+                        controller: searchController,
+                        onChanged: handleSearch,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          hintStyle: const TextStyle(color: Colors.white54),
+                          filled: true,
+                          fillColor: const Color.fromARGB(255, 71, 71, 71),
+                          labelStyle: const TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          prefixIcon:
+                              const Icon(Icons.search, color: Colors.white),
                         ),
-                        prefixIcon:
-                            const Icon(Icons.search, color: Colors.white),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  DropdownButton<String>(
-                    value: searchField,
-                    dropdownColor: const Color.fromARGB(255, 6, 33, 55),
-                    style: const TextStyle(color: Colors.white),
-                    icon:
-                        const Icon(Icons.arrow_drop_down, color: Colors.white),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        searchField = newValue!;
-                      });
-                    },
-                    items: searchOptions
-                        .map<DropdownMenuItem<String>>((String option) {
-                      return DropdownMenuItem<String>(
-                        value: option,
-                        child: Text(option),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Container(
-                  height: 530,
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                  ),
-                  child: Expanded(child: allRequestDetails()))
-            ],
+                    const SizedBox(width: 10),
+                    DropdownButton<String>(
+                      value: searchField,
+                      dropdownColor: const Color.fromARGB(255, 6, 33, 55),
+                      style: const TextStyle(color: Colors.white),
+                      icon: const Icon(Icons.arrow_drop_down,
+                          color: Colors.white),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          searchField = newValue!;
+                        });
+                      },
+                      items: searchOptions
+                          .map<DropdownMenuItem<String>>((String option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                Container(
+                    height: 530,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    child: Expanded(child: allRequestDetails()))
+              ],
+            ),
           ),
         ));
   }

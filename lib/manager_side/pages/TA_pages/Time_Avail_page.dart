@@ -393,6 +393,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
+                  style: TextStyle(color: Colors.grey),
                   controller: nicknameController,
                   readOnly: true,
                   decoration: const InputDecoration(
@@ -458,51 +459,78 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                 ),
                 const SizedBox(height: 20),
                 Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      // Validate time formats or "NA"
-                      List<TextEditingController> controllers = [
-                        monController,
-                        tuesController,
-                        wedsController,
-                        thursController,
-                        friController,
-                        satController,
-                        sunController,
-                      ];
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 6, 83, 146),
+                          Color.fromARGB(255, 100, 206, 255),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    padding: const EdgeInsets.all(3.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // Validate time formats or "NA"
+                        List<TextEditingController> controllers = [
+                          monController,
+                          tuesController,
+                          wedsController,
+                          thursController,
+                          friController,
+                          satController,
+                          sunController,
+                        ];
 
-                      for (var controller in controllers) {
-                        if (!isValidTimeFormat(controller.text.trim())) {
-                          Fluttertoast.showToast(
-                            msg:
-                                "Invalid time format in ${controller.text}. Please use '6am to 10pm' format or 'NA'.",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                          return;
+                        for (var controller in controllers) {
+                          if (!isValidTimeFormat(controller.text.trim())) {
+                            Fluttertoast.showToast(
+                              msg:
+                                  "Invalid time format in ${controller.text}. Please use '6am to 10pm' format or 'NA'.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                            return;
+                          }
                         }
-                      }
 
-                      // Update data
-                      Map<String, dynamic> updateInfo = {
-                        "nickname": nicknameController.text,
-                        "mon": monController.text,
-                        "tues": tuesController.text,
-                        "weds": wedsController.text,
-                        "thurs": thursController.text,
-                        "fri": friController.text,
-                        "sat": satController.text,
-                        "sun": sunController.text,
-                      };
-                      await DatabaseMethods()
-                          .updateTimeAvailDetail(id, updateInfo);
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Update'),
+                        // Update data
+                        Map<String, dynamic> updateInfo = {
+                          "nickname": nicknameController.text,
+                          "mon": monController.text,
+                          "tues": tuesController.text,
+                          "weds": wedsController.text,
+                          "thurs": thursController.text,
+                          "fri": friController.text,
+                          "sat": satController.text,
+                          "sun": sunController.text,
+                        };
+                        await DatabaseMethods()
+                            .updateTimeAvailDetail(id, updateInfo);
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: const Text(
+                        'Update',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
                 )
               ],

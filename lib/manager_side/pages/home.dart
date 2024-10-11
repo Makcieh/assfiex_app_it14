@@ -43,8 +43,8 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        title: Center(
-          child: const Text(
+        title: const Center(
+          child: Text(
             'WELCOME TO ASFIEX',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
@@ -233,10 +233,10 @@ class _HomeState extends State<Home> {
                 padding: const EdgeInsets.only(left: 40),
                 child: GestureDetector(
                   onTap: signUserOut,
-                  child: Text(
+                  child: const Text(
                     'Log Out',
                     style: TextStyle(
-                        color: const Color.fromARGB(255, 189, 54, 54),
+                        color: Color.fromARGB(255, 189, 54, 54),
                         fontWeight: FontWeight.bold),
                   ),
                 ),

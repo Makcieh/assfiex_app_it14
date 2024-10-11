@@ -302,6 +302,7 @@ class _AllRequestState extends State<AllRequest> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
+                        style: TextStyle(color: Colors.grey),
                         controller: nicknameController,
                         readOnly: true,
                         decoration: const InputDecoration(
@@ -359,30 +360,57 @@ class _AllRequestState extends State<AllRequest> {
                       const SizedBox(height: 20),
 
                       Center(
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              if (selectedDates.any((date) => date == null)) {
-                                // Ensure all dates are selected
-                                return;
-                              }
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color.fromARGB(255, 6, 83, 146),
+                                Color.fromARGB(255, 100, 206, 255),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          padding: const EdgeInsets.all(3.0),
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                if (selectedDates.any((date) => date == null)) {
+                                  // Ensure all dates are selected
+                                  return;
+                                }
 
-                              List<String> formattedDates = selectedDates
-                                  .map((date) => dateFormat.format(date!))
-                                  .toList();
+                                List<String> formattedDates = selectedDates
+                                    .map((date) => dateFormat.format(date!))
+                                    .toList();
 
-                              Map<String, dynamic> updateRequestInfo = {
-                                "Nickname": nicknameController.text,
-                                "Dates":
-                                    formattedDates, // Store dates list in Firestore
-                              };
+                                Map<String, dynamic> updateRequestInfo = {
+                                  "Nickname": nicknameController.text,
+                                  "Dates":
+                                      formattedDates, // Store dates list in Firestore
+                                };
 
-                              await DatabaseMethods()
-                                  .updateRequestDetail(id, updateRequestInfo)
-                                  .then((value) {
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: const Text('Update')),
+                                await DatabaseMethods()
+                                    .updateRequestDetail(id, updateRequestInfo)
+                                    .then((value) {
+                                  Navigator.pop(context);
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                elevation: 2,
+                              ),
+                              child: const Text(
+                                'Update',
+                                style: TextStyle(color: Colors.white),
+                              )),
+                        ),
                       )
                     ],
                   ),

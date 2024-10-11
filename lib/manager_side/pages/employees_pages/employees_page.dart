@@ -459,42 +459,67 @@ class _EmployeesPageState extends State<EmployeesPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (nameController.text.isEmpty ||
-                          nicknameController.text.isEmpty ||
-                          contactController.text.isEmpty ||
-                          stationController.text.isEmpty ||
-                          positionController.text.isEmpty ||
-                          dateController.text.isEmpty ||
-                          addressController.text.isEmpty) {
-                        // Show error message if any field is empty
-                        Fluttertoast.showToast(
-                          msg: "Please fill in all fields.",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                        return; // Stop execution if any field is empty
-                      }
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 6, 83, 146),
+                          Color.fromARGB(255, 100, 206, 255),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    padding: const EdgeInsets.all(3.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (nameController.text.isEmpty ||
+                            nicknameController.text.isEmpty ||
+                            contactController.text.isEmpty ||
+                            stationController.text.isEmpty ||
+                            positionController.text.isEmpty ||
+                            dateController.text.isEmpty ||
+                            addressController.text.isEmpty) {
+                          // Show error message if any field is empty
+                          Fluttertoast.showToast(
+                            msg: "Please fill in all fields.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                          return; // Stop execution if any field is empty
+                        }
 
-                      Map<String, dynamic> updateInfo = {
-                        "Name": nameController.text,
-                        "Nickname": nicknameController.text,
-                        "Contact": contactController.text,
-                        "Station": stationController.text,
-                        "Position": positionController.text,
-                        "DateEmployed": dateController.text,
-                        "Address": addressController.text
-                      };
-                      await DatabaseMethods()
-                          .updateEmployeeDetail(id, updateInfo);
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Update'),
+                        Map<String, dynamic> updateInfo = {
+                          "Name": nameController.text,
+                          "Nickname": nicknameController.text,
+                          "Contact": contactController.text,
+                          "Station": stationController.text,
+                          "Position": positionController.text,
+                          "DateEmployed": dateController.text,
+                          "Address": addressController.text
+                        };
+                        await DatabaseMethods()
+                            .updateEmployeeDetail(id, updateInfo);
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: const Text('Update',
+                          style: TextStyle(color: Colors.white)),
+                    ),
                   ),
                 ],
               ),

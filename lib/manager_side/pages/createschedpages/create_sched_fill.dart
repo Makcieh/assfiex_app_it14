@@ -165,99 +165,122 @@ void createschedFill(BuildContext context) {
                     const SizedBox(height: 20),
 
                     // Add Schedule Button
-                    ElevatedButton(
-                      onPressed: () async {
-                        // Check if the nickname is empty
-                        if (nicknameController.text.isEmpty) {
-                          Fluttertoast.showToast(
-                            msg: "Nickname is required",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                          return;
-                        }
-
-                        // Validate nickname from Firestore
-                        bool isValidNickname = await isNicknameValid(
-                            nicknameController.text.trim());
-
-                        if (!isValidNickname) {
-                          Fluttertoast.showToast(
-                            msg: "Nickname not found",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                          return;
-                        }
-
-                        // Validate the date format entered by the user
-                        String enteredDate = dateController.text.trim();
-                        if (enteredDate.isEmpty) {
-                          Fluttertoast.showToast(
-                            msg: "Date is required",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                          return;
-                        }
-                        // Parse the entered date to check validity
-                        try {
-                          DateFormat('yyyy-MM-dd').parseStrict(enteredDate);
-                        } catch (e) {
-                          Fluttertoast.showToast(
-                            msg: "Invalid date format. Please use yyyy-MM-dd.",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                          return;
-                        }
-
-                        // Proceed with adding the schedule
-                        String scheduleId = randomNumeric(5);
-                        Map<String, dynamic> createSchedInfoMap = {
-                          "ScheduleID": scheduleId,
-                          "Nickname": nicknameController.text,
-                          "Position": positionController.text,
-                          "Hours": hoursController.text,
-                          "Start": startController.text,
-                          "End": endController.text,
-                          "CreatedDate": enteredDate, // Use the entered date
-                        };
-
-                        clearTextFields();
-
-                        await DatabaseMethods()
-                            .addCreateSched(createSchedInfoMap, scheduleId)
-                            .then((value) {
-                          Fluttertoast.showToast(
-                            msg: "Schedule Details Added",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            backgroundColor:
-                                const Color.fromARGB(255, 37, 123, 39),
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12.0, horizontal: 24.0),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 6, 83, 146),
+                            Color.fromARGB(255, 100, 206, 255),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                      child: const Text('ADD'),
+                      padding: const EdgeInsets.all(3.0),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          // Check if the nickname is empty
+                          if (nicknameController.text.isEmpty) {
+                            Fluttertoast.showToast(
+                              msg: "Nickname is required",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                            return;
+                          }
+
+                          // Validate nickname from Firestore
+                          bool isValidNickname = await isNicknameValid(
+                              nicknameController.text.trim());
+
+                          if (!isValidNickname) {
+                            Fluttertoast.showToast(
+                              msg: "Nickname not found",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                            return;
+                          }
+
+                          // Validate the date format entered by the user
+                          String enteredDate = dateController.text.trim();
+                          if (enteredDate.isEmpty) {
+                            Fluttertoast.showToast(
+                              msg: "Date is required",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                            return;
+                          }
+                          // Parse the entered date to check validity
+                          try {
+                            DateFormat('yyyy-MM-dd').parseStrict(enteredDate);
+                          } catch (e) {
+                            Fluttertoast.showToast(
+                              msg:
+                                  "Invalid date format. Please use yyyy-MM-dd.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                            return;
+                          }
+
+                          // Proceed with adding the schedule
+                          String scheduleId = randomNumeric(5);
+                          Map<String, dynamic> createSchedInfoMap = {
+                            "ScheduleID": scheduleId,
+                            "Nickname": nicknameController.text,
+                            "Position": positionController.text,
+                            "Hours": hoursController.text,
+                            "Start": startController.text,
+                            "End": endController.text,
+                            "CreatedDate": enteredDate, // Use the entered date
+                          };
+
+                          clearTextFields();
+
+                          await DatabaseMethods()
+                              .addCreateSched(createSchedInfoMap, scheduleId)
+                              .then((value) {
+                            Fluttertoast.showToast(
+                              msg: "Schedule Details Added",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor:
+                                  const Color.fromARGB(255, 37, 123, 39),
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          elevation: 2,
+                        ),
+                        child: const Text(
+                          'ADD',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ],
                 ),

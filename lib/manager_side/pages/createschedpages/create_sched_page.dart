@@ -382,6 +382,7 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                   const SizedBox(height: 10),
                   TextFormField(
                     style: const TextStyle(color: Colors.grey),
+                    readOnly: true,
                     controller: nicknameController,
                     decoration: const InputDecoration(
                       labelText: 'Nickname',
@@ -423,22 +424,49 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                   ),
                   const SizedBox(height: 20),
                   Center(
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          Map<String, dynamic> updateSchedInfo = {
-                            "Nickname": nicknameController.text,
-                            "Position": positionController.text,
-                            "Hours": hoursController.text,
-                            "Start": startController.text,
-                            "End": endController.text,
-                          };
-                          await DatabaseMethods()
-                              .updateSchedDetail(id, updateSchedInfo)
-                              .then((value) {
-                            Navigator.pop(context);
-                          });
-                        },
-                        child: const Text('Update')),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 6, 83, 146),
+                            Color.fromARGB(255, 100, 206, 255),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      padding: const EdgeInsets.all(3.0),
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            Map<String, dynamic> updateSchedInfo = {
+                              "Nickname": nicknameController.text,
+                              "Position": positionController.text,
+                              "Hours": hoursController.text,
+                              "Start": startController.text,
+                              "End": endController.text,
+                            };
+                            await DatabaseMethods()
+                                .updateSchedDetail(id, updateSchedInfo)
+                                .then((value) {
+                              Navigator.pop(context);
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            elevation: 2,
+                          ),
+                          child: const Text(
+                            'Update',
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    ),
                   )
                 ],
               ),

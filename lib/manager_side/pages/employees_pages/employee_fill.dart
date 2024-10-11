@@ -127,6 +127,8 @@ class _EmployeeState extends State<EmployeeFill> {
                               controller: nicknameController,
                               decoration: const InputDecoration(
                                 labelText: 'Nickname: ',
+                                hintText: 'Must be unique nickname*',
+                                hintStyle: TextStyle(color: Colors.grey),
                                 border: OutlineInputBorder(),
                               ),
                             ),

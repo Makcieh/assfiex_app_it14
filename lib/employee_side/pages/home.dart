@@ -76,59 +76,70 @@ class _HomeState extends State<EmployeeHome> {
           ),
 
           // Calendar to display the current day with customized styles
-          TableCalendar(
-            focusedDay: focusedDay,
-            firstDay: DateTime.utc(2024, 9, 24),
-            lastDay: DateTime.utc(2030, 5, 6),
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                this.selectedDay = selectedDay; // Set the selected day
-                this.focusedDay = focusedDay; // Update focused day
-              });
-            },
-            selectedDayPredicate: (day) {
-              return isSameDay(selectedDay, day);
-            },
-            calendarStyle: const CalendarStyle(
-              defaultTextStyle: TextStyle(color: Colors.white, fontSize: 16),
-              weekendTextStyle: TextStyle(color: Colors.blue, fontSize: 16),
-              selectedTextStyle:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              selectedDecoration: BoxDecoration(
-                color: Colors.blueAccent,
-                shape: BoxShape.circle,
+          Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  'assets/icon/AsfiexLogo.png', // Replace with your image path
+                  fit: BoxFit.cover, // Adjust how the image fits the space
+                ),
               ),
-              todayTextStyle: TextStyle(color: Colors.white),
-              todayDecoration: BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
+              TableCalendar(
+                focusedDay: focusedDay,
+                firstDay: DateTime.utc(2024, 9, 24),
+                lastDay: DateTime.utc(2030, 5, 6),
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    this.selectedDay = selectedDay;
+                    this.focusedDay = focusedDay;
+                  });
+                },
+                selectedDayPredicate: (day) {
+                  return isSameDay(selectedDay, day);
+                },
+                calendarStyle: const CalendarStyle(
+                  defaultTextStyle:
+                      TextStyle(color: Colors.white, fontSize: 16),
+                  weekendTextStyle: TextStyle(color: Colors.blue, fontSize: 16),
+                  selectedTextStyle: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                  selectedDecoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    shape: BoxShape.circle,
+                  ),
+                  todayTextStyle: TextStyle(color: Colors.white),
+                  todayDecoration: BoxDecoration(
+                    color: Colors.blue,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                daysOfWeekStyle: const DaysOfWeekStyle(
+                  weekdayStyle: TextStyle(color: Colors.white, fontSize: 14),
+                  weekendStyle: TextStyle(color: Colors.blue, fontSize: 14),
+                ),
+                headerStyle: HeaderStyle(
+                  titleTextStyle:
+                      const TextStyle(color: Colors.white, fontSize: 18),
+                  formatButtonTextStyle: const TextStyle(color: Colors.white),
+                  formatButtonDecoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  leftChevronIcon: const Icon(
+                    Icons.chevron_left,
+                    color: Colors.white,
+                  ),
+                  rightChevronIcon: const Icon(
+                    Icons.chevron_right,
+                    color: Colors.white,
+                  ),
+                  titleCentered: true,
+                  formatButtonVisible: false,
+                ),
               ),
-            ),
-            daysOfWeekStyle: const DaysOfWeekStyle(
-              weekdayStyle: TextStyle(color: Colors.white, fontSize: 14),
-              weekendStyle: TextStyle(color: Colors.blue, fontSize: 14),
-            ),
-            headerStyle: HeaderStyle(
-              titleTextStyle:
-                  const TextStyle(color: Colors.white, fontSize: 18),
-              formatButtonTextStyle: const TextStyle(color: Colors.white),
-              formatButtonDecoration: BoxDecoration(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              leftChevronIcon: const Icon(
-                Icons.chevron_left,
-                color: Colors.white,
-              ),
-              rightChevronIcon: const Icon(
-                Icons.chevron_right,
-                color: Colors.white,
-              ),
-              titleCentered: true,
-              formatButtonVisible: false, // Hide format button if not needed
-            ),
+            ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 5),
 
           // StreamBuilder for real-time updates of schedules based on selected day
           Expanded(
@@ -158,73 +169,104 @@ class _HomeState extends State<EmployeeHome> {
                   };
                 }).toList();
 
-                return ListView.builder(
-                  itemCount: schedules.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Container(
-                          color: const Color.fromARGB(0, 75, 54, 54),
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 2),
-                            padding: const EdgeInsets.all(2),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                begin: Alignment.bottomLeft,
-                                end: Alignment.topLeft,
-                                colors: [
-                                  Color.fromARGB(255, 6, 83, 146),
-                                  Color.fromARGB(255, 100, 206, 255),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                  12), // Ensure the child is clipped with the same radius
-                              child: ListTile(
-                                title: Text(
-                                  'Nickname: ${schedules[index]['nickname']}',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Position: ${schedules[index]['position']}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      'Hours: ${schedules[index]['hours']}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                // Check if schedules are empty and show the "No schedules" message
+                if (schedules.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "There are no schedules for this day",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey,
                           ),
-                        ));
-                  },
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                // If schedules are present, build the ListView
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7)),
+                    child: ListView.builder(
+                      itemCount: schedules.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Container(
+                              color: const Color.fromARGB(0, 75, 54, 54),
+                              child: Container(
+                                margin: const EdgeInsets.only(top: 2),
+                                padding: const EdgeInsets.all(2),
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.bottomLeft,
+                                    end: Alignment.topLeft,
+                                    colors: [
+                                      Color.fromARGB(255, 6, 83, 146),
+                                      Color.fromARGB(255, 100, 206, 255),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      12), // Ensure the child is clipped with the same radius
+                                  child: ListTile(
+                                    title: Text(
+                                      'Nickname: ${schedules[index]['nickname']}',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    subtitle: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Position: ${schedules[index]['position']}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          'Hours: ${schedules[index]['hours']}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          'From: ${schedules[index]['start']} to ${schedules[index]['end']}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ));
+                      },
+                    ),
+                  ),
                 );
               },
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 2),
           Row(
             children: [
               Container(
@@ -232,6 +274,7 @@ class _HomeState extends State<EmployeeHome> {
                   child: const Employee_ButtonMenu()),
             ],
           ),
+          const SizedBox(height: 10)
         ],
       ),
     );

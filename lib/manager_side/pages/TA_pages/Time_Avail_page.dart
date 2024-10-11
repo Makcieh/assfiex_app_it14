@@ -66,7 +66,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
       TimeAvailStream = FirebaseFirestore.instance
           .collection('TimeAvailability')
           .where(field, isGreaterThanOrEqualTo: query)
-          .where(field, isLessThanOrEqualTo: query + '\uf8ff')
+          .where(field, isLessThanOrEqualTo: '$query\uf8ff')
           .snapshots();
 
       setState(() {});
@@ -91,14 +91,14 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Confirm Deletion"),
-          content: Text("Are you sure you want to delete this schedule?"),
+          title: const Text("Confirm Deletion"),
+          content: const Text("Are you sure you want to delete this schedule?"),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             TextButton(
               onPressed: () async {
@@ -109,7 +109,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                     .delete();
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Delete"),
+              child: const Text("Delete"),
             ),
           ],
         );
@@ -134,15 +134,14 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.docs[index];
 
-                  return Container(
-                      child: Material(
+                  return Material(
                     color: const Color.fromARGB(0, 75, 54, 54),
                     child: Container(
                       margin: const EdgeInsets.only(top: 10),
                       padding: const EdgeInsets.all(15),
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           begin: Alignment.bottomLeft,
                           end: Alignment.topLeft,
                           colors: [
@@ -215,7 +214,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                         ],
                       ),
                     ),
-                  ));
+                  );
                 },
               )
             : const Center(child: Text('No data available'));
@@ -259,7 +258,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
       ),
       body: Container(
         margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
-        padding: EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 10),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -275,7 +274,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                       style: const TextStyle(
                           color: Color.fromARGB(255, 255, 255, 255)),
                       decoration: InputDecoration(
-                        labelText: 'Search Nickname',
+                        labelText: 'Search',
                         filled: true,
                         fillColor: const Color.fromARGB(255, 71, 71, 71),
                         labelStyle: const TextStyle(color: Colors.grey),
@@ -298,7 +297,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                         value: option,
                         child: Text(
                           option,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       );
                     }).toList(),
@@ -346,7 +345,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
 
               Container(
                   height: 340,
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: const Color.fromARGB(255, 255, 255, 255),
@@ -356,7 +355,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                 height: 5,
               ),
               const Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'NOTE: PLEASE DELETE CURRENT T.A WHEN CREATING NEW',
                   style: TextStyle(
@@ -372,6 +371,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Future EditTimeAvailDetail(String id) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -393,7 +393,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                   controller: nicknameController,
                   readOnly: true,
                   decoration: const InputDecoration(
@@ -514,6 +514,7 @@ class _TimeAvailPageState extends State<TimeAvailPage> {
                         };
                         await DatabaseMethods()
                             .updateTimeAvailDetail(id, updateInfo);
+                        // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(

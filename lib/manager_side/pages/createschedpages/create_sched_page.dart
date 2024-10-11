@@ -169,17 +169,11 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Scheduled Date: " + data['CreatedDate'],
-                            style: const TextStyle(color: Colors.white),
-                          ),
                           Row(
                             children: [
                               Text(
-                                "Nickname: " + data['Nickname'],
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                "Scheduled Date: " + data['CreatedDate'],
+                                style: const TextStyle(color: Colors.white),
                               ),
                               const Spacer(),
                               GestureDetector(
@@ -209,6 +203,12 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                                 ),
                               )
                             ],
+                          ),
+                          Text(
+                            "Nickname: " + data['Nickname'],
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                           Text(
                             "Position: " + data['Position'],

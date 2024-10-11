@@ -135,6 +135,11 @@ class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(
+                          "Scheduled Date: " + data['CreatedDate'],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(height: 5),
                         Row(
                           children: [
                             Text(

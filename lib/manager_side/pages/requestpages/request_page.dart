@@ -82,10 +82,10 @@ class RequestPage extends StatelessWidget {
                         color: const Color.fromARGB(255, 140, 185, 223),
                         width: 2)),
                 child: const Text(
-                  '\u2022 I would like to request a day the following dates:',
+                  '\u2022 Employee must submitted a formal letter for approval of request:',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -135,7 +135,21 @@ class RequestPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "REASON:",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          " SICK LEAVE",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
                     const Text(
                       "Select Number of Days: Day 2",
                       style: TextStyle(

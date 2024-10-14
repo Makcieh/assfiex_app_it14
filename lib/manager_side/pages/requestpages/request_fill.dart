@@ -15,6 +15,7 @@ class RequestFill extends StatefulWidget {
 class _RequestState extends State<RequestFill> {
   TextEditingController idController = TextEditingController();
   TextEditingController nicknameController = TextEditingController();
+  TextEditingController reasonController = TextEditingController();
 
   DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
@@ -91,6 +92,14 @@ class _RequestState extends State<RequestFill> {
                   controller: nicknameController,
                   decoration: const InputDecoration(
                     labelText: "NICKNAME",
+                    hintText: "",
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: reasonController,
+                  decoration: const InputDecoration(
+                    labelText: "REASON",
                     hintText: "",
                   ),
                 ),
@@ -183,8 +192,8 @@ class _RequestState extends State<RequestFill> {
                       String RequestID = randomNumeric(5);
                       Map<String, dynamic> requestInfoMap = {
                         "RequestID": RequestID,
-                        "EmployeeID": idController.text,
                         "Nickname": nicknameController.text,
+                        "Reason": reasonController.text,
                         "Dates": selectedDates
                             .map((date) => dateFormat.format(date!))
                             .toList(),
@@ -205,6 +214,7 @@ class _RequestState extends State<RequestFill> {
                         setState(() {
                           idController.clear();
                           nicknameController.clear();
+                          reasonController.clear();
                           selectedDates = [null];
                           selectedDays = 1;
                         });

@@ -12,6 +12,7 @@ class AllRequest extends StatefulWidget {
 
 class _AllRequestState extends State<AllRequest> {
   TextEditingController nicknameController = TextEditingController();
+  TextEditingController reasonController = TextEditingController();
   TextEditingController searchController = TextEditingController();
 
   String searchField = 'Nickname';
@@ -21,7 +22,7 @@ class _AllRequestState extends State<AllRequest> {
   List<DateTime?> selectedDates = [null];
   int selectedDays = 1;
 
-  List<String> searchOptions = ['Nickname', 'Dates'];
+  List<String> searchOptions = ['Nickname', 'Dates', 'Reason'];
   final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
   getRequestStream() async {
@@ -163,6 +164,11 @@ class _AllRequestState extends State<AllRequest> {
                         ],
                       ),
                       Text(
+                        "Reason: " + db['Reason'],
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
                         "Dates: " + db['Dates'].join(", "),
                         style: const TextStyle(color: Colors.white),
                       ),
@@ -294,6 +300,15 @@ class _AllRequestState extends State<AllRequest> {
                         ),
                       ),
                       const SizedBox(height: 10),
+                      TextFormField(
+                        style: TextStyle(color: Colors.grey),
+                        controller: reasonController,
+                        decoration: const InputDecoration(
+                          labelText: 'Reason',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
                           const Text("Number of Days: "),
@@ -363,6 +378,7 @@ class _AllRequestState extends State<AllRequest> {
 
                                 Map<String, dynamic> updateRequestInfo = {
                                   "Nickname": nicknameController.text,
+                                  "Reason": reasonController.text,
                                   "Dates": formattedDates,
                                 };
 

@@ -21,7 +21,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
   TextEditingController addressController = TextEditingController();
 
   TextEditingController searchController = TextEditingController();
-  String searchField = 'Name'; // Default search field
+  String searchField = 'Name';
   String searchQuery = '';
   Stream? EmployeeStream;
 
@@ -30,8 +30,8 @@ class _EmployeesPageState extends State<EmployeesPage> {
     'Nickname',
     'Station',
     'Position',
-    'Date Employed', // Add Date Employed
-    'Address', // Add Address
+    'Date Employed',
+    'Address',
   ];
 
   getontheload() async {
@@ -55,18 +55,17 @@ class _EmployeesPageState extends State<EmployeesPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Cancel"),
             ),
             TextButton(
               onPressed: () async {
-                // Delete the document from Firestore
                 await FirebaseFirestore.instance
                     .collection('Employee')
                     .doc(docId)
                     .delete();
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Delete"),
             ),
@@ -87,20 +86,17 @@ class _EmployeesPageState extends State<EmployeesPage> {
     if (pickedDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       setState(() {
-        dateController.text =
-            formattedDate; // Set formatted date in the controller
+        dateController.text = formattedDate;
       });
     }
   }
 
-  // Function to handle search input change
   void handleSearch(String query) {
     setState(() {
       searchQuery = query.toLowerCase();
     });
   }
 
-  // Filter function based on the selected search option
   bool searchFilter(DocumentSnapshot ds) {
     switch (searchField) {
       case 'Name':
@@ -140,10 +136,8 @@ class _EmployeesPageState extends State<EmployeesPage> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data.docs[index];
 
-                    // Apply the search filter
                     if (!searchFilter(ds)) {
-                      return const SizedBox
-                          .shrink(); // Hide non-matching results
+                      return const SizedBox.shrink();
                     }
 
                     return Container(
@@ -381,8 +375,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
       builder: (context) => AlertDialog(
             content: SingleChildScrollView(
               child: Column(
-                mainAxisSize:
-                    MainAxisSize.min, // Adjusts height based on content
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
@@ -445,8 +438,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.calendar_today),
-                        onPressed: () =>
-                            _selectDate(context), // Opens date picker
+                        onPressed: () => _selectDate(context),
                       ),
                     ),
                   ),
@@ -481,7 +473,6 @@ class _EmployeesPageState extends State<EmployeesPage> {
                             positionController.text.isEmpty ||
                             dateController.text.isEmpty ||
                             addressController.text.isEmpty) {
-                          // Show error message if any field is empty
                           Fluttertoast.showToast(
                             msg: "Please fill in all fields.",
                             toastLength: Toast.LENGTH_SHORT,
@@ -491,7 +482,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
                             textColor: Colors.white,
                             fontSize: 16.0,
                           );
-                          return; // Stop execution if any field is empty
+                          return;
                         }
 
                         Map<String, dynamic> updateInfo = {

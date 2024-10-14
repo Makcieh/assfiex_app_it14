@@ -18,13 +18,12 @@ class _RequestState extends State<RequestFill> {
 
   DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
-  int selectedDays = 1; // Default to 1 day
-  List<DateTime?> selectedDates = [null]; // To store selected dates
+  int selectedDays = 1;
+  List<DateTime?> selectedDates = [null];
 
-// Function to validate if the entered nickname exists in Firestore
   Future<bool> isNicknameValid(String nickname) async {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('Employee') // Adjust collection name as necessary
+        .collection('Employee')
         .where('Nickname', isEqualTo: nickname)
         .limit(1)
         .get();
@@ -87,9 +86,7 @@ class _RequestState extends State<RequestFill> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
                 TextField(
                   controller: nicknameController,
                   decoration: const InputDecoration(
@@ -98,8 +95,6 @@ class _RequestState extends State<RequestFill> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Dropdown for number of days selection
                 Row(
                   children: [
                     const Text(
@@ -115,7 +110,6 @@ class _RequestState extends State<RequestFill> {
                         );
                       }).toList(),
                       onChanged: (int? newValue) {
-                        // Wrap state-changing logic inside setState()
                         setState(() {
                           selectedDays = newValue!;
                           selectedDates =
@@ -125,10 +119,7 @@ class _RequestState extends State<RequestFill> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 10),
-
-                // Date pickers for each day
                 Column(
                   children: List.generate(
                     selectedDays,
@@ -148,7 +139,6 @@ class _RequestState extends State<RequestFill> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
                 Container(
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
@@ -163,7 +153,6 @@ class _RequestState extends State<RequestFill> {
                   ),
                   child: ElevatedButton(
                     onPressed: () async {
-                      // Check if the nickname is empty
                       if (nicknameController.text.isEmpty) {
                         Fluttertoast.showToast(
                           msg: "Nickname is required",
@@ -176,7 +165,6 @@ class _RequestState extends State<RequestFill> {
                         return;
                       }
 
-                      // Validate nickname from Firestore
                       bool isValidNickname =
                           await isNicknameValid(nicknameController.text.trim());
 
@@ -192,7 +180,6 @@ class _RequestState extends State<RequestFill> {
                         return;
                       }
 
-                      // Generate request data
                       String RequestID = randomNumeric(5);
                       Map<String, dynamic> requestInfoMap = {
                         "RequestID": RequestID,
@@ -200,10 +187,9 @@ class _RequestState extends State<RequestFill> {
                         "Nickname": nicknameController.text,
                         "Dates": selectedDates
                             .map((date) => dateFormat.format(date!))
-                            .toList(), // Store formatted dates
+                            .toList(),
                       };
 
-                      // Add request to the database
                       await DatabaseMethods()
                           .addRequest(requestInfoMap, RequestID)
                           .then((value) {
@@ -216,12 +202,11 @@ class _RequestState extends State<RequestFill> {
                             textColor: Colors.white,
                             fontSize: 16.0);
 
-                        // Clear the text fields and reset the form after adding the request
                         setState(() {
                           idController.clear();
                           nicknameController.clear();
-                          selectedDates = [null]; // Reset selected dates
-                          selectedDays = 1; // Reset the number of days
+                          selectedDates = [null];
+                          selectedDays = 1;
                         });
                       });
                     },
@@ -249,7 +234,6 @@ class _RequestState extends State<RequestFill> {
     );
   }
 
-  // Function to select date using date picker
   Future<void> _selectDate(BuildContext context, int index) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -258,7 +242,6 @@ class _RequestState extends State<RequestFill> {
       lastDate: DateTime(2101),
     );
     if (picked != null) {
-      // Wrap state-changing logic inside setState()
       setState(() {
         selectedDates[index] = picked;
       });

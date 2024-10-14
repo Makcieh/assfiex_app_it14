@@ -2,7 +2,7 @@ import 'package:assfiex_app_it14/manager_side/pages/createschedpages/databaseCre
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // For Firebase Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 final TextEditingController nicknameController = TextEditingController();
 final TextEditingController positionController = TextEditingController();
@@ -10,7 +10,7 @@ final TextEditingController hoursController = TextEditingController();
 final TextEditingController startController = TextEditingController();
 final TextEditingController endController = TextEditingController();
 
-List<String> nicknameSuggestions = []; // List to store nickname suggestions
+List<String> nicknameSuggestions = [];
 
 void clearTextFields() {
   nicknameController.clear();
@@ -20,32 +20,25 @@ void clearTextFields() {
   endController.clear();
 }
 
-// Function to fetch nickname suggestions from Firebase
 void getNicknameSuggestions(String query) async {
   if (query.isEmpty) {
     nicknameSuggestions.clear();
     return;
   }
 
-  // Fetch nicknames from Firestore based on input
   QuerySnapshot snapshot = await FirebaseFirestore.instance
-      .collection(
-          'Employee') // Replace 'nicknames' with your actual collection name
+      .collection('Employee')
       .where('Nickname', isGreaterThanOrEqualTo: query)
-      .where('Nickname',
-          isLessThanOrEqualTo:
-              query + '\uf8ff') // Ensure range query works correctly
+      .where('Nickname', isLessThanOrEqualTo: query + '\uf8ff')
       .get();
 
-  // Map the results to a list of nicknames
   nicknameSuggestions =
       snapshot.docs.map((doc) => doc['Nickname'] as String).toList();
 }
 
-// Function to validate if the entered nickname exists in Firestore
 Future<bool> isNicknameValid(String nickname) async {
   QuerySnapshot snapshot = await FirebaseFirestore.instance
-      .collection('Employee') // Adjust collection name as necessary
+      .collection('Employee')
       .where('Nickname', isEqualTo: nickname)
       .limit(1)
       .get();
@@ -84,7 +77,6 @@ void createschedFill(BuildContext context) {
                   const SizedBox(
                     height: 20,
                   ),
-                  // TextField for nickname with dynamic suggestions
                   TextField(
                     controller: nicknameController,
                     decoration: const InputDecoration(
@@ -93,14 +85,11 @@ void createschedFill(BuildContext context) {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        getNicknameSuggestions(
-                            value); // Fetch suggestions on every change
+                        getNicknameSuggestions(value);
                       });
                     },
                   ),
-
                   const SizedBox(height: 20),
-
                   TextField(
                     controller: positionController,
                     decoration: const InputDecoration(
@@ -135,7 +124,6 @@ void createschedFill(BuildContext context) {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      // Check if the nickname is empty
                       if (nicknameController.text.isEmpty) {
                         Fluttertoast.showToast(
                           msg: "Nickname is required",
@@ -148,7 +136,6 @@ void createschedFill(BuildContext context) {
                         return;
                       }
 
-                      // Validate nickname from Firestore
                       bool isValidNickname =
                           await isNicknameValid(nicknameController.text.trim());
 
@@ -164,7 +151,6 @@ void createschedFill(BuildContext context) {
                         return;
                       }
 
-                      // Proceed with adding the schedule if validation passes
                       String scheduleId = randomNumeric(5);
                       Map<String, dynamic> createSchedInfoMap = {
                         "ScheduleID": scheduleId,

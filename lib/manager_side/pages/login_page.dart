@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     const Text(
-                      "Welcome Manager!",
+                      "Welcome to ASFIEX",
                       style: TextStyle(
                           color: Color.fromARGB(255, 5, 5, 5),
                           fontSize: 25,

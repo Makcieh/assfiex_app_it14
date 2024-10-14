@@ -31,7 +31,6 @@ class _EmployeeState extends State<EmployeeFill> {
     addressController.clear();
   }
 
-  // Employee ID counter
   int employeeIdCounter = 100;
 
   Future<int> getStoredEmployeeId() async {
@@ -55,8 +54,7 @@ class _EmployeeState extends State<EmployeeFill> {
     if (pickedDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       setState(() {
-        dateController.text =
-            formattedDate; // Set formatted date in the controller
+        dateController.text = formattedDate;
       });
     }
   }
@@ -64,7 +62,7 @@ class _EmployeeState extends State<EmployeeFill> {
   // Checking for duplicate nicknames
   Future<bool> _checkDuplicateNickname(String nickname) async {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('Employee') // Use your Firestore collection name
+        .collection('Employee')
         .where('Nickname', isEqualTo: nickname)
         .get();
 
@@ -193,7 +191,6 @@ class _EmployeeState extends State<EmployeeFill> {
                           padding: EdgeInsets.only(top: 10, bottom: 20),
                           child: ElevatedButton(
                             onPressed: () async {
-                              // Check if any required field is empty
                               if (nameController.text.isEmpty ||
                                   nicknameController.text.isEmpty ||
                                   contactController.text.isEmpty ||
@@ -201,7 +198,6 @@ class _EmployeeState extends State<EmployeeFill> {
                                   positionController.text.isEmpty ||
                                   dateController.text.isEmpty ||
                                   addressController.text.isEmpty) {
-                                // Show error message if any field is empty
                                 Fluttertoast.showToast(
                                   msg: "Please fill in all fields.",
                                   toastLength: Toast.LENGTH_SHORT,
@@ -211,18 +207,15 @@ class _EmployeeState extends State<EmployeeFill> {
                                   textColor: Colors.white,
                                   fontSize: 16.0,
                                 );
-                                return; // Stop execution if any field is empty
+                                return;
                               }
 
-                              // Get the nickname from the input
                               String nickname = nicknameController.text.trim();
 
-                              // Check if the nickname already exists
                               bool isDuplicate =
                                   await _checkDuplicateNickname(nickname);
 
                               if (isDuplicate) {
-                                // Show error message if nickname already exists
                                 Fluttertoast.showToast(
                                   msg:
                                       "Nickname already exists. Please choose another one.",
@@ -234,7 +227,6 @@ class _EmployeeState extends State<EmployeeFill> {
                                   fontSize: 16.0,
                                 );
                               } else {
-                                // If the nickname is unique, proceed to add the employee
                                 String employeeaydi = randomNumeric(3);
                                 Map<String, dynamic> employeeInfoMap = {
                                   "Id": employeeaydi,

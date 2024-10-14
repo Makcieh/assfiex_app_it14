@@ -21,16 +21,11 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
   TextEditingController addressController = TextEditingController();
 
   TextEditingController searchController = TextEditingController();
-  String searchField = 'Name'; // Default search field
+  String searchField = 'Name';
   String searchQuery = '';
   Stream? EmployeeStream;
 
-  List<String> searchOptions = [
-    'Name',
-    'Nickname',
-    'Station',
-    'Position'
-  ]; // Search by Name, Nickname, Station, or Position
+  List<String> searchOptions = ['Name', 'Nickname', 'Station', 'Position'];
 
   getontheload() async {
     EmployeeStream = await DatabaseMethods().getEmployeeDetails();
@@ -53,18 +48,17 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Cancel"),
             ),
             TextButton(
               onPressed: () async {
-                // Delete the document from Firestore
                 await FirebaseFirestore.instance
                     .collection('Employee')
                     .doc(docId)
                     .delete();
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Delete"),
             ),
@@ -85,20 +79,17 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
     if (pickedDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       setState(() {
-        dateController.text =
-            formattedDate; // Set formatted date in the controller
+        dateController.text = formattedDate;
       });
     }
   }
 
-  // Function to handle search input change
   void handleSearch(String query) {
     setState(() {
       searchQuery = query.toLowerCase();
     });
   }
 
-  // Filter function based on the selected search option
   bool searchFilter(DocumentSnapshot ds) {
     return ds[searchField].toString().toLowerCase().contains(searchQuery);
   }
@@ -113,10 +104,8 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data.docs[index];
 
-                    // Apply the search filter
                     if (!searchFilter(ds)) {
-                      return const SizedBox
-                          .shrink(); // Hide non-matching results
+                      return const SizedBox.shrink();
                     }
 
                     return Container(
@@ -148,36 +137,6 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  // const Spacer(),
-                                  // GestureDetector(
-                                  //   onTap: () {
-                                  //     nameController.text = ds["Name"];
-                                  //     nicknameController.text = ds["Nickname"];
-                                  //     contactController.text = ds["Contact"];
-                                  //     stationController.text = ds["Station"];
-                                  //     positionController.text = ds["Position"];
-                                  //     dateController.text = ds['DateEmployed'];
-                                  //     addressController.text = ds['Address'];
-                                  //     EditEmployeeDetail(ds['Id']);
-                                  //   },
-                                  //   child: const Icon(
-                                  //     Icons.edit,
-                                  //     color: Colors.white,
-                                  //   ),
-                                  // ),
-                                  // const SizedBox(
-                                  //   width: 10,
-                                  // ),
-                                  // GestureDetector(
-                                  //   onTap: () {
-                                  //     _showDeleteConfirmationDialog(
-                                  //         context, ds.id);
-                                  //   },
-                                  //   child: const Icon(
-                                  //     Icons.delete_rounded,
-                                  //     color: Colors.white,
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                               Text(
@@ -299,39 +258,6 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
                   ),
                 ],
               ),
-              // const SizedBox(height: 20),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     gradient: const LinearGradient(
-              //       colors: [
-              //         Color.fromARGB(255, 6, 83, 146),
-              //         Color.fromARGB(255, 100, 206, 255),
-              //       ],
-              //       begin: Alignment.topLeft,
-              //       end: Alignment.bottomRight,
-              //     ),
-              //     borderRadius: BorderRadius.circular(25),
-              //   ),
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       Navigator.pushNamed(context, '/addemploye');
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: Colors.transparent,
-              //       shadowColor: Colors.transparent,
-              //       padding: const EdgeInsets.symmetric(
-              //           horizontal: 30, vertical: 12),
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(25),
-              //       ),
-              //       elevation: 2,
-              //     ),
-              //     child: const Text(
-              //       'Add Employee',
-              //       style: TextStyle(letterSpacing: 1, color: Colors.white),
-              //     ),
-              //   ),
-              // ),
               const SizedBox(height: 20),
               Container(
                   height: 500,
@@ -354,8 +280,7 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
       builder: (context) => AlertDialog(
             content: SingleChildScrollView(
               child: Column(
-                mainAxisSize:
-                    MainAxisSize.min, // Adjusts height based on content
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
@@ -418,8 +343,7 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.calendar_today),
-                        onPressed: () =>
-                            _selectDate(context), // Opens date picker
+                        onPressed: () => _selectDate(context),
                       ),
                     ),
                   ),
@@ -441,7 +365,6 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
                           positionController.text.isEmpty ||
                           dateController.text.isEmpty ||
                           addressController.text.isEmpty) {
-                        // Show error message if any field is empty
                         Fluttertoast.showToast(
                           msg: "Please fill in all fields.",
                           toastLength: Toast.LENGTH_SHORT,
@@ -451,7 +374,7 @@ class _EmployeesPageState extends State<See_EmployeesPage> {
                           textColor: Colors.white,
                           fontSize: 16.0,
                         );
-                        return; // Stop execution if any field is empty
+                        return;
                       }
 
                       Map<String, dynamic> updateInfo = {

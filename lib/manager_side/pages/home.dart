@@ -45,7 +45,7 @@ class _HomeState extends State<Home> {
         ),
         title: const Center(
           child: Text(
-            'WELCOME TO ASFIEX',
+            'WELCOME MANAGER',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
@@ -74,13 +74,13 @@ class _HomeState extends State<Home> {
             ),
           ),
 
-          // Calendar to display the current day with customized styles
+          // Mudisplay og schedule sa calendar
           Stack(
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'assets/icon/AsfiexLogo.png', // Replace with your image path
-                  fit: BoxFit.cover, // Adjust how the image fits the space
+                  'assets/icon/ASFIEXLOGO.png',
+                  fit: BoxFit.cover,
                 ),
               ),
               TableCalendar(
@@ -183,7 +183,7 @@ class _HomeState extends State<Home> {
                           "There are no schedules for this day",
                           style: TextStyle(
                             fontSize: 15,
-                            color: Colors.grey,
+                            color: Color.fromARGB(255, 158, 158, 158),
                           ),
                         ),
                       ),

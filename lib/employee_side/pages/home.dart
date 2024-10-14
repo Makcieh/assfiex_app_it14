@@ -16,12 +16,10 @@ class _HomeState extends State<EmployeeHome> {
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
 
-  // Function to sign out the user
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
 
-  // Function to format the date in 'yyyy-MM-dd' format
   String formatDate(DateTime date) {
     return DateFormat('yyyy-MM-dd').format(date);
   }
@@ -44,9 +42,9 @@ class _HomeState extends State<EmployeeHome> {
           ),
         ),
         title: Container(
-          padding: const EdgeInsets.only(right: 30),
+          padding: const EdgeInsets.only(left: 23),
           child: const Text(
-            'WELCOME TO ASFIEX',
+            'WELCOME EMPLOYEE',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
@@ -75,13 +73,13 @@ class _HomeState extends State<EmployeeHome> {
             ),
           ),
 
-          // Calendar to display the current day with customized styles
+          // Mudisplay ang mga employee sa calendar
           Stack(
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'assets/icon/AsfiexLogo.png', // Replace with your image path
-                  fit: BoxFit.cover, // Adjust how the image fits the space
+                  'assets/icon/ASFIEXLOGO.png',
+                  fit: BoxFit.cover,
                 ),
               ),
               TableCalendar(
@@ -141,15 +139,13 @@ class _HomeState extends State<EmployeeHome> {
           ),
           const SizedBox(height: 5),
 
-          // StreamBuilder for real-time updates of schedules based on selected day
+          // Real-time updates sa schedule basi sa date na nainput
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('CreateSched')
-                  .where('CreatedDate',
-                      isEqualTo:
-                          formatDate(selectedDay)) // Filtering by selected day
-                  .snapshots(), // Listen to schedules created on the selected day
+                  .where('CreatedDate', isEqualTo: formatDate(selectedDay))
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -157,7 +153,6 @@ class _HomeState extends State<EmployeeHome> {
                   );
                 }
 
-                // Extracting schedules from the Firestore snapshot
                 var schedules = snapshot.data!.docs.map((doc) {
                   return {
                     'start': doc['Start'],
@@ -169,7 +164,6 @@ class _HomeState extends State<EmployeeHome> {
                   };
                 }).toList();
 
-                // Check if schedules are empty and show the "No schedules" message
                 if (schedules.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -190,7 +184,7 @@ class _HomeState extends State<EmployeeHome> {
                     ),
                   );
                 }
-                // If schedules are present, build the ListView
+
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -220,8 +214,7 @@ class _HomeState extends State<EmployeeHome> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      12), // Ensure the child is clipped with the same radius
+                                  borderRadius: BorderRadius.circular(12),
                                   child: ListTile(
                                     title: Text(
                                       'Nickname: ${schedules[index]['nickname']}',

@@ -14,20 +14,16 @@ class _AllRequestState extends State<Employee_AllRequest> {
   TextEditingController nicknameController = TextEditingController();
   TextEditingController searchController = TextEditingController();
 
-  String searchField = 'Nickname'; // Default search field
+  String searchField = 'Nickname';
   String searchQuery = '';
   Stream? requestStream;
 
-  List<DateTime?> selectedDates = [null]; // To store the selected dates
-  int selectedDays = 1; // Default to 1 day
+  List<DateTime?> selectedDates = [null];
+  int selectedDays = 1;
 
-  List<String> searchOptions = [
-    'Nickname',
-    'Dates'
-  ]; // Search options (Removed 'EmployeeID')
-  final DateFormat dateFormat = DateFormat('yyyy-MM-dd'); // Date format
+  List<String> searchOptions = ['Nickname', 'Dates'];
+  final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
-  // Fetch the request details from Firestore
   getRequestStream() async {
     requestStream = await DatabaseMethods().getRequestDetails();
     setState(() {});
@@ -39,26 +35,17 @@ class _AllRequestState extends State<Employee_AllRequest> {
     super.initState();
   }
 
-  // Function to handle search input change
   void handleSearch(String query) {
     setState(() {
       searchQuery = query.toLowerCase();
     });
   }
 
-  // Filter function based on the selected search option
   bool searchFilter(DocumentSnapshot ds) {
     if (searchField == 'Dates') {
-      // Search in the list of dates
-      return ds['Dates']
-          .toString()
-          .toLowerCase()
-          .contains(searchQuery); // Search inside dates
+      return ds['Dates'].toString().toLowerCase().contains(searchQuery);
     }
-    return ds[searchField]
-        .toString()
-        .toLowerCase()
-        .contains(searchQuery); // General search filter
+    return ds[searchField].toString().toLowerCase().contains(searchQuery);
   }
 
   void _showDeleteConfirmationDialog(BuildContext context, String docId) {
@@ -71,18 +58,17 @@ class _AllRequestState extends State<Employee_AllRequest> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Cancel"),
             ),
             TextButton(
               onPressed: () async {
-                // Delete the document from Firestore
                 await FirebaseFirestore.instance
                     .collection('RequestLeave')
                     .doc(docId)
                     .delete();
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Delete"),
             ),
@@ -104,9 +90,8 @@ class _AllRequestState extends State<Employee_AllRequest> {
             itemBuilder: (context, index) {
               DocumentSnapshot db = snapshot.data.docs[index];
 
-              // Apply the search filter
               if (!searchFilter(db)) {
-                return const SizedBox.shrink(); // Hide non-matching results
+                return const SizedBox.shrink();
               }
 
               return Material(
@@ -138,43 +123,8 @@ class _AllRequestState extends State<Employee_AllRequest> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
-                          // const Spacer(),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     nicknameController.text = db["Nickname"];
-
-                          //     // Fetch the dates from Firestore and convert to DateTime list
-                          //     selectedDates = List<DateTime>.from(
-                          //       db['Dates'].map((date) {
-                          //         if (date is Timestamp) {
-                          //           return date.toDate();
-                          //         } else {
-                          //           return DateTime.parse(date);
-                          //         }
-                          //       }),
-                          //     );
-                          //     selectedDays = selectedDates.length;
-
-                          //     EditRequestDetail(db['RequestID']);
-                          //   },
-                          //   child: const Icon(
-                          //     Icons.edit,
-                          //     color: Colors.white,
-                          //   ),
-                          // ),
-                          // const SizedBox(width: 10),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     _showDeleteConfirmationDialog(context, db.id);
-                          //   },
-                          //   child: const Icon(
-                          //     Icons.delete_rounded,
-                          //     color: Colors.white,
-                          //   ),
-                          // ),
                         ],
                       ),
-                      // Display all the dates as a comma-separated string
                       Text(
                         "Dates: " + db['Dates'].join(", "),
                         style: const TextStyle(color: Colors.white),
@@ -358,7 +308,6 @@ class _AllRequestState extends State<Employee_AllRequest> {
                         child: ElevatedButton(
                             onPressed: () async {
                               if (selectedDates.any((date) => date == null)) {
-                                // Ensure all dates are selected
                                 return;
                               }
 
@@ -368,8 +317,7 @@ class _AllRequestState extends State<Employee_AllRequest> {
 
                               Map<String, dynamic> updateRequestInfo = {
                                 "Nickname": nicknameController.text,
-                                "Dates":
-                                    formattedDates, // Store dates list in Firestore
+                                "Dates": formattedDates,
                               };
 
                               await DatabaseMethods()

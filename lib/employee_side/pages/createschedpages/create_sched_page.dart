@@ -12,11 +12,10 @@ class Employee_CreateSchedPage extends StatefulWidget {
 
 class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
   TextEditingController searchController = TextEditingController();
-  String searchBy = 'Nickname'; // Default search by Nickname
+  String searchBy = 'Nickname';
   String searchQuery = '';
   Stream<QuerySnapshot>? scheduStream;
 
-  // Updated search options without 'Station' but with 'Hours', 'Start', and 'End'
   List<String> searchOptions = [
     'Nickname',
     'Position',
@@ -25,29 +24,23 @@ class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
     'End'
   ];
 
-  // Load schedules without search
   getSchedules() async {
     scheduStream =
         FirebaseFirestore.instance.collection('CreateSched').snapshots();
     setState(() {});
   }
 
-  // Function to search schedules based on the selected filter
   searchSchedules(String query) {
     if (query.isEmpty) {
-      // If search bar is empty, load all schedules
       getSchedules();
     } else {
-      // Handle specific cases for numeric or string fields like Hours, Start, End
       if (searchBy == 'Hours' || searchBy == 'Start' || searchBy == 'End') {
-        // For Hours, Start, and End, treat them as string comparisons
         scheduStream = FirebaseFirestore.instance
             .collection('CreateSched')
             .where(searchBy, isGreaterThanOrEqualTo: query)
             .where(searchBy, isLessThanOrEqualTo: query + '\uf8ff')
             .snapshots();
       } else {
-        // Handle text fields (Nickname, Position)
         scheduStream = FirebaseFirestore.instance
             .collection('CreateSched')
             .where(searchBy, isGreaterThanOrEqualTo: query)
@@ -61,11 +54,9 @@ class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
   @override
   void initState() {
     super.initState();
-    // Load all schedules initially
     getSchedules();
   }
 
-  // Confirming Delete
   void _showDeleteConfirmationDialog(BuildContext context, String docId) {
     showDialog(
       context: context,
@@ -76,18 +67,17 @@ class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Cancel"),
             ),
             TextButton(
               onPressed: () async {
-                // Delete the document from Firestore
                 await FirebaseFirestore.instance
                     .collection('CreateSched')
                     .doc(docId)
                     .delete();
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Delete"),
             ),
@@ -148,32 +138,6 @@ class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
-                            // const Spacer(),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     nicknameController.text = data["Nickname"];
-                            //     positionController.text = data["Position"];
-                            //     hoursController.text = data["Hours"];
-                            //     startController.text = data["Start"];
-                            //     endController.text = data["End"];
-                            //     editSchedDetail(data["ScheduleID"]);
-                            //   },
-                            //   child: const Icon(
-                            //     Icons.edit,
-                            //     color: Colors.white,
-                            //   ),
-                            // ),
-                            // const SizedBox(width: 10),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     // Show confirmation dialog before deletion
-                            //     _showDeleteConfirmationDialog(context, data.id);
-                            //   },
-                            //   child: const Icon(
-                            //     Icons.delete_rounded,
-                            //     color: Colors.white,
-                            //   ),
-                            // )
                           ],
                         ),
                         Text(
@@ -230,7 +194,6 @@ class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
             children: [
               Row(
                 children: [
-                  // Search Bar
                   Expanded(
                     child: TextField(
                       controller: searchController,
@@ -251,8 +214,6 @@ class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
                     ),
                   ),
                   const SizedBox(width: 10),
-
-                  // Dropdown for search filter
                   DropdownButton<String>(
                     value: searchBy,
                     items: searchOptions.map((String option) {
@@ -272,42 +233,7 @@ class _CreateSchedPageState extends State<Employee_CreateSchedPage> {
                   const SizedBox(width: 10),
                 ],
               ),
-
               const SizedBox(height: 30),
-
-              // Create Schedule Button
-              // Container(
-              //   decoration: BoxDecoration(
-              //     gradient: const LinearGradient(
-              //       colors: [
-              //         Color.fromARGB(255, 6, 83, 146),
-              //         Color.fromARGB(255, 100, 206, 255),
-              //       ],
-              //       begin: Alignment.topLeft,
-              //       end: Alignment.bottomRight,
-              //     ),
-              //     borderRadius: BorderRadius.circular(25),
-              //   ),
-              //   padding: const EdgeInsets.all(3.0),
-              //   child: ElevatedButton(
-              //     onPressed: () =>
-              //         createschedFill(context), // Call the method here
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: Colors.transparent,
-              //       shadowColor: Colors.transparent,
-              //       padding: const EdgeInsets.symmetric(
-              //           horizontal: 20, vertical: 15),
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(25),
-              //       ),
-              //       elevation: 2,
-              //     ),
-              //     child: const Text(
-              //       "Create Schedule",
-              //       style: TextStyle(fontSize: 15, color: Colors.white),
-              //     ),
-              //   ),
-              // ),
               SizedBox(height: 20),
               Container(
                   height: 470,

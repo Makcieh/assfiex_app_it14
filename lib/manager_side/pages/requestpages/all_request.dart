@@ -1,7 +1,7 @@
 import 'package:assfiex_app_it14/manager_side/pages/requestpages/databaseRequest.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // For date formatting
+import 'package:intl/intl.dart';
 
 class AllRequest extends StatefulWidget {
   const AllRequest({super.key});
@@ -14,20 +14,16 @@ class _AllRequestState extends State<AllRequest> {
   TextEditingController nicknameController = TextEditingController();
   TextEditingController searchController = TextEditingController();
 
-  String searchField = 'Nickname'; // Default search field
+  String searchField = 'Nickname';
   String searchQuery = '';
   Stream? requestStream;
 
-  List<DateTime?> selectedDates = [null]; // To store the selected dates
-  int selectedDays = 1; // Default to 1 day
+  List<DateTime?> selectedDates = [null];
+  int selectedDays = 1;
 
-  List<String> searchOptions = [
-    'Nickname',
-    'Dates'
-  ]; // Search options (Removed 'EmployeeID')
-  final DateFormat dateFormat = DateFormat('yyyy-MM-dd'); // Date format
+  List<String> searchOptions = ['Nickname', 'Dates'];
+  final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
-  // Fetch the request details from Firestore
   getRequestStream() async {
     requestStream = await DatabaseMethods().getRequestDetails();
     setState(() {});
@@ -39,26 +35,17 @@ class _AllRequestState extends State<AllRequest> {
     super.initState();
   }
 
-  // Function to handle search input change
   void handleSearch(String query) {
     setState(() {
       searchQuery = query.toLowerCase();
     });
   }
 
-  // Filter function based on the selected search option
   bool searchFilter(DocumentSnapshot ds) {
     if (searchField == 'Dates') {
-      // Search in the list of dates
-      return ds['Dates']
-          .toString()
-          .toLowerCase()
-          .contains(searchQuery); // Search inside dates
+      return ds['Dates'].toString().toLowerCase().contains(searchQuery);
     }
-    return ds[searchField]
-        .toString()
-        .toLowerCase()
-        .contains(searchQuery); // General search filter
+    return ds[searchField].toString().toLowerCase().contains(searchQuery);
   }
 
   void _showDeleteConfirmationDialog(BuildContext context, String docId) {
@@ -71,18 +58,17 @@ class _AllRequestState extends State<AllRequest> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Cancel"),
             ),
             TextButton(
               onPressed: () async {
-                // Delete the document from Firestore
                 await FirebaseFirestore.instance
                     .collection('RequestLeave')
                     .doc(docId)
                     .delete();
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Delete"),
             ),
@@ -108,9 +94,8 @@ class _AllRequestState extends State<AllRequest> {
             itemBuilder: (context, index) {
               DocumentSnapshot db = snapshot.data.docs[index];
 
-              // Apply the search filter
               if (!searchFilter(db)) {
-                return const SizedBox.shrink(); // Hide non-matching results
+                return const SizedBox.shrink();
               }
 
               return Material(
@@ -147,7 +132,6 @@ class _AllRequestState extends State<AllRequest> {
                             onTap: () {
                               nicknameController.text = db["Nickname"];
 
-                              // Fetch the dates from Firestore and convert to DateTime list
                               selectedDates = List<DateTime>.from(
                                 db['Dates'].map((date) {
                                   if (date is Timestamp) {
@@ -178,7 +162,6 @@ class _AllRequestState extends State<AllRequest> {
                           ),
                         ],
                       ),
-                      // Display all the dates as a comma-separated string
                       Text(
                         "Dates: " + db['Dates'].join(", "),
                         style: const TextStyle(color: Colors.white),
@@ -311,8 +294,6 @@ class _AllRequestState extends State<AllRequest> {
                         ),
                       ),
                       const SizedBox(height: 10),
-
-                      // Dropdown for selecting number of days
                       Row(
                         children: [
                           const Text("Number of Days: "),
@@ -335,8 +316,6 @@ class _AllRequestState extends State<AllRequest> {
                         ],
                       ),
                       const SizedBox(height: 10),
-
-                      // Date pickers for each selected day
                       Column(
                         children: List.generate(
                           selectedDays,
@@ -358,7 +337,6 @@ class _AllRequestState extends State<AllRequest> {
                         ),
                       ),
                       const SizedBox(height: 20),
-
                       Center(
                         child: Container(
                           decoration: BoxDecoration(
@@ -376,7 +354,6 @@ class _AllRequestState extends State<AllRequest> {
                           child: ElevatedButton(
                               onPressed: () async {
                                 if (selectedDates.any((date) => date == null)) {
-                                  // Ensure all dates are selected
                                   return;
                                 }
 
@@ -386,8 +363,7 @@ class _AllRequestState extends State<AllRequest> {
 
                                 Map<String, dynamic> updateRequestInfo = {
                                   "Nickname": nicknameController.text,
-                                  "Dates":
-                                      formattedDates, // Store dates list in Firestore
+                                  "Dates": formattedDates,
                                 };
 
                                 await DatabaseMethods()
@@ -421,7 +397,6 @@ class _AllRequestState extends State<AllRequest> {
         ),
       );
 
-  // Function to select date using date picker
   Future<void> _selectDate(
       BuildContext context, int index, StateSetter setState) async {
     final DateTime? picked = await showDatePicker(

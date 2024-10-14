@@ -32,16 +32,13 @@ class DatabaseMethods {
         .delete();
   }
 
-  // Function to check if the employee ID exists in Firestore
   Future<bool> checkEmployeeIdInDatabase(String employeeId) async {
     try {
-      // Query the employee document using the employeeId as the document ID
       DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('Employees') // Replace with your collection name
+          .collection('Employees')
           .doc(employeeId)
           .get();
 
-      // Return true if the document exists, otherwise false
       return doc.exists;
     } catch (e) {
       print('Error checking employee ID: $e');

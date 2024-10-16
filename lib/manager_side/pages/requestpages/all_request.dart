@@ -132,6 +132,7 @@ class _AllRequestState extends State<AllRequest> {
                           GestureDetector(
                             onTap: () {
                               nicknameController.text = db["Nickname"];
+                              reasonController.text = db["Reason"];
 
                               selectedDates = List<DateTime>.from(
                                 db['Dates'].map((date) {
@@ -301,7 +302,7 @@ class _AllRequestState extends State<AllRequest> {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.black),
                         controller: reasonController,
                         decoration: const InputDecoration(
                           labelText: 'Reason',

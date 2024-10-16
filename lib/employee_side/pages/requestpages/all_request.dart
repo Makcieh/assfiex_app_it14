@@ -126,6 +126,11 @@ class _AllRequestState extends State<Employee_AllRequest> {
                         ],
                       ),
                       Text(
+                        "Reason: " + db['Reason'],
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
                         "Dates: " + db['Dates'].join(", "),
                         style: const TextStyle(color: Colors.white),
                       ),

@@ -78,7 +78,7 @@ class _HomeState extends State<EmployeeHome> {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'assets/icon/ASFIEXLOGO.png',
+                  'assets/icon/Aspex.png',
                   fit: BoxFit.cover,
                 ),
               ),

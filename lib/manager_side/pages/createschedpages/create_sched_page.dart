@@ -2,6 +2,8 @@ import 'package:assfiex_app_it14/employee_side/pages/createschedpages/databaseCr
 import 'package:assfiex_app_it14/manager_side/pages/createschedpages/create_sched_fill.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class CreateSchedPage extends StatefulWidget {
   const CreateSchedPage({super.key});
@@ -129,6 +131,22 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
         );
       },
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      setState(() {
+        dateController.text =
+            formattedDate; // Set formatted date in the controller
+      });
+    }
   }
 
   Widget allCreateSchedDetails() {
@@ -422,6 +440,19 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                       border: OutlineInputBorder(),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: dateController,
+                    keyboardType: TextInputType.datetime,
+                    decoration: InputDecoration(
+                      labelText: 'Schedule Date:',
+                      border: OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () => _selectDate(context),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Center(
                     child: Container(
@@ -439,12 +470,25 @@ class _CreateSchedPageState extends State<CreateSchedPage> {
                       padding: const EdgeInsets.all(3.0),
                       child: ElevatedButton(
                           onPressed: () async {
+                            String enteredDate = dateController.text.trim();
+                            if (enteredDate.isEmpty) {
+                              Fluttertoast.showToast(
+                                msg: "Date is required",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0,
+                              );
+                              return;
+                            }
                             Map<String, dynamic> updateSchedInfo = {
                               "Nickname": nicknameController.text,
                               "Position": positionController.text,
                               "Hours": hoursController.text,
                               "Start": startController.text,
                               "End": endController.text,
+                              "CreatedDate": enteredDate,
                             };
                             await DatabaseMethods()
                                 .updateSchedDetail(id, updateSchedInfo)

@@ -150,12 +150,12 @@ void createschedFill(BuildContext context) {
                     ),
                     const SizedBox(height: 20),
 
-                    // TextField for custom date input (new field)
                     TextField(
                       controller: dateController,
                       keyboardType: TextInputType.datetime,
                       decoration: InputDecoration(
                         labelText: 'Schedule Date:',
+                        hintText: 'YYYY-mm-dd',
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.calendar_today),
                           onPressed: () => _selectDate(context),
@@ -247,7 +247,7 @@ void createschedFill(BuildContext context) {
                             "Hours": hoursController.text,
                             "Start": startController.text,
                             "End": endController.text,
-                            "CreatedDate": enteredDate, // Use the entered date
+                            "CreatedDate": enteredDate,
                           };
 
                           clearTextFields();
